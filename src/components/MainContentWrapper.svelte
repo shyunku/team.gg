@@ -1,5 +1,5 @@
-<div class="content-expanded-wrapper">
-  <div class="content-wrapper">
+<div class="main-content-expanded-wrapper">
+  <div class="main-content-wrapper">
     <!-- child -->
     <slot />
   </div>
@@ -8,19 +8,15 @@
 <style lang="scss">
   @import "../styles/variables.scss";
 
-  .content-expanded-wrapper {
+  .main-content-expanded-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1;
   }
 
-  .content-wrapper {
+  .main-content-wrapper {
     display: flex;
     width: $main-content-width;
-
-    &.vertical {
-      flex-direction: column;
-    }
   }
 </style>

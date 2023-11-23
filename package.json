@@ -23,6 +23,7 @@
     "svelte-preprocess": "5.1.1"
   },
   "dependencies": {
+    "@sveltejs/kit": "^1.27.6",
     "sirv-cli": "^2.0.0",
     "svelte-spa-router": "3.3.0"
   }

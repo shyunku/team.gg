@@ -29,3 +29,9 @@ body {
 
   font-family: "rix", sans-serif;
 }
+
+input {
+  &:focus {
+    outline: none;
+  }
+}
