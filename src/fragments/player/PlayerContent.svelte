@@ -1,0 +1,162 @@
+<script>
+  import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
+  import "./PlayerContent.scss";
+</script>
+
+<MainContentWrapper>
+  <div class="content-wrapper">
+    <div class="rank-summary">
+      <div class="solo-rank rank card">
+        <div class="rank-header header">솔로랭크</div>
+        <div class="rank-body">
+          <div class="rank-icon">
+            <img src="https://via.placeholder.com/80x80" />
+          </div>
+          <div class="rank-info">
+            <div class="rank-row">
+              <div class="rank-tier">플레티넘 1</div>
+              <div class="rank-lp">100 LP</div>
+            </div>
+            <div class="rank-row">
+              <div class="rank-win-lose">156승 124패</div>
+              <div class="rank-win-rate">승률 67%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-rank rank card">
+        <div class="rank-header header">자유랭크</div>
+        <div class="rank-body">
+          <div class="rank-icon">
+            <img src="https://via.placeholder.com/60x60" />
+          </div>
+          <div class="rank-info">
+            <div class="rank-row">
+              <div class="rank-tier">실버 2</div>
+              <div class="rank-lp">100 LP</div>
+            </div>
+            <div class="rank-row">
+              <div class="rank-win-lose">100승 100패</div>
+              <div class="rank-win-rate">승률 50%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recent-players card">
+        <div class="header">최근 함께한 소환사</div>
+        <div class="body">
+          <div class="list-header row">
+            <div class="player-name">소환사</div>
+            <div class="player-game-count">게임 수</div>
+            <div class="player-win-lose">승패</div>
+            <div class="player-win-rate">승률</div>
+          </div>
+          {#each Array(10) as player, i}
+            <div class="player row">
+              <div class="player-icon">
+                <img src="https://via.placeholder.com/20x20" />
+              </div>
+              <div class="player-name">player name</div>
+              <div class="player-game-count">15</div>
+              <div class="player-win-lose">10승 5패</div>
+              <div class="player-win-rate">67%</div>
+            </div>
+          {/each}
+        </div>
+      </div>
+    </div>
+    <div class="match-info">
+      <div class="match-summary card">
+        <div class="header">
+          <div class="menu">
+            <div class="menu-item selected">전체</div>
+            <div class="menu-item">솔로랭크</div>
+            <div class="menu-item">자유랭크</div>
+          </div>
+        </div>
+        <div class="body">
+          <!-- TODO :: implement summary of recent histories -->
+        </div>
+      </div>
+      <div class="match-history">
+        {#each Array(20) as match}
+          <div class={"match " + (Math.random() < 0.6 ? "win" : "lose")}>
+            <div class="color-flag"></div>
+            <div class="header">
+              <div class="match-win">
+                {Math.random() < 0.6 ? "승리" : "패배"}
+              </div>
+              <div class="match-type">솔로랭크</div>
+              <div class="match-date">2021-01-01</div>
+              <div class="match-duration">24분 49초</div>
+            </div>
+            <div class="body">
+              <div class="champion-item-section">
+                <div class="champion-section">
+                  <div class="champion-icon">
+                    <img src="https://via.placeholder.com/50x50" />
+                  </div>
+                  <div class="spell-section">
+                    <div class="spell-icon">
+                      <img src="https://via.placeholder.com/23x23" />
+                    </div>
+                    <div class="spell-icon">
+                      <img src="https://via.placeholder.com/23x23" />
+                    </div>
+                  </div>
+                  <div class="rune-section">
+                    <div class="rune-icon">
+                      <img src="https://via.placeholder.com/23x23" />
+                    </div>
+                    <div class="rune-icon">
+                      <img src="https://via.placeholder.com/23x23" />
+                    </div>
+                  </div>
+                  <div class="kda-section">
+                    <div class="kda">18 / 8 / 14</div>
+                    <div class="kda-rate">2.25:1 평점</div>
+                  </div>
+                </div>
+                <div class="item-section">
+                  {#each Array(7) as item}
+                    <div class="item">
+                      <img src="https://via.placeholder.com/26x26" />
+                    </div>
+                  {/each}
+                </div>
+              </div>
+              <div class="ingame-stat-section"></div>
+              <div class="ingame-summoners-section">
+                <div class="team team-1">
+                  {#each Array(5) as teammate}
+                    <div class="teammate">
+                      <div class="teammate-icon">
+                        <img src="https://via.placeholder.com/16x16" />
+                      </div>
+                      <div class="teammate-name">teammate name</div>
+                    </div>
+                  {/each}
+                </div>
+                <div class="team team-2">
+                  {#each Array(5) as teammate}
+                    <div class="teammate">
+                      <div class="teammate-icon">
+                        <img src="https://via.placeholder.com/16x16" />
+                      </div>
+                      <div class="teammate-name">teammate name</div>
+                    </div>
+                  {/each}
+                </div>
+              </div>
+              <div class="expand-btn">
+                <div class="expand-icon">
+                  <img src="https://via.placeholder.com/16x16" />
+                </div>
+              </div>
+            </div>
+          </div>
+        {/each}
+      </div>
+    </div>
+  </div>
+</MainContentWrapper>

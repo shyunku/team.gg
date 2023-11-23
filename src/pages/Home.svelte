@@ -1,11 +1,9 @@
 <script>
-  import Input from "../atoms/Input.svelte";
-  import MainContentWrapper from "../components/MainContentWrapper.svelte";
-  import { goto } from "$app/navigation";
+  import { push } from "svelte-spa-router";
+  import MainContentWrapper from "../layouts/MainContentLayout.svelte";
 
   const onPlayerSearch = () => {
-    console.log("player");
-    goto("/player");
+    push("/player");
   };
 </script>
 
@@ -22,12 +20,15 @@
           <option>EU</option>
         </select>
       </div>
-      <Input
+      <input
         type="text"
-        placeholder="소환사명을 입력하세요"
+        placeholder="플레이어 이름"
         spellcheck="false"
-        onEnter={onPlayerSearch}
+        on:keydown={(e) => {
+          if (e.key === "Enter") onPlayerSearch();
+        }}
       />
+      <button id="search" on:click={onPlayerSearch}>검색</button>
     </div>
   </div>
 </MainContentWrapper>
@@ -49,15 +50,28 @@
     display: flex;
     align-items: center;
 
+    select,
+    input,
+    button {
+      background-color: black;
+      color: white;
+      border: 1px solid rgb(67, 67, 67);
+      height: 40px;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+
+    select {
+    }
+
     input {
       margin-left: 15px;
       width: 500px;
-      height: 40px;
-      background-color: black;
-      color: white;
-      padding: 8px 12px;
-      border: 1px solid rgb(67, 67, 67);
-      border-radius: 5px;
+    }
+
+    #search {
+      margin-left: 15px;
+      cursor: pointer;
     }
   }
 </style>

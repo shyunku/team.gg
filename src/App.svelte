@@ -14,7 +14,5 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    // background-color: rgb(229, 217, 239);
-    flex: 1;
   }
 </style>

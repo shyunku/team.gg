@@ -1,16 +1,11 @@
 <script>
-  import MainContentWrapper from "../components/MainContentWrapper.svelte";
+  import PlayerContent from "../fragments/player/PlayerContent.svelte";
+  import PlayerHeader from "../fragments/player/PlayerHeader.svelte";
+  import PlayerSearcher from "../fragments/player/PlayerSearcher.svelte";
+  import PlayerStatMenu from "../fragments/player/PlayerStatMenu.svelte";
 </script>
 
-<MainContentWrapper>
-  <div class="content-wrapper"></div>
-</MainContentWrapper>
-
-<style lang="scss">
-  .content-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-</style>
+<PlayerSearcher />
+<PlayerHeader />
+<PlayerStatMenu />
+<PlayerContent />
