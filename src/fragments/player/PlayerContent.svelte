@@ -1,6 +1,43 @@
 <script>
   import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
   import "./PlayerContent.scss";
+
+  export let sr = {};
+  export let fr = {};
+
+  let srTierRank = "언랭";
+  let srWinRate = 0;
+  let srTierImgUrl = null;
+  let frTierRank = "언랭";
+  let frWinRate = 0;
+  let frTierImgUrl = null;
+
+  $: console.log(sr, fr);
+  $: {
+    if (sr?.tier != null && sr?.rank != null) {
+      srTierRank = sr.tier + " " + sr.rank;
+    }
+    if (sr?.wins != null && sr?.losses != null) {
+      srWinRate = sr.wins / (sr.wins + sr.losses);
+    }
+    if (sr?.tier != null) {
+      let tier = sr.tier.toLowerCase();
+      tier = tier.charAt(0).toUpperCase() + tier.slice(1);
+      srTierImgUrl = `/img/tier/Rank=${tier}.png`;
+    }
+
+    if (fr?.tier != null && fr?.rank != null) {
+      frTierRank = fr.tier + " " + fr.rank;
+    }
+    if (fr?.wins != null && fr?.losses != null) {
+      frWinRate = fr.wins / (fr.wins + fr.losses);
+    }
+    if (fr?.tier != null) {
+      let tier = fr.tier.toLowerCase();
+      tier = tier.charAt(0).toUpperCase() + tier.slice(1);
+      frTierImgUrl = `/img/tier/Rank=${tier}.png`;
+    }
+  }
 </script>
 
 <MainContentWrapper>
@@ -9,17 +46,17 @@
       <div class="solo-rank rank card">
         <div class="rank-header header">솔로랭크</div>
         <div class="rank-body">
-          <div class="rank-icon">
-            <img src="https://via.placeholder.com/80x80" />
+          <div class="rank-icon img">
+            <img src={srTierImgUrl} />
           </div>
           <div class="rank-info">
             <div class="rank-row">
-              <div class="rank-tier">플레티넘 1</div>
-              <div class="rank-lp">100 LP</div>
+              <div class="rank-tier">{srTierRank}</div>
+              <div class="rank-lp">{sr?.lp ?? "0"} LP</div>
             </div>
             <div class="rank-row">
-              <div class="rank-win-lose">156승 124패</div>
-              <div class="rank-win-rate">승률 67%</div>
+              <div class="rank-win-lose">{sr?.wins ?? "0"}승 {sr?.losses ?? "0"}패</div>
+              <div class="rank-win-rate">승률 {(100 * srWinRate).toFixed(0)}%</div>
             </div>
           </div>
         </div>
@@ -27,17 +64,17 @@
       <div class="flex-rank rank card">
         <div class="rank-header header">자유랭크</div>
         <div class="rank-body">
-          <div class="rank-icon">
-            <img src="https://via.placeholder.com/60x60" />
+          <div class="rank-icon img">
+            <img src={frTierImgUrl} />
           </div>
           <div class="rank-info">
             <div class="rank-row">
-              <div class="rank-tier">실버 2</div>
-              <div class="rank-lp">100 LP</div>
+              <div class="rank-tier">{frTierRank}</div>
+              <div class="rank-lp">{fr?.lp ?? "0"} LP</div>
             </div>
             <div class="rank-row">
-              <div class="rank-win-lose">100승 100패</div>
-              <div class="rank-win-rate">승률 50%</div>
+              <div class="rank-win-lose">{fr?.wins ?? "0"}승 {fr?.losses ?? "0"}패</div>
+              <div class="rank-win-rate">승률 {(100 * frWinRate).toFixed(0)}%</div>
             </div>
           </div>
         </div>

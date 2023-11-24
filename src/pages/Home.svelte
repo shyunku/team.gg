@@ -2,8 +2,10 @@
   import { push } from "svelte-spa-router";
   import MainContentWrapper from "../layouts/MainContentLayout.svelte";
 
+  let summonerName = "";
+
   const onPlayerSearch = () => {
-    push("/player");
+    push(`/player/${summonerName}`);
   };
 </script>
 
@@ -24,6 +26,7 @@
         type="text"
         placeholder="플레이어 이름"
         spellcheck="false"
+        bind:value={summonerName}
         on:keydown={(e) => {
           if (e.key === "Enter") onPlayerSearch();
         }}

@@ -1,17 +1,37 @@
 <script>
+  import { onDestroy } from "svelte";
   import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
+  import { profileIconUrl } from "../../thunks/GeneralThunk";
+  import { toRelativeTime } from "../../utils/Datetime";
+
+  export let summary = {};
+  let t;
+
+  let lastUpdatedRelativeTime = "-";
+  $: {
+    t = setInterval(() => {
+      if (summary?.lastUpdatedAt) {
+        let lastUpdatedAtMillis = new Date(summary?.lastUpdatedAt).getTime();
+        lastUpdatedRelativeTime = toRelativeTime(lastUpdatedAtMillis);
+      }
+    }, 1000);
+  }
+
+  onDestroy(() => {
+    clearInterval(t);
+  });
 </script>
 
 <div class="player-header">
   <MainContentWrapper>
     <div class="player-info-summary">
-      <div class="player-profile-icon">
-        <img src="https://via.placeholder.com/120x120" />
-        <div class="player-level">Lv. 250</div>
+      <div class="player-profile-icon img">
+        <img src={profileIconUrl(summary?.profileIconId)} />
+        <div class="player-level">Lv. {summary?.summonerLevel ?? "-"}</div>
       </div>
       <div class="player-profile-info">
-        <div class="player-name">summoner name</div>
-        <div class="last-renewed-time">마지막 갱신: 3분 전</div>
+        <div class="player-name">{summary?.name ?? "-"}</div>
+        <div class="last-renewed-time">마지막 갱신: {lastUpdatedRelativeTime}</div>
         <button id="renew_btn">프로필 갱신</button>
       </div>
     </div>
@@ -34,9 +54,11 @@
       .player-profile-icon {
         position: relative;
         overflow: hidden;
-        border-radius: 3px;
+        border-radius: 5px;
         width: 120px;
         height: 120px;
+        border: 2px solid $main-fg-color;
+        box-sizing: border-box;
 
         .player-level {
           display: flex;
@@ -54,8 +76,9 @@
       .player-profile-info {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         margin-left: 20px;
-        width: 100%;
+        flex: 1;
 
         .player-name {
           font-size: 28px;
@@ -65,7 +88,7 @@
         .last-renewed-time {
           font-size: 12px;
           color: rgb(215, 201, 165);
-          margin-top: 5px;
+          margin-top: 8px;
         }
 
         #renew_btn {

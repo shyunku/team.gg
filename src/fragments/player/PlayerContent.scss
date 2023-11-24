@@ -41,6 +41,10 @@
       padding: 10px 15px;
 
       .rank-icon {
+        width: 60px;
+        height: 60px;
+        // central black gradient
+        background: radial-gradient(circle, rgba(0, 0, 0, 0.207) 0%, transparent 70%);
       }
 
       .rank-info {

@@ -5,15 +5,19 @@ import terser from "@rollup/plugin-terser";
 import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 // import css from "rollup-plugin-css-only";
+import replace from "@rollup/plugin-replace";
 import sveltePreprocess from "svelte-preprocess";
 import postcss from "rollup-plugin-postcss";
 import alias from "@rollup/plugin-alias";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 
 const production = !process.env.ROLLUP_WATCH;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const scssAliasPath = path.resolve(__dirname, "src/");
+
+dotenv.config();
 
 function serve() {
   let server;
@@ -88,9 +92,13 @@ export default {
         ],
       ],
     }),
-
     alias({
       entries: [{ find: "@", replacement: scssAliasPath }],
+    }),
+    replace({
+      preventAssignment: true,
+      APP_SERVER_HOST: JSON.stringify(process.env.APP_SERVER_HOST),
+      APP_SERVER_PORT: JSON.stringify(process.env.APP_SERVER_PORT),
     }),
 
     // In dev mode, call `npm run start` once

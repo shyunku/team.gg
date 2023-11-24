@@ -4,7 +4,7 @@ import NotFound from "../pages/NotFound.svelte";
 
 const routes = {
   "/": Home,
-  "/player": Player,
+  "/player/:summonerName": Player,
   "*": NotFound,
 };
 
