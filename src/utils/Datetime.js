@@ -124,4 +124,46 @@ export function fromRelativeTime(milli, rawOptions = defaultOptions) {
   return (inversed ? "-" : "") + texts.join(" ");
 }
 
+export function toDuration(milli) {
+  if (milli == null) return "-";
+  let inversed = milli < 0;
+  if (inversed) milli = -milli;
+
+  const year = Math.floor(milli / YEAR);
+  milli %= YEAR;
+  const month = Math.floor(milli / MONTH);
+  milli %= MONTH;
+  const day = Math.floor(milli / DAY);
+  milli %= DAY;
+  const hour = Math.floor(milli / HOUR);
+  milli %= HOUR;
+  const min = Math.floor(milli / MINUTE);
+  milli %= MINUTE;
+  const sec = Math.floor(milli / SECOND);
+  milli %= SECOND;
+  const msec = milli;
+
+  const segments = [
+    { value: year, unit: "년" },
+    { value: month, unit: "개월" },
+    { value: day, unit: "일" },
+    { value: hour, unit: "시간" },
+    { value: min, unit: "분" },
+    { value: sec, unit: "초" },
+  ];
+
+  const texts = [];
+  let flag = false;
+  for (let i = 0; i < segments.length; i++) {
+    const { value, unit } = segments[i];
+    if (value > 0 || flag) {
+      texts.push(`${value}${unit}`);
+      flag = true;
+    }
+  }
+  if (texts.length === 0) texts.push("0초");
+
+  return (inversed ? "-" : "") + texts.join(" ");
+}
+
 export default {};

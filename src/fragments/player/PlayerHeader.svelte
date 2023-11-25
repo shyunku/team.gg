@@ -3,13 +3,16 @@
   import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
   import { profileIconUrl } from "../../thunks/GeneralThunk";
   import { toRelativeTime } from "../../utils/Datetime";
+  import { fastInterval } from "../../utils/Common";
 
   export let summary = {};
+  export let onTryRenew = () => {};
+  export let renewing = false;
   let t;
 
   let lastUpdatedRelativeTime = "-";
   $: {
-    t = setInterval(() => {
+    t = fastInterval(() => {
       if (summary?.lastUpdatedAt) {
         let lastUpdatedAtMillis = new Date(summary?.lastUpdatedAt).getTime();
         lastUpdatedRelativeTime = toRelativeTime(lastUpdatedAtMillis);
@@ -32,7 +35,9 @@
       <div class="player-profile-info">
         <div class="player-name">{summary?.name ?? "-"}</div>
         <div class="last-renewed-time">마지막 갱신: {lastUpdatedRelativeTime}</div>
-        <button id="renew_btn">프로필 갱신</button>
+        <button id="renew_btn" on:click={onTryRenew} disabled={renewing}
+          >{renewing ? "갱신 중..." : "프로필 갱신"}</button
+        >
       </div>
     </div>
   </MainContentWrapper>
@@ -65,11 +70,12 @@
           align-items: center;
           justify-content: center;
           position: absolute;
-          font-size: 12px;
+          font-size: 13px;
+          // font-weight: bold;
           bottom: 0;
-          padding: 6px 0;
+          padding: 7px 0;
           width: 100%;
-          background-color: rgba(0, 0, 0, 0.412);
+          background-color: rgba(0, 0, 0, 0.6);
         }
       }
 
@@ -92,14 +98,19 @@
         }
 
         #renew_btn {
-          font-size: 13px;
+          font-size: 14px;
           margin-top: 10px;
-          padding: 6px 8px;
+          padding: 10px 0;
           background-color: rgb(162, 128, 49);
           color: rgb(255, 255, 255);
           border: none;
-          width: 120px;
+          width: 140px;
           cursor: pointer;
+
+          &:disabled {
+            background-color: rgb(59, 51, 32);
+            cursor: not-allowed;
+          }
         }
       }
     }

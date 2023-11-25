@@ -1,0 +1,178 @@
+.masteries {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .most3-masteries {
+    display: flex;
+    padding: 20px 0;
+
+    .mastery {
+      flex: 1;
+      padding: 12px 25px;
+
+      &:not(:first-child) {
+        margin-left: 18px;
+      }
+
+      .mastery-image {
+        width: 80px;
+        height: 80px;
+        background-color: black;
+      }
+
+      .mastery-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 18px;
+        flex: 1;
+
+        .mastery-name {
+          font-size: 24px;
+          font-weight: bold;
+          // color: white;
+        }
+
+        .mastery-points {
+          font-size: 18px;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .masteries-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+
+    .mastery {
+      &:not(:first-child) {
+        margin-top: 12px;
+      }
+
+      .mastery-image {
+        width: 40px;
+        height: 40px;
+        background-color: black;
+      }
+
+      .mastery-info {
+        display: flex;
+        margin-left: 15px;
+        flex: 1;
+        justify-content: flex-end;
+        align-items: center;
+
+        .mastery-name {
+          flex: 1;
+          font-size: 17px;
+          // color: white;
+          font-weight: bold;
+        }
+
+        .mastery-points {
+          flex: 1;
+          text-align: right;
+          // font-size: 13px;
+          // color: rgb(174, 160, 123);
+        }
+      }
+    }
+  }
+
+  .mastery {
+    display: flex;
+    flex-direction: row;
+    padding: 7px 18px;
+    padding-left: 20px;
+    align-items: center;
+    color: rgb(215, 201, 165);
+    position: relative;
+    background-color: rgb(23, 23, 23);
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    transition: 0.1s linear;
+    overflow: hidden;
+
+    .color-flag {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background-color: rgb(54, 54, 54);
+    }
+
+    .mastery-header {
+      display: flex;
+      align-items: center;
+
+      .mastery-level {
+        display: flex;
+        width: 22px;
+        height: 22px;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(47, 44, 35);
+        margin-right: 10px;
+        border-radius: 3px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+
+    &:hover {
+      border: 1px solid rgb(125, 106, 61);
+      box-shadow: 0 0 10px 1px rgb(125, 106, 61);
+    }
+
+    &.m-7 {
+      color: rgb(142, 183, 188);
+      background-color: rgb(31, 41, 44);
+      .color-flag {
+        background-color: rgb(31, 139, 153);
+      }
+      .mastery-level {
+        background-color: rgb(29, 139, 179);
+        color: white;
+      }
+      &:hover {
+        border: 1px solid rgb(29, 139, 179);
+        box-shadow: 0 0 10px 1px rgb(29, 139, 179);
+      }
+    }
+
+    &.m-6 {
+      color: rgb(206, 176, 206);
+      background-color: rgb(41, 31, 41);
+      .color-flag {
+        background-color: rgb(171, 59, 173);
+      }
+      .mastery-level {
+        background-color: rgb(150, 30, 152);
+        color: white;
+      }
+      &:hover {
+        border: 1px solid rgb(150, 30, 152);
+        box-shadow: 0 0 10px 1px rgb(150, 30, 152);
+      }
+    }
+
+    &.m-5 {
+      color: rgb(217, 176, 176);
+      background-color: rgb(45, 30, 30);
+      .color-flag {
+        background-color: rgb(182, 56, 56);
+      }
+      .mastery-level {
+        background-color: rgb(164, 61, 61);
+        color: white;
+      }
+      &:hover {
+        border: 1px solid rgb(164, 61, 61);
+        box-shadow: 0 0 10px 1px rgb(164, 61, 61);
+      }
+    }
+  }
+}

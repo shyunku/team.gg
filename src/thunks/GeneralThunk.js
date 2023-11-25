@@ -8,6 +8,29 @@ export const getSummonerInfo = async (summonerName) => {
   return response.data;
 };
 
+export const renewSummonerInfo = async (puuid) => {
+  const response = await axios.post(`${ServerHost}/renewSummoner`, {
+    puuid: puuid,
+  });
+  return response.data;
+};
+
 export const profileIconUrl = (profileIconId) => {
-  return `${ServerHost}/profileIcon?id=${profileIconId}`;
+  return `${ServerHost}/icon/profile?id=${profileIconId}`;
+};
+
+export const championIconUrl = (championId) => {
+  return `${ServerHost}/icon/champion?key=${championId}`;
+};
+
+export const summonerSpellIconUrl = (spellId) => {
+  return `${ServerHost}/icon/summonerSpell?id=${spellId}`;
+};
+
+export const itemIconUrl = (itemId) => {
+  return `${ServerHost}/icon/item?id=${itemId}`;
+};
+
+export const perkStyleIconUrl = (perkStyleId) => {
+  return `${ServerHost}/icon/perkStyle?id=${perkStyleId}`;
 };

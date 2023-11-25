@@ -1,13 +1,31 @@
 <script>
   import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
+  import { PlayerInfoMenu } from "../../types/General";
+  import { location, push, querystring } from "svelte-spa-router";
+  import JsxUtil from "../../utils/JsxUtil";
+
+  export let summonerName;
+  export let menu;
 </script>
 
 <div class="player-stat-menu">
   <MainContentWrapper>
     <div class="menu-items">
-      <div class="stat-menu-item selected">종합</div>
-      <div class="stat-menu-item">인게임</div>
-      <div class="stat-menu-item">숙련도</div>
+      {#each Object.keys(PlayerInfoMenu) as menuKey}
+        <div
+          class={"stat-menu-item" + JsxUtil.classByEqual(menu, PlayerInfoMenu[menuKey], "selected")}
+          on:mousedown={() => {
+            menu = PlayerInfoMenu[menuKey];
+            if (menu === PlayerInfoMenu.total) {
+              push(`/player/${encodeURIComponent(summonerName)}`);
+            } else {
+              push(`/player/${encodeURIComponent(summonerName)}/${menuKey}`);
+            }
+          }}
+        >
+          {PlayerInfoMenu[menuKey]}
+        </div>
+      {/each}
     </div>
   </MainContentWrapper>
 </div>

@@ -1,11 +1,14 @@
 <script>
+  import SafeImg from "../atoms/SafeImg.svelte";
   import MainContentWrapper from "../layouts/MainContentLayout.svelte";
 </script>
 
 <div class="header">
   <MainContentWrapper>
-    <div class="app-icon">
-      <img src="https://via.placeholder.com/100x32" />
+    <div class="app-icon-wrapper">
+      <div class="app-icon img">
+        <SafeImg src="/img/common/app_logo.png" />
+      </div>
     </div>
     <div class="app-menu">
       <div class="app-menu-item selected">홈</div>
@@ -28,9 +31,17 @@
     border-bottom: 1px solid $main-border-color;
   }
 
+  .app-icon-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
   .app-icon {
     display: flex;
     align-items: center;
+    width: 120px;
+    height: 32px;
   }
 
   .app-menu {

@@ -1,5 +1,15 @@
 <script>
+  import { push } from "svelte-spa-router";
   import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
+
+  export let summonerName = "";
+  let playerNameSearchInput = "";
+
+  const onPlayerSearch = () => {
+    if (playerNameSearchInput === "") return;
+    summonerName = playerNameSearchInput;
+    push(`/player/${summonerName}`);
+  };
 </script>
 
 <div class="player-searcher">
@@ -12,8 +22,17 @@
           <option>EU</option>
         </select>
       </div>
-      <input id="player_name_input" type="text" placeholder="플레이어 이름" spellcheck="false" />
-      <button id="search_btn">검색</button>
+      <input
+        id="player_name_input"
+        type="text"
+        placeholder="플레이어 이름"
+        spellcheck="false"
+        bind:value={playerNameSearchInput}
+        on:keydown={(e) => {
+          if (e.key === "Enter") onPlayerSearch();
+        }}
+      />
+      <button id="search_btn" on:click={onPlayerSearch}>검색</button>
     </div>
   </MainContentWrapper>
 </div>

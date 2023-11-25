@@ -31,6 +31,9 @@ body {
   overflow-y: overlay;
 
   font-family: "rix", sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased; /* 크롬, 사파리 등 웹킷 기반 브라우저용 */
+  -moz-osx-font-smoothing: grayscale; /* 파이어폭스용 */
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -61,10 +64,32 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: $sub-bg-color;
+  border-radius: 3px;
+  overflow: hidden;
+
+  & > .header {
+    padding: 10px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    border-bottom: 1px solid rgb(82, 74, 58);
+    color: rgb(215, 201, 165);
+  }
+
+  & > .body {
+    padding: 10px 15px;
+    color: rgb(215, 201, 165);
   }
 }
