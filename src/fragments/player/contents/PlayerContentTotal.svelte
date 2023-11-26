@@ -20,12 +20,21 @@
   export let matches = [];
   export let puuid = null;
 
+  export let loadMoreBefore = () => {};
+  export let loadingMoreMatches = false;
+
   let srTierRank = "언랭";
   let srWinRate = 0;
   let srTierImgUrl = null;
   let frTierRank = "언랭";
   let frWinRate = 0;
   let frTierImgUrl = null;
+  let oldestMatchStartTimestamp = null;
+  $: {
+    if (sortedMatches?.length > 0) {
+      oldestMatchStartTimestamp = sortedMatches[sortedMatches.length - 1].gameStartTimestamp;
+    }
+  }
 
   let sortedMatches = [];
   let duoList = [];
@@ -89,8 +98,8 @@
     duoList.sort((a, b) => b.gameCount - a.gameCount);
   }
 
-  $: {
-    console.log(sortedMatches[0]);
+  $: if (sortedMatches?.length > 0) {
+    console.log(sortedMatches?.[0]);
   }
 
   const getKillAssistRate = (match) => {
@@ -105,7 +114,7 @@
         killSum += teammate?.kills ?? 0;
       });
     }
-    if (killSum === 0 && assistSum === 0) return 0;
+    if (killSum === 0) return 0;
     return (match?.myStat?.kills + match?.myStat?.assists) / killSum;
   };
 
@@ -282,8 +291,9 @@
                 </div>
                 <div class="item-section">
                   {#each Array(7) as item, i}
+                    {@const itemId = match?.myStat?.[`item${i}`]}
                     <div class="item img">
-                      <SafeImg src={itemIconUrl(match?.myStat?.[`item${i}`])} />
+                      <SafeImg src={itemId ? itemIconUrl(match?.myStat?.[`item${i}`]) : null} />
                     </div>
                   {/each}
                 </div>
@@ -343,7 +353,14 @@
             </div>
           </div>
         {/each}
-        <div class="more-matches card">20개 더보기</div>
+        <div
+          class="more-matches card"
+          on:mousedown={(e) => {
+            loadMoreBefore(oldestMatchStartTimestamp);
+          }}
+        >
+          {loadingMoreMatches ? "불러오는 중..." : "20개 더보기"}
+        </div>
       </div>
     </div>
   </div>

@@ -26,7 +26,7 @@
     align-items: center;
     // background-color: rgb(118, 25, 180);
     color: white;
-    height: 56px;
+    height: 60px;
     padding: 0 12px;
     border-bottom: 1px solid $main-border-color;
   }
@@ -55,10 +55,10 @@
       display: flex;
       align-items: center;
       cursor: pointer;
-      //   font-weight: bold;
+      font-weight: bold;
       height: 100%;
       color: $main-fg-color;
-      font-size: 16px;
+      font-size: 21px;
       padding: 0 18px;
       background: linear-gradient(180deg, transparent 50%, transparent 100%);
       transition: 0.5s linear;

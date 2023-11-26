@@ -4,9 +4,11 @@
   import { profileIconUrl } from "../../thunks/GeneralThunk";
   import { toRelativeTime } from "../../utils/Datetime";
   import { fastInterval } from "../../utils/Common";
+  import Skeleton from "../../molecules/Skeleton.svelte";
 
   export let summary = {};
   export let onTryRenew = () => {};
+  export let loading = true;
   export let renewing = false;
   let t;
 
@@ -33,9 +35,15 @@
         <div class="player-level">Lv. {summary?.summonerLevel ?? "-"}</div>
       </div>
       <div class="player-profile-info">
-        <div class="player-name">{summary?.name ?? "-"}</div>
+        <div class="player-name">
+          {#if loading}
+            <Skeleton height={"40px"} />
+          {:else}
+            {summary?.name ?? "-"}
+          {/if}
+        </div>
         <div class="last-renewed-time">마지막 갱신: {lastUpdatedRelativeTime}</div>
-        <button id="renew_btn" on:click={onTryRenew} disabled={renewing}
+        <button id="renew_btn" on:click={onTryRenew} disabled={renewing || summary?.puuid == null}
           >{renewing ? "갱신 중..." : "프로필 갱신"}</button
         >
       </div>
@@ -82,7 +90,8 @@
       .player-profile-info {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
+        padding: 5px 0;
         margin-left: 20px;
         flex: 1;
 

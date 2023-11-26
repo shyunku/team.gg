@@ -15,6 +15,14 @@ export const renewSummonerInfo = async (puuid) => {
   return response.data;
 };
 
+export const loadMoreMatches = async (puuid, before) => {
+  const response = await axios.post(`${ServerHost}/loadMatches`, {
+    puuid: puuid,
+    before: before,
+  });
+  return response.data;
+};
+
 export const profileIconUrl = (profileIconId) => {
   return `${ServerHost}/icon/profile?id=${profileIconId}`;
 };
