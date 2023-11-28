@@ -8,7 +8,11 @@
     profileIconUrl,
     summonerSpellIconUrl,
   } from "../../../thunks/GeneralThunk";
-  import { MultiKill, QueueType, TeamPositionType } from "../../../types/General";
+  import {
+    MultiKill,
+    QueueType,
+    TeamPositionType,
+  } from "../../../types/General";
   import { formatDecimalBy3 } from "../../../utils/Common";
   import { toDuration, toRelativeTime } from "../../../utils/Datetime";
   import IoIosArrowDown from "svelte-icons/io/IoIosArrowDown.svelte";
@@ -32,13 +36,16 @@
   let oldestMatchStartTimestamp = null;
   $: {
     if (sortedMatches?.length > 0) {
-      oldestMatchStartTimestamp = sortedMatches[sortedMatches.length - 1].gameStartTimestamp;
+      oldestMatchStartTimestamp =
+        sortedMatches[sortedMatches.length - 1].gameStartTimestamp;
     }
   }
 
   let sortedMatches = [];
   let duoList = [];
-  $: sortedMatches = (matches ?? []).sort((a, b) => b.gameCreation - a.gameCreation);
+  $: sortedMatches = (matches ?? []).sort(
+    (a, b) => b.gameCreation - a.gameCreation
+  );
 
   $: {
     if (sr?.tier != null && sr?.rank != null) {
@@ -103,7 +110,9 @@
   }
 
   const getKillAssistRate = (match) => {
-    const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid);
+    const isTeam1 = match?.team1?.some(
+      (teammate) => teammate?.puuid === match?.myStat?.puuid
+    );
     let killSum = 0;
     if (isTeam1) {
       match?.team1?.forEach((teammate) => {
@@ -133,7 +142,9 @@
   };
 
   const getDamageDealtPercentageInTeam = (match) => {
-    const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid);
+    const isTeam1 = match?.team1?.some(
+      (teammate) => teammate?.puuid === match?.myStat?.puuid
+    );
     let dealtSum = 0;
     if (isTeam1) {
       match?.team1?.forEach((teammate) => {
@@ -150,8 +161,13 @@
 
   const getDamageDealtRanking = (match) => {
     const participants = (match?.team1 ?? []).concat(match?.team2 ?? []);
-    participants.sort((a, b) => (b?.totalDealtToChampions ?? 0) - (a?.totalDealtToChampions ?? 0));
-    const myIndex = participants.findIndex((participant) => participant?.puuid === match?.myStat?.puuid);
+    participants.sort(
+      (a, b) =>
+        (b?.totalDealtToChampions ?? 0) - (a?.totalDealtToChampions ?? 0)
+    );
+    const myIndex = participants.findIndex(
+      (participant) => participant?.puuid === match?.myStat?.puuid
+    );
     return myIndex + 1;
   };
 </script>
@@ -171,8 +187,12 @@
               <div class="rank-lp">{sr?.lp ?? "0"} LP</div>
             </div>
             <div class="rank-row">
-              <div class="rank-win-lose">{sr?.wins ?? "0"}승 {sr?.losses ?? "0"}패</div>
-              <div class="rank-win-rate">승률 {(100 * srWinRate).toFixed(0)}%</div>
+              <div class="rank-win-lose">
+                {sr?.wins ?? "0"}승 {sr?.losses ?? "0"}패
+              </div>
+              <div class="rank-win-rate">
+                승률 {(100 * srWinRate).toFixed(0)}%
+              </div>
             </div>
           </div>
         </div>
@@ -189,8 +209,12 @@
               <div class="rank-lp">{fr?.lp ?? "0"} LP</div>
             </div>
             <div class="rank-row">
-              <div class="rank-win-lose">{fr?.wins ?? "0"}승 {fr?.losses ?? "0"}패</div>
-              <div class="rank-win-rate">승률 {(100 * frWinRate).toFixed(0)}%</div>
+              <div class="rank-win-lose">
+                {fr?.wins ?? "0"}승 {fr?.losses ?? "0"}패
+              </div>
+              <div class="rank-win-rate">
+                승률 {(100 * frWinRate).toFixed(0)}%
+              </div>
             </div>
           </div>
         </div>
@@ -213,7 +237,9 @@
               </div>
               <div class="player-name">{duo?.name ?? "-"}</div>
               <div class="player-game-count">{duo?.gameCount ?? "-"}</div>
-              <div class="player-win-lose">{duo?.winCount ?? "-"}승 {lossCount}패</div>
+              <div class="player-win-lose">
+                {duo?.winCount ?? "-"}승 {lossCount}패
+              </div>
               <div class="player-win-rate">{(winRate * 100).toFixed(0)}%</div>
             </div>
           {/each}
@@ -238,23 +264,36 @@
           {@const kills = match?.myStat?.kills}
           {@const deaths = match?.myStat?.deaths}
           {@const assists = match?.myStat?.assists}
-          {@const kda = deaths === 0 ? "Perfect" : `${((kills + assists) / deaths).toFixed(2)}`}
+          {@const kda =
+            deaths === 0
+              ? "Perfect"
+              : `${((kills + assists) / deaths).toFixed(2)}`}
           {@const multiKillCode = getMultiKillCode(match)}
           {@const multiKillLabel = MultiKill[multiKillCode]}
-          {@const csPerMinute = (match?.myStat?.totalMinionsKilled ?? 0) / (match?.gameDuration / 60)}
+          {@const csPerMinute =
+            (match?.myStat?.totalMinionsKilled ?? 0) /
+            (match?.gameDuration / 60)}
           {@const teamPosition =
-            match?.myStat?.teamPosition && match?.myStat?.teamPosition !== "" ? match?.myStat?.teamPosition : null}
+            match?.myStat?.teamPosition && match?.myStat?.teamPosition !== ""
+              ? match?.myStat?.teamPosition
+              : null}
           {@const dealtPercentageInTeam = getDamageDealtPercentageInTeam(match)}
           {@const dealtRanking = getDamageDealtRanking(match)}
           <div class={"match " + (match?.myStat?.win ? "win" : "lose")}>
             <div class="color-flag"></div>
             <div class="header">
-              <div class="match-type">{QueueType[match?.queueId] ?? "게임 모드"}</div>
+              <div class="match-type">
+                {QueueType[match?.queueId] ?? "게임 모드"}
+              </div>
               <div class="match-win">
                 {match?.myStat?.win ? "승리" : "패배"}
               </div>
-              <div class="match-date">{toRelativeTime(match?.gameEndTimestamp)}</div>
-              <div class="match-duration">{toDuration(match?.gameDuration * 1000)}</div>
+              <div class="match-date">
+                {toRelativeTime(match?.gameEndTimestamp)}
+              </div>
+              <div class="match-duration">
+                {toDuration(match?.gameDuration * 1000)}
+              </div>
             </div>
             <div class="body">
               <div class="champion-item-section">
@@ -264,27 +303,39 @@
                   </div>
                   <div class="spell-section">
                     <div class="spell-icon img">
-                      <SafeImg src={summonerSpellIconUrl(match?.myStat?.summoner1Id)} />
+                      <SafeImg
+                        src={summonerSpellIconUrl(match?.myStat?.summoner1Id)}
+                      />
                     </div>
                     <div class="spell-icon sub img">
-                      <SafeImg src={summonerSpellIconUrl(match?.myStat?.summoner2Id)} />
+                      <SafeImg
+                        src={summonerSpellIconUrl(match?.myStat?.summoner2Id)}
+                      />
                     </div>
                   </div>
                   <div class="rune-section">
                     <div class="rune-icon img">
-                      <SafeImg src={perkStyleIconUrl(match?.myStat?.primaryPerkStyle)} />
+                      <SafeImg
+                        src={perkStyleIconUrl(match?.myStat?.primaryPerkStyle)}
+                      />
                     </div>
                     <div class="rune-icon sub img">
-                      <SafeImg src={perkStyleIconUrl(match?.myStat?.subPerkStyle)} />
+                      <SafeImg
+                        src={perkStyleIconUrl(match?.myStat?.subPerkStyle)}
+                      />
                     </div>
                   </div>
                   <div class="kda-section">
                     <div class="kda">
                       <div class="kda-segment kill">{match?.myStat?.kills}</div>
                       <div class="kda-split">/</div>
-                      <div class="kda-segment death">{match?.myStat?.deaths}</div>
+                      <div class="kda-segment death">
+                        {match?.myStat?.deaths}
+                      </div>
                       <div class="kda-split">/</div>
-                      <div class="kda-segment assist">{match?.myStat?.assists}</div>
+                      <div class="kda-segment assist">
+                        {match?.myStat?.assists}
+                      </div>
                     </div>
                     <div class="kda-rate">평점 {kda}</div>
                   </div>
@@ -293,7 +344,11 @@
                   {#each Array(7) as item, i}
                     {@const itemId = match?.myStat?.[`item${i}`]}
                     <div class="item img">
-                      <SafeImg src={itemId ? itemIconUrl(match?.myStat?.[`item${i}`]) : null} />
+                      <SafeImg
+                        src={itemId
+                          ? itemIconUrl(match?.myStat?.[`item${i}`])
+                          : null}
+                      />
                     </div>
                   {/each}
                 </div>
@@ -301,24 +356,38 @@
               <div class="ingame-stat-section">
                 <div class="ingame-stat-detail">
                   <div class="subsection">
-                    <div class="kill-assists-rate">킬 관여 {(getKillAssistRate(match) * 100).toFixed(0)}%</div>
-                    <div class="minion-kills">
-                      CS {match?.myStat?.totalMinionsKilled ?? 0} ({csPerMinute.toFixed(1)})
+                    <div class="kill-assists-rate">
+                      킬 관여 {(getKillAssistRate(match) * 100).toFixed(0)}%
                     </div>
-                    <div class="gold">{formatDecimalBy3(match?.myStat?.goldEarned)} 골드</div>
+                    <div class="minion-kills">
+                      CS {match?.myStat?.totalMinionsKilled ?? 0} ({csPerMinute.toFixed(
+                        1
+                      )})
+                    </div>
+                    <div class="gold">
+                      {formatDecimalBy3(match?.myStat?.goldEarned)} 골드
+                    </div>
                   </div>
                   <div class="split"></div>
                   <div class="subsection">
-                    <div class="dealt-rate">딜량 {(dealtPercentageInTeam * 100).toFixed(0)}%</div>
-                    <div class="cc-time">CC {toDuration((match?.myStat?.totalCCDealt ?? 0) * 1000)}</div>
+                    <div class="dealt-rate">
+                      딜량 {(dealtPercentageInTeam * 100).toFixed(0)}%
+                    </div>
+                    <div class="cc-time">
+                      CC {toDuration((match?.myStat?.totalCCDealt ?? 0) * 1000)}
+                    </div>
                     <!-- <div class="vision">시야점수 25</div> -->
-                    <div class="lane">{TeamPositionType[teamPosition] ?? ""}</div>
+                    <div class="lane">
+                      {TeamPositionType[teamPosition] ?? ""}
+                    </div>
                     <!-- <div class="wards">와드 3</div> -->
                   </div>
                 </div>
                 <div class="representative-decorations">
                   {#if multiKillLabel != null}
-                    <div class={"deco" + JsxUtil.class(multiKillCode)}>{multiKillLabel}</div>
+                    <div class={"deco" + JsxUtil.class(multiKillCode)}>
+                      {multiKillLabel}
+                    </div>
                   {/if}
                   <div class="deco">딜량 {dealtRanking}등</div>
                 </div>
@@ -326,21 +395,39 @@
               <div class="ingame-summoners-section">
                 <div class="team team-1">
                   {#each match?.team1 ?? [] as teammate}
-                    <div class={"teammate" + JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}>
+                    {@const nameTag =
+                      teammate?.riotIdName && teammate?.riotIdTagLine
+                        ? `${teammate?.riotIdName} #${teammate?.riotIdTagLine}`
+                        : "-"}
+                    <div
+                      class={"teammate" +
+                        JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}
+                    >
                       <div class="teammate-icon img">
                         <SafeImg src={championIconUrl(teammate?.championId)} />
                       </div>
-                      <div class="teammate-name">{teammate?.summonerName ?? "-"}</div>
+                      <div class="teammate-name">
+                        {nameTag}
+                      </div>
                     </div>
                   {/each}
                 </div>
                 <div class="team team-2">
                   {#each match?.team2 ?? [] as teammate}
-                    <div class={"teammate" + JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}>
+                    {@const nameTag =
+                      teammate?.riotIdName && teammate?.riotIdTagLine
+                        ? `${teammate?.riotIdName} #${teammate?.riotIdTagLine}`
+                        : "-"}
+                    <div
+                      class={"teammate" +
+                        JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}
+                    >
                       <div class="teammate-icon img">
                         <SafeImg src={championIconUrl(teammate?.championId)} />
                       </div>
-                      <div class="teammate-name">{teammate?.summonerName ?? "-"}</div>
+                      <div class="teammate-name">
+                        {nameTag}
+                      </div>
                     </div>
                   {/each}
                 </div>

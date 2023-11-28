@@ -4,7 +4,11 @@
   import PlayerSearcher from "../fragments/player/PlayerSearcher.svelte";
   import PlayerStatMenu from "../fragments/player/PlayerStatMenu.svelte";
   import { PlayerInfoMenu } from "../types/General";
-  import { getSummonerInfo, loadMoreMatches, renewSummonerInfo } from "../thunks/GeneralThunk";
+  import {
+    getSummonerInfo,
+    loadMoreMatches,
+    renewSummonerInfo,
+  } from "../thunks/GeneralThunk";
   import PlayerContentMastery from "../fragments/player/contents/PlayerContentMastery.svelte";
   import PlayerContentIngame from "../fragments/player/contents/PlayerContentIngame.svelte";
   import { location, push } from "svelte-spa-router";
@@ -23,7 +27,10 @@
 
   $: {
     // console.log("params", params);
-    if (!loading && (summonerInfo == null || summonerName != params?.summonerName)) {
+    if (
+      !loading &&
+      (summonerInfo == null || summonerName != params?.summonerName)
+    ) {
       summonerName = params.summonerName;
       console.log(">> load", summonerName);
       loadSummonerInfo();
@@ -54,6 +61,9 @@
         console.log(`${searchingName}은/는 존재하지 않는 소환사입니다.`);
         summonerNotFound = true;
         summonerInfo = {};
+      } else {
+        alert("오류가 발생했습니다.");
+        push("/");
       }
     } finally {
       renewing = false;
@@ -109,7 +119,12 @@
   <!-- TODO :: design this -->
   <div class="not-found">'{summonerName}'는 존재하지 않는 소환사입니다.</div>
 {:else}
-  <PlayerHeader summary={summonerInfo?.summary} {onTryRenew} {renewing} {loading} />
+  <PlayerHeader
+    summary={summonerInfo?.summary}
+    {onTryRenew}
+    {renewing}
+    {loading}
+  />
   <PlayerStatMenu bind:menu {summonerName} />
   {#if menu === PlayerInfoMenu.total}
     {#if summonerInfo?.summary?.puuid != null}
