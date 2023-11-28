@@ -279,14 +279,27 @@
               : null}
           {@const dealtPercentageInTeam = getDamageDealtPercentageInTeam(match)}
           {@const dealtRanking = getDamageDealtRanking(match)}
-          <div class={"match " + (match?.myStat?.win ? "win" : "lose")}>
+          {@const earlySurrender =
+            match?.myStat?.gameEndedInEarlySurrender ?? false}
+          <div
+            class={"match " +
+              (earlySurrender
+                ? "early-surrender"
+                : match?.myStat?.win
+                  ? "win"
+                  : "lose")}
+          >
             <div class="color-flag"></div>
             <div class="header">
               <div class="match-type">
                 {QueueType[match?.queueId] ?? "게임 모드"}
               </div>
               <div class="match-win">
-                {match?.myStat?.win ? "승리" : "패배"}
+                {earlySurrender
+                  ? "다시하기"
+                  : match?.myStat?.win
+                    ? "승리"
+                    : "패배"}
               </div>
               <div class="match-date">
                 {toRelativeTime(match?.gameEndTimestamp)}

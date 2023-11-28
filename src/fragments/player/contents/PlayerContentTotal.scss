@@ -28,7 +28,11 @@
       .rank-icon {
         width: 60px;
         height: 60px;
-        background: radial-gradient(circle, rgba(0, 0, 0, 0.207) 0%, transparent 70%) !important;
+        background: radial-gradient(
+          circle,
+          rgba(0, 0, 0, 0.207) 0%,
+          transparent 70%
+        ) !important;
       }
 
       .rank-info {
@@ -192,6 +196,7 @@
       display: flex;
       position: relative;
       background-color: rgb(27, 27, 27);
+      color: rgb(140, 140, 140);
       border-radius: 3px;
       padding-left: $color-flag-width;
       overflow: hidden;
@@ -208,7 +213,7 @@
         color: rgb(132, 151, 168);
 
         .match-type {
-          color: rgb(202, 223, 244);
+          color: rgb(202, 223, 244) !important;
         }
         .color-flag {
           background-color: rgb(41, 107, 164);
@@ -225,7 +230,7 @@
         background-color: rgb(43, 27, 27);
         color: rgb(170, 130, 130);
         .match-type {
-          color: rgb(246, 206, 206);
+          color: rgb(246, 206, 206) !important;
         }
         .color-flag {
           background-color: rgb(194, 77, 77);
@@ -263,6 +268,7 @@
         .match-type {
           font-size: 18px;
           font-weight: bolder;
+          color: rgb(226, 226, 226);
         }
 
         .match-win {
@@ -518,7 +524,11 @@
               }
 
               &.triple {
-                background: linear-gradient(135deg, rgb(46, 74, 108) 0%, rgb(23, 83, 157) 100%);
+                background: linear-gradient(
+                  135deg,
+                  rgb(46, 74, 108) 0%,
+                  rgb(23, 83, 157) 100%
+                );
                 color: white;
               }
 
