@@ -4,6 +4,10 @@
   import Header from "./organisms/Header.svelte";
 </script>
 
+<svelte:head>
+  <title>team.gg</title>
+</svelte:head>
+
 <Header />
 <div class="content">
   <Router {routes} />

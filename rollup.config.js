@@ -12,12 +12,16 @@ import alias from "@rollup/plugin-alias";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import PackageJson from "./package.json" assert { type: "json" };
 
 const production = !process.env.ROLLUP_WATCH;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const scssAliasPath = path.resolve(__dirname, "src/");
 
-dotenv.config();
+const isProduction = process.env.NODE_ENV === "production";
+dotenv.config({
+  path: isProduction ? ".production.env" : ".dev.env",
+});
 
 function serve() {
   let server;
@@ -99,6 +103,7 @@ export default {
       preventAssignment: true,
       APP_SERVER_HOST: JSON.stringify(process.env.APP_SERVER_HOST),
       APP_SERVER_PORT: JSON.stringify(process.env.APP_SERVER_PORT),
+      APP_VERSION: JSON.stringify(PackageJson.version),
     }),
 
     // In dev mode, call `npm run start` once

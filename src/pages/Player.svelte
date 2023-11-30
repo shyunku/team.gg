@@ -55,10 +55,10 @@
     } catch (e) {
       console.error(e);
       // console.error(e.response?.status);
+      summonerInfo = {};
       if (e.response?.status === 404) {
         console.log(`${searchingName}은/는 존재하지 않는 소환사입니다.`);
         summonerNotFound = true;
-        summonerInfo = {};
       } else {
         alert("오류가 발생했습니다.");
         push("/");
@@ -111,6 +111,10 @@
     }
   };
 </script>
+
+<svelte:head>
+  <title>{summonerName} #{summonerTag} 전적검색</title>
+</svelte:head>
 
 <PlayerSearcher bind:summonerName />
 {#if summonerNotFound}

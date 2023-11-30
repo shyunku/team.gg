@@ -3,6 +3,7 @@
   import MainContentWrapper from "../layouts/MainContentLayout.svelte";
   import JsxUtil from "../utils/JsxUtil";
   import NameTagSearcher from "../molecules/NameTagSearchInput.svelte";
+  import SafeImg from "../atoms/SafeImg.svelte";
 
   let summonerName = "";
   let summonerTag = null;
@@ -14,8 +15,9 @@
 
 <MainContentWrapper>
   <div class="content-wrapper">
-    <div class="app-logo">
-      <img src="https://via.placeholder.com/320x200" />
+    <div class="app-logo img">
+      <SafeImg src="/img/common/app_logo.png" />
+      <div class="version">v{APP_VERSION}</div>
     </div>
     <div class="summoner-searcher">
       <div class="summoner-region">
@@ -34,6 +36,7 @@
 </MainContentWrapper>
 
 <style lang="scss">
+  @import "../styles/variables.scss";
   .content-wrapper {
     display: flex;
     flex-direction: column;
@@ -42,8 +45,20 @@
   }
 
   .app-logo {
+    position: relative;
     margin-top: 100px;
     margin-bottom: 50px;
+    width: 300px;
+
+    .version {
+      position: absolute;
+      bottom: 15px;
+      left: 100%;
+      margin-left: 5px;
+      color: $main-fg-color;
+      font-weight: bold;
+      font-size: 13px;
+    }
   }
 
   .summoner-searcher {
