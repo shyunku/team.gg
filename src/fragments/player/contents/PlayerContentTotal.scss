@@ -28,11 +28,7 @@
       .rank-icon {
         width: 60px;
         height: 60px;
-        background: radial-gradient(
-          circle,
-          rgba(0, 0, 0, 0.207) 0%,
-          transparent 70%
-        ) !important;
+        background: radial-gradient(circle, rgba(0, 0, 0, 0.207) 0%, transparent 70%) !important;
       }
 
       .rank-info {
@@ -108,6 +104,7 @@
           width: 20px;
           height: 20px;
           border-radius: 3px;
+          overflow: hidden;
         }
 
         .player-name {
@@ -524,11 +521,7 @@
               }
 
               &.triple {
-                background: linear-gradient(
-                  135deg,
-                  rgb(46, 74, 108) 0%,
-                  rgb(23, 83, 157) 100%
-                );
+                background: linear-gradient(135deg, rgb(46, 74, 108) 0%, rgb(23, 83, 157) 100%);
                 color: white;
               }
 
@@ -572,6 +565,10 @@
                   color: rgb(255, 255, 255) !important;
                   // font-weight: bold;
                 }
+
+                .teammate-tag {
+                  color: rgb(255, 255, 255, 0.5) !important;
+                }
               }
 
               .teammate-icon {
@@ -581,21 +578,34 @@
                 height: 18px;
               }
 
-              .teammate-name {
-                // display: flex;
-                // align-items: center;
+              .teammate-nametag {
+                display: flex;
                 margin-left: 6px;
                 font-size: 13px;
                 flex: 1;
-                width: 80px;
+                width: 85px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 margin-bottom: -3px;
                 cursor: pointer;
+                align-items: center;
 
                 &:hover {
                   color: $main-fg-color;
+
+                  .teammate-tag {
+                    color: rgba(255, 255, 255, 0.5);
+                  }
+                }
+
+                .teammate-tag {
+                  margin-left: 5px;
+                  font-size: 11px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  color: rgba(255, 255, 255, 0.2);
                 }
               }
             }

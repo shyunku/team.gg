@@ -1,11 +1,14 @@
 <script>
   import { push } from "svelte-spa-router";
   import MainContentWrapper from "../layouts/MainContentLayout.svelte";
+  import JsxUtil from "../utils/JsxUtil";
+  import NameTagSearcher from "../molecules/NameTagSearchInput.svelte";
 
   let summonerName = "";
+  let summonerTag = null;
 
   const onPlayerSearch = () => {
-    push(`/player/${summonerName}`);
+    push(`/player/${summonerName}/${summonerTag ?? "KR1"}`);
   };
 </script>
 
@@ -18,19 +21,13 @@
       <div class="summoner-region">
         <select>
           <option>KR</option>
-          <option>NA</option>
-          <option>EU</option>
+          <!-- <option>NA</option>
+          <option>EU</option> -->
         </select>
       </div>
-      <input
-        type="text"
-        placeholder="플레이어 이름"
-        spellcheck="false"
-        bind:value={summonerName}
-        on:keydown={(e) => {
-          if (e.key === "Enter") onPlayerSearch();
-        }}
-      />
+      <div class={"id-tag-searcher" + JsxUtil.classByCondition(summonerName.length > 0, "unempty")}>
+        <NameTagSearcher bind:summonerName bind:summonerTag onEnter={onPlayerSearch} />
+      </div>
       <button id="search" on:click={onPlayerSearch}>검색</button>
     </div>
   </div>
@@ -67,9 +64,17 @@
     select {
     }
 
-    input {
+    .id-tag-searcher {
+      display: flex;
+      position: relative;
+      align-items: center;
       margin-left: 15px;
       width: 500px;
+      border: 1px solid rgb(67, 67, 67);
+      height: 40px;
+      border-radius: 5px;
+      padding: 8px 12px;
+      box-sizing: border-box;
     }
 
     #search {

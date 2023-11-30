@@ -27,3 +27,12 @@ export const TeamPositionType = {
   BOTTOM: "바텀",
   UTILITY: "서포터",
 };
+
+// https://static.developer.riotgames.com/docs/lol/maps.json
+export const MapType = {
+  11: "소환사의 협곡",
+  12: "칼바람 나락",
+  21: "돌격 넥서스",
+  22: "전략적 팀 전투",
+  30: "아레나",
+};

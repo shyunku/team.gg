@@ -39,7 +39,8 @@
           {#if loading}
             <Skeleton height={"40px"} />
           {:else}
-            {summary?.name ?? "-"}
+            <div class="name">{summary?.gameName ?? "-"}</div>
+            <div class="tag">#{summary?.tagLine ?? "-"}</div>
           {/if}
         </div>
         <div class="last-renewed-time">마지막 갱신: {lastUpdatedRelativeTime}</div>
@@ -96,8 +97,18 @@
         flex: 1;
 
         .player-name {
+          display: flex;
           font-size: 28px;
           font-weight: bold;
+          align-items: flex-end;
+
+          .tag {
+            margin-left: 6px;
+            color: rgba(255, 255, 255, 0.25);
+            // font-weight: normal;
+            font-size: 22px;
+            margin-top: -5px;
+          }
         }
 
         .last-renewed-time {

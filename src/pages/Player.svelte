@@ -4,11 +4,7 @@
   import PlayerSearcher from "../fragments/player/PlayerSearcher.svelte";
   import PlayerStatMenu from "../fragments/player/PlayerStatMenu.svelte";
   import { PlayerInfoMenu } from "../types/General";
-  import {
-    getSummonerInfo,
-    loadMoreMatches,
-    renewSummonerInfo,
-  } from "../thunks/GeneralThunk";
+  import { getSummonerInfo, loadMoreMatches, renewSummonerInfo } from "../thunks/GeneralThunk";
   import PlayerContentMastery from "../fragments/player/contents/PlayerContentMastery.svelte";
   import PlayerContentIngame from "../fragments/player/contents/PlayerContentIngame.svelte";
   import { location, push } from "svelte-spa-router";
@@ -17,6 +13,7 @@
 
   let summonerInfo = null;
   let summonerName = null;
+  let summonerTag = null;
 
   let renewing = false;
   let loading = false;
@@ -29,10 +26,11 @@
     // console.log("params", params);
     if (
       !loading &&
-      (summonerInfo == null || summonerName != params?.summonerName)
+      (summonerInfo == null || summonerName != params?.summonerName || summonerTag != params?.summonerTag)
     ) {
       summonerName = params.summonerName;
-      console.log(">> load", summonerName);
+      summonerTag = params.summonerTag;
+      console.log(">> load", summonerName, summonerTag ? "#" + summonerTag : "");
       loadSummonerInfo();
     }
   }
@@ -51,7 +49,7 @@
     try {
       summonerNotFound = false;
       loading = true;
-      summonerInfo = await getSummonerInfo(searchingName);
+      summonerInfo = await getSummonerInfo(searchingName, summonerTag);
       console.log("summonerInfo", summonerInfo);
       summonerNotFound = false;
     } catch (e) {
@@ -117,18 +115,14 @@
 <PlayerSearcher bind:summonerName />
 {#if summonerNotFound}
   <!-- TODO :: design this -->
-  <div class="not-found">'{summonerName}'는 존재하지 않는 소환사입니다.</div>
+  <div class="not-found">'{summonerName} #{summonerTag}'는 존재하지 않는 소환사입니다.</div>
 {:else}
-  <PlayerHeader
-    summary={summonerInfo?.summary}
-    {onTryRenew}
-    {renewing}
-    {loading}
-  />
-  <PlayerStatMenu bind:menu {summonerName} />
+  <PlayerHeader summary={summonerInfo?.summary} {onTryRenew} {renewing} {loading} />
+  <PlayerStatMenu bind:menu {summonerName} {summonerTag} />
   {#if menu === PlayerInfoMenu.total}
     {#if summonerInfo?.summary?.puuid != null}
       <PlayerContentTotal
+        bind:summonerName
         sr={summonerInfo?.soloRank}
         fr={summonerInfo?.flexRank}
         matches={summonerInfo?.matches}
@@ -138,7 +132,7 @@
       />
     {/if}
   {:else if menu === PlayerInfoMenu.ingame}
-    <PlayerContentIngame />
+    <PlayerContentIngame puuid={summonerInfo?.summary?.puuid} />
   {:else if menu === PlayerInfoMenu.mastery}
     <PlayerContentMastery masteries={summonerInfo?.mastery} />
   {/if}

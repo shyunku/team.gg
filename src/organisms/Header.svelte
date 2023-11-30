@@ -1,12 +1,16 @@
 <script>
   import SafeImg from "../atoms/SafeImg.svelte";
   import MainContentWrapper from "../layouts/MainContentLayout.svelte";
+
+  const goToHome = () => {
+    window.location.href = "/";
+  };
 </script>
 
 <div class="header">
   <MainContentWrapper>
     <div class="app-icon-wrapper">
-      <div class="app-icon img">
+      <div class="app-icon img" on:mousedown={goToHome}>
         <SafeImg src="/img/common/app_logo.png" />
       </div>
     </div>
@@ -42,6 +46,7 @@
     align-items: center;
     width: 120px;
     height: 32px;
+    cursor: pointer;
   }
 
   .app-menu {

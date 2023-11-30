@@ -1,14 +1,13 @@
 <script>
   import { push } from "svelte-spa-router";
   import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
+  import NameTagSearchInput from "../../molecules/NameTagSearchInput.svelte";
 
-  export let summonerName = "";
-  let playerNameSearchInput = "";
+  let summonerName = "";
+  let summonerTag = "";
 
   const onPlayerSearch = () => {
-    if (playerNameSearchInput === "") return;
-    summonerName = playerNameSearchInput;
-    push(`/player/${summonerName}`);
+    push(`/player/${summonerName}/${summonerTag ?? "KR1"}`);
   };
 </script>
 
@@ -22,16 +21,9 @@
           <option>EU</option>
         </select>
       </div>
-      <input
-        id="player_name_input"
-        type="text"
-        placeholder="플레이어 이름"
-        spellcheck="false"
-        bind:value={playerNameSearchInput}
-        on:keydown={(e) => {
-          if (e.key === "Enter") onPlayerSearch();
-        }}
-      />
+      <div class="searcher-input">
+        <NameTagSearchInput bind:summonerName bind:summonerTag onEnter={onPlayerSearch} />
+      </div>
       <button id="search_btn" on:click={onPlayerSearch}>검색</button>
     </div>
   </MainContentWrapper>
@@ -71,7 +63,7 @@
         color: rgb(215, 201, 165);
       }
 
-      #player_name_input {
+      .searcher-input {
         flex: 1;
         color: rgb(242, 228, 194);
         font-weight: normal;

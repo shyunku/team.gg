@@ -8,21 +8,20 @@
     profileIconUrl,
     summonerSpellIconUrl,
   } from "../../../thunks/GeneralThunk";
-  import {
-    MultiKill,
-    QueueType,
-    TeamPositionType,
-  } from "../../../types/General";
+  import { MultiKill, QueueType, TeamPositionType } from "../../../types/General";
   import { formatDecimalBy3 } from "../../../utils/Common";
   import { toDuration, toRelativeTime } from "../../../utils/Datetime";
   import IoIosArrowDown from "svelte-icons/io/IoIosArrowDown.svelte";
   import JsxUtil from "../../../utils/JsxUtil";
   import "./PlayerContentTotal.scss";
+  import { push } from "svelte-spa-router";
 
   export let sr = {};
   export let fr = {};
   export let matches = [];
   export let puuid = null;
+
+  export let summonerName = "";
 
   export let loadMoreBefore = () => {};
   export let loadingMoreMatches = false;
@@ -36,42 +35,51 @@
   let oldestMatchStartTimestamp = null;
   $: {
     if (sortedMatches?.length > 0) {
-      oldestMatchStartTimestamp =
-        sortedMatches[sortedMatches.length - 1].gameStartTimestamp;
+      oldestMatchStartTimestamp = sortedMatches[sortedMatches.length - 1].gameStartTimestamp;
     }
   }
 
   let sortedMatches = [];
   let duoList = [];
-  $: sortedMatches = (matches ?? []).sort(
-    (a, b) => b.gameCreation - a.gameCreation
-  );
+  $: sortedMatches = (matches ?? []).sort((a, b) => b.gameCreation - a.gameCreation);
 
   $: {
     if (sr?.tier != null && sr?.rank != null) {
       srTierRank = sr.tier + " " + sr.rank;
+    } else {
+      srTierRank = "언랭";
     }
     if (sr?.wins != null && sr?.losses != null) {
       srWinRate = sr.wins / (sr.wins + sr.losses);
+    } else {
+      srWinRate = 0;
     }
     if (sr?.tier != null) {
       let tier = sr.tier.toLowerCase();
       tier = tier.charAt(0).toUpperCase() + tier.slice(1);
       srTierImgUrl = `/img/tier/Rank=${tier}.png`;
+    } else {
+      srTierImgUrl = null;
     }
   }
 
   $: {
     if (fr?.tier != null && fr?.rank != null) {
       frTierRank = fr.tier + " " + fr.rank;
+    } else {
+      frTierRank = "언랭";
     }
     if (fr?.wins != null && fr?.losses != null) {
       frWinRate = fr.wins / (fr.wins + fr.losses);
+    } else {
+      frWinRate = 0;
     }
     if (fr?.tier != null) {
       let tier = fr.tier.toLowerCase();
       tier = tier.charAt(0).toUpperCase() + tier.slice(1);
       frTierImgUrl = `/img/tier/Rank=${tier}.png`;
+    } else {
+      frTierImgUrl = null;
     }
   }
 
@@ -109,10 +117,13 @@
     console.log(sortedMatches?.[0]);
   }
 
+  const onPlayerSearch = (name, tag) => {
+    if (name === "") return;
+    push(`/player/${name}/${tag ?? "KR1"}`);
+  };
+
   const getKillAssistRate = (match) => {
-    const isTeam1 = match?.team1?.some(
-      (teammate) => teammate?.puuid === match?.myStat?.puuid
-    );
+    const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid);
     let killSum = 0;
     if (isTeam1) {
       match?.team1?.forEach((teammate) => {
@@ -142,9 +153,7 @@
   };
 
   const getDamageDealtPercentageInTeam = (match) => {
-    const isTeam1 = match?.team1?.some(
-      (teammate) => teammate?.puuid === match?.myStat?.puuid
-    );
+    const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid);
     let dealtSum = 0;
     if (isTeam1) {
       match?.team1?.forEach((teammate) => {
@@ -161,13 +170,8 @@
 
   const getDamageDealtRanking = (match) => {
     const participants = (match?.team1 ?? []).concat(match?.team2 ?? []);
-    participants.sort(
-      (a, b) =>
-        (b?.totalDealtToChampions ?? 0) - (a?.totalDealtToChampions ?? 0)
-    );
-    const myIndex = participants.findIndex(
-      (participant) => participant?.puuid === match?.myStat?.puuid
-    );
+    participants.sort((a, b) => (b?.totalDealtToChampions ?? 0) - (a?.totalDealtToChampions ?? 0));
+    const myIndex = participants.findIndex((participant) => participant?.puuid === match?.myStat?.puuid);
     return myIndex + 1;
   };
 </script>
@@ -264,42 +268,23 @@
           {@const kills = match?.myStat?.kills}
           {@const deaths = match?.myStat?.deaths}
           {@const assists = match?.myStat?.assists}
-          {@const kda =
-            deaths === 0
-              ? "Perfect"
-              : `${((kills + assists) / deaths).toFixed(2)}`}
+          {@const kda = deaths === 0 ? "Perfect" : `${((kills + assists) / deaths).toFixed(2)}`}
           {@const multiKillCode = getMultiKillCode(match)}
           {@const multiKillLabel = MultiKill[multiKillCode]}
-          {@const csPerMinute =
-            (match?.myStat?.totalMinionsKilled ?? 0) /
-            (match?.gameDuration / 60)}
+          {@const csPerMinute = (match?.myStat?.totalMinionsKilled ?? 0) / (match?.gameDuration / 60)}
           {@const teamPosition =
-            match?.myStat?.teamPosition && match?.myStat?.teamPosition !== ""
-              ? match?.myStat?.teamPosition
-              : null}
+            match?.myStat?.teamPosition && match?.myStat?.teamPosition !== "" ? match?.myStat?.teamPosition : null}
           {@const dealtPercentageInTeam = getDamageDealtPercentageInTeam(match)}
           {@const dealtRanking = getDamageDealtRanking(match)}
-          {@const earlySurrender =
-            match?.myStat?.gameEndedInEarlySurrender ?? false}
-          <div
-            class={"match " +
-              (earlySurrender
-                ? "early-surrender"
-                : match?.myStat?.win
-                  ? "win"
-                  : "lose")}
-          >
+          {@const earlySurrender = match?.myStat?.gameEndedInEarlySurrender ?? false}
+          <div class={"match " + (earlySurrender ? "early-surrender" : match?.myStat?.win ? "win" : "lose")}>
             <div class="color-flag"></div>
             <div class="header">
               <div class="match-type">
                 {QueueType[match?.queueId] ?? "게임 모드"}
               </div>
               <div class="match-win">
-                {earlySurrender
-                  ? "다시하기"
-                  : match?.myStat?.win
-                    ? "승리"
-                    : "패배"}
+                {earlySurrender ? "다시하기" : match?.myStat?.win ? "승리" : "패배"}
               </div>
               <div class="match-date">
                 {toRelativeTime(match?.gameEndTimestamp)}
@@ -316,26 +301,18 @@
                   </div>
                   <div class="spell-section">
                     <div class="spell-icon img">
-                      <SafeImg
-                        src={summonerSpellIconUrl(match?.myStat?.summoner1Id)}
-                      />
+                      <SafeImg src={summonerSpellIconUrl(match?.myStat?.summoner1Id)} />
                     </div>
                     <div class="spell-icon sub img">
-                      <SafeImg
-                        src={summonerSpellIconUrl(match?.myStat?.summoner2Id)}
-                      />
+                      <SafeImg src={summonerSpellIconUrl(match?.myStat?.summoner2Id)} />
                     </div>
                   </div>
                   <div class="rune-section">
                     <div class="rune-icon img">
-                      <SafeImg
-                        src={perkStyleIconUrl(match?.myStat?.primaryPerkStyle)}
-                      />
+                      <SafeImg src={perkStyleIconUrl(match?.myStat?.primaryPerkStyle)} />
                     </div>
                     <div class="rune-icon sub img">
-                      <SafeImg
-                        src={perkStyleIconUrl(match?.myStat?.subPerkStyle)}
-                      />
+                      <SafeImg src={perkStyleIconUrl(match?.myStat?.subPerkStyle)} />
                     </div>
                   </div>
                   <div class="kda-section">
@@ -357,11 +334,7 @@
                   {#each Array(7) as item, i}
                     {@const itemId = match?.myStat?.[`item${i}`]}
                     <div class="item img">
-                      <SafeImg
-                        src={itemId
-                          ? itemIconUrl(match?.myStat?.[`item${i}`])
-                          : null}
-                      />
+                      <SafeImg src={itemId ? itemIconUrl(match?.myStat?.[`item${i}`]) : null} />
                     </div>
                   {/each}
                 </div>
@@ -373,9 +346,7 @@
                       킬 관여 {(getKillAssistRate(match) * 100).toFixed(0)}%
                     </div>
                     <div class="minion-kills">
-                      CS {match?.myStat?.totalMinionsKilled ?? 0} ({csPerMinute.toFixed(
-                        1
-                      )})
+                      CS {match?.myStat?.totalMinionsKilled ?? 0} ({csPerMinute.toFixed(1)})
                     </div>
                     <div class="gold">
                       {formatDecimalBy3(match?.myStat?.goldEarned)} 골드
@@ -408,38 +379,56 @@
               <div class="ingame-summoners-section">
                 <div class="team team-1">
                   {#each match?.team1 ?? [] as teammate}
-                    {@const nameTag =
-                      teammate?.riotIdName && teammate?.riotIdTagLine
-                        ? `${teammate?.riotIdName} #${teammate?.riotIdTagLine}`
-                        : "-"}
-                    <div
-                      class={"teammate" +
-                        JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}
-                    >
+                    {@const name =
+                      teammate?.riotIdName != null && teammate?.riotIdName.length > 0
+                        ? teammate?.riotIdName
+                        : teammate?.summonerName ?? "-"}
+                    <div class={"teammate" + JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}>
                       <div class="teammate-icon img">
                         <SafeImg src={championIconUrl(teammate?.championId)} />
                       </div>
-                      <div class="teammate-name">
-                        {nameTag}
+                      <div
+                        class="teammate-nametag"
+                        on:mousedown={(e) => {
+                          onPlayerSearch(teammate?.riotIdName, teammate?.riotIdTagLine);
+                        }}
+                      >
+                        <div class="teammate-name">
+                          {name}
+                        </div>
+                        {#if teammate?.riotIdTagLine}
+                          <div class="teammate-tag">
+                            #{teammate?.riotIdTagLine}
+                          </div>
+                        {/if}
                       </div>
                     </div>
                   {/each}
                 </div>
                 <div class="team team-2">
                   {#each match?.team2 ?? [] as teammate}
-                    {@const nameTag =
-                      teammate?.riotIdName && teammate?.riotIdTagLine
-                        ? `${teammate?.riotIdName} #${teammate?.riotIdTagLine}`
-                        : "-"}
-                    <div
-                      class={"teammate" +
-                        JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}
-                    >
+                    {@const name =
+                      teammate?.riotIdName != null && teammate?.riotIdName.length > 0
+                        ? teammate?.riotIdName
+                        : teammate?.summonerName ?? "-"}
+                    <div class={"teammate" + JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}>
                       <div class="teammate-icon img">
                         <SafeImg src={championIconUrl(teammate?.championId)} />
                       </div>
-                      <div class="teammate-name">
-                        {nameTag}
+                      <div
+                        class="teammate-nametag"
+                        on:mousedown={(e) => {
+                          onPlayerSearch(teammate?.riotIdName, teammate?.riotIdTagLine);
+                        }}
+                      >
+                        <div class="teammate-name">
+                          {name}
+                        </div>
+                        {#if teammate?.riotIdTagLine}
+                          <div class="teammate-tag">
+                            #{teammate?.riotIdTagLine}
+                          </div>
+                        {/if}
                       </div>
                     </div>
                   {/each}

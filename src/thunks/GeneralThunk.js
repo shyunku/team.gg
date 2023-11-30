@@ -2,9 +2,10 @@ import axios from "axios";
 
 const ServerHost = `http://${APP_SERVER_HOST}:${APP_SERVER_PORT}/v1`;
 
-export const getSummonerInfo = async (summonerName) => {
-  const encodedSummonerName = encodeURIComponent(summonerName);
-  const response = await axios.get(`${ServerHost}/summoner?summonerName=${encodedSummonerName}`);
+export const getSummonerInfo = async (gameName = null, tagLine = null) => {
+  const encodedGameName = encodeURIComponent(gameName);
+  const encodedTagLine = encodeURIComponent(tagLine);
+  const response = await axios.get(`${ServerHost}/summoner?gameName=${encodedGameName}&tagLine=${encodedTagLine}`);
   return response.data;
 };
 
@@ -20,6 +21,11 @@ export const loadMoreMatches = async (puuid, before) => {
     puuid: puuid,
     before: before,
   });
+  return response.data;
+};
+
+export const getIngameInfo = async (puuid) => {
+  const response = await axios.get(`${ServerHost}/ingame?puuid=${puuid}`);
   return response.data;
 };
 

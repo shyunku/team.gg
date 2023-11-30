@@ -2,7 +2,87 @@
   display: flex;
   width: 100%;
 
+  .header {
+    display: flex;
+    align-items: center;
+
+    .map-name {
+      margin-left: 10px;
+      font-weight: normal;
+    }
+
+    .game-time {
+      margin-left: 10px;
+      color: rgb(138, 129, 106);
+      font-weight: normal;
+      font-size: 13px;
+    }
+  }
+
   .body {
+    display: flex;
+    flex-direction: column;
     font-size: 13px;
+    padding: 0 !important;
+
+    .team {
+      display: flex;
+      flex-direction: column;
+      // margin-top: 10px;
+
+      &.team-1 .team-header {
+        background-color: rgb(35, 63, 99);
+      }
+
+      &.team-2 .team-header {
+        background-color: rgb(99, 35, 35);
+      }
+
+      .team-header {
+        display: flex;
+        font-size: 16px;
+        background-color: rgb(47, 47, 47);
+        padding: 10px 15px;
+      }
+
+      .members {
+        display: flex;
+        flex-direction: column;
+        padding: 0 15px;
+
+        .member {
+          display: flex;
+          height: 45px;
+          align-items: center;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          }
+
+          .champion-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 3px;
+            overflow: hidden;
+
+            img {
+              transform: scale(1.2);
+            }
+          }
+
+          .summoner-nametag {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+            font-size: 14px;
+
+            .summoner-tag {
+              margin-left: 5px;
+              opacity: 0.3;
+            }
+          }
+        }
+      }
+    }
   }
 }

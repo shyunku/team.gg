@@ -5,6 +5,7 @@
   import JsxUtil from "../../utils/JsxUtil";
 
   export let summonerName;
+  export let summonerTag;
   export let menu;
 </script>
 
@@ -16,10 +17,12 @@
           class={"stat-menu-item" + JsxUtil.classByEqual(menu, PlayerInfoMenu[menuKey], "selected")}
           on:mousedown={() => {
             menu = PlayerInfoMenu[menuKey];
+            const encodedName = encodeURIComponent(summonerName);
+            const encodedTag = encodeURIComponent(summonerTag);
             if (menu === PlayerInfoMenu.total) {
-              push(`/player/${encodeURIComponent(summonerName)}`);
+              push(`/player/${encodedName}/${encodedTag}`);
             } else {
-              push(`/player/${encodeURIComponent(summonerName)}/${menuKey}`);
+              push(`/player/${encodedName}/${encodedTag}/${menuKey}`);
             }
           }}
         >
