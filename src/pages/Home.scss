@@ -1,0 +1,135 @@
+@import "../styles/variables.scss";
+
+.home-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.app-logo {
+  position: relative;
+  margin-top: 100px;
+  margin-bottom: 50px;
+  width: 300px;
+
+  .version {
+    position: absolute;
+    bottom: 15px;
+    left: 100%;
+    margin-left: 5px;
+    color: $main-fg-color;
+    font-weight: bold;
+    font-size: 13px;
+  }
+}
+
+.summoner-searcher {
+  display: flex;
+  align-items: center;
+  width: 650px;
+
+  select,
+  input,
+  button {
+    background-color: black;
+    color: white;
+    border: 1px solid rgb(67, 67, 67);
+    height: 40px;
+    padding: 8px 12px;
+    border-radius: 5px;
+  }
+
+  select {
+  }
+
+  .id-tag-searcher {
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-left: 15px;
+    width: 500px;
+    border: 1px solid rgb(67, 67, 67);
+    height: 40px;
+    border-radius: 5px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    flex: 1;
+  }
+
+  #search {
+    margin-left: 15px;
+    cursor: pointer;
+  }
+}
+
+.favorites {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  width: 650px;
+
+  .favorite-summoners {
+    display: flex;
+    flex-direction: column;
+    // margin-top: 5px;
+    // padding: 10px 0;
+
+    .summoner {
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      font-size: 14px;
+      color: rgb(221, 211, 182);
+      height: 50px;
+      cursor: pointer;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(82, 74, 58, 0.441);
+      }
+
+      &:hover {
+        background-color: rgb(41, 38, 30);
+        // cursor: pointer;
+
+        .summoner-name,
+        .summoner-tag {
+          color: rgb(255, 220, 115);
+        }
+      }
+
+      .summoner-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 3px;
+        overflow: hidden;
+        // border: 1px solid rgb(88, 77, 44);
+      }
+
+      .summoner-name {
+        margin-left: 15px;
+      }
+
+      .summoner-tag {
+        margin-left: 5px;
+        flex: 1;
+      }
+
+      .favorite-icon {
+        display: flex;
+        align-items: center;
+        height: 16px;
+        padding: 4px;
+        border-radius: 3px;
+        background-color: rgb(74, 66, 52);
+        color: rgb(255, 199, 31);
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgb(99, 89, 70);
+          color: rgb(175, 160, 116);
+        }
+      }
+    }
+  }
+}

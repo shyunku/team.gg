@@ -4,13 +4,19 @@
   import { profileIconUrl } from "../../thunks/GeneralThunk";
   import { toRelativeTime } from "../../utils/Datetime";
   import { fastInterval } from "../../utils/Common";
+  import { toggleSummonerFavorite } from "../../utils/Storage";
   import Skeleton from "../../molecules/Skeleton.svelte";
+  import IoIosStar from "svelte-icons/io/IoIosStar.svelte";
+  import IoIosStarOutline from "svelte-icons/io/IoIosStarOutline.svelte";
 
   export let summary = {};
   export let onTryRenew = () => {};
   export let loading = true;
   export let renewing = false;
   let t;
+
+  let favorites = [];
+  let isFavorite = false;
 
   let lastUpdatedRelativeTime = "-";
   $: {
@@ -20,7 +26,23 @@
         lastUpdatedRelativeTime = toRelativeTime(lastUpdatedAtMillis);
       }
     }, 1000);
+
+    try {
+      favorites = JSON.parse(localStorage.getItem("favorite_summoners") ?? "[]");
+      isFavorite = favorites.some((f) => f.puuid === summary?.puuid);
+    } catch (err) {
+      console.error(err);
+    }
   }
+
+  const onFavoriteClick = () => {
+    // load from local storage
+    try {
+      isFavorite = toggleSummonerFavorite(summary?.puuid, summary);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   onDestroy(() => {
     clearInterval(t);
@@ -41,6 +63,13 @@
           {:else}
             <div class="name">{summary?.gameName ?? "-"}</div>
             <div class="tag">#{summary?.tagLine ?? "-"}</div>
+            <div class={"favorite-icon" + (isFavorite ? " enabled" : "")} on:mouseup={onFavoriteClick}>
+              {#if isFavorite}
+                <IoIosStar />
+              {:else}
+                <IoIosStarOutline />
+              {/if}
+            </div>
           {/if}
         </div>
         <div class="last-renewed-time">마지막 갱신: {lastUpdatedRelativeTime}</div>
@@ -108,6 +137,27 @@
             // font-weight: normal;
             font-size: 22px;
             margin-top: -5px;
+          }
+
+          .favorite-icon {
+            display: flex;
+            align-items: center;
+            height: 15px;
+            border-radius: 3px;
+            align-self: center;
+            margin-left: 10px;
+            padding: 5px 5px;
+            background-color: rgba(255, 255, 255, 0.083);
+            cursor: pointer;
+
+            // &:hover {
+            //   background-color: rgb(91, 81, 63);
+            // }
+
+            &.enabled {
+              background-color: rgb(91, 81, 63);
+              color: rgb(255, 199, 31);
+            }
           }
         }
 

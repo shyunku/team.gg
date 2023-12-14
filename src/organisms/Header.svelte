@@ -15,8 +15,7 @@
       </div>
     </div>
     <div class="app-menu">
-      <div class="app-menu-item selected">홈</div>
-      <div class="app-menu-item">전적</div>
+      <div class="app-menu-item selected">전적</div>
       <div class="app-menu-item">내전 팀 구성</div>
     </div>
   </MainContentWrapper>
