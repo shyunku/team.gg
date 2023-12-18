@@ -1,0 +1,24 @@
+@import "../../styles/variables.scss";
+
+.custom-game-header {
+  border-bottom: 1px solid $sub-border-color;
+  width: 100%;
+  background-color: $sub-bg-color;
+  padding: 20px 0;
+  color: rgb(195, 190, 169);
+
+  .header {
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-size: 30px;
+      //   margin-top: 15px;
+    }
+
+    .last-update-time {
+      font-size: 13px;
+      margin-top: 10px;
+    }
+  }
+}

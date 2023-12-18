@@ -1,6 +1,6 @@
 {
   "name": "svelte-app",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "type": "module",
   "scripts": {
@@ -27,8 +27,11 @@
     "axios": "1.6.2",
     "dateformat": "5.0.3",
     "dotenv": "16.3.1",
+    "sha256": "0.2.0",
     "sirv-cli": "^2.0.0",
+    "svelte-chartjs": "3.1.2",
     "svelte-icons": "2.1.0",
-    "svelte-spa-router": "3.3.0"
+    "svelte-spa-router": "3.3.0",
+    "svelte-toasts": "1.1.2"
   }
 }

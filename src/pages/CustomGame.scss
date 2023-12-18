@@ -1,0 +1,62 @@
+@import "../styles/variables.scss";
+
+.custom-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.recent-customs {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  width: 650px;
+}
+
+.menus {
+  display: flex;
+
+  .menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 50px;
+    background-color: rgb(133, 97, 38);
+    cursor: pointer;
+    border-radius: 3px;
+  }
+}
+
+.recent-customs {
+  .custom-configures {
+    display: flex;
+    flex-direction: column;
+
+    .recent-custom-game-configure {
+      display: flex;
+      padding: 15px 15px;
+      font-size: 13px;
+      color: $main-fg-color;
+      cursor: pointer;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(82, 74, 58, 0.441);
+      }
+
+      &:hover {
+        background-color: rgb(41, 38, 30);
+        // cursor: pointer;
+
+        color: rgb(255, 220, 115);
+      }
+
+      .created-at {
+        flex: 1;
+        margin-left: 15px;
+        color: rgb(105, 92, 68);
+      }
+    }
+  }
+}

@@ -1,0 +1,272 @@
+.custom-game-content {
+  margin-top: 30px;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  padding-bottom: 40px;
+
+  .teams {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .card:not(:last-child) {
+      margin-bottom: 15px;
+    }
+
+    .header {
+      display: flex;
+
+      .title {
+        flex: 1;
+      }
+
+      .rating {
+        display: flex;
+      }
+
+      .avg-tier {
+        display: flex;
+        margin-left: 15px;
+      }
+    }
+
+    .team {
+      display: flex;
+      flex-direction: column;
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        min-height: 200px;
+        padding: 0;
+
+        .placeholder {
+          display: none;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: rgb(108, 99, 74);
+        }
+      }
+
+      .summoners {
+        display: flex;
+        flex-direction: column;
+
+        .summoner {
+          display: flex;
+          height: 40px;
+          align-items: center;
+          padding: 8px 15px;
+          font-size: 13px;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid rgb(62, 59, 49);
+          }
+
+          .profile-icon,
+          .champion-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 3px;
+            overflow: hidden;
+          }
+
+          .name {
+            margin-left: 15px;
+            width: 150px;
+          }
+
+          .tiers {
+            display: flex;
+            align-items: center;
+            flex: 1;
+          }
+
+          .rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+          }
+
+          .available-lines {
+            display: flex;
+            align-items: center;
+            width: 150px;
+            justify-content: center;
+
+            .line {
+              display: flex;
+              align-items: center;
+              color: rgb(70, 66, 54);
+              font-size: 13px;
+              width: 20px;
+              height: 20px;
+
+              &:not(:last-child) {
+                margin-right: 5px;
+              }
+
+              &.check {
+                color: rgb(229, 203, 139);
+              }
+            }
+          }
+
+          .most-champions {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+            width: 200px;
+            justify-content: space-between;
+
+            .most-champion {
+              display: flex;
+              position: relative;
+              background-color: black;
+
+              .img img {
+                transform: scale(1.1);
+                opacity: 0.7;
+              }
+
+              .score {
+                display: flex;
+                justify-content: center;
+                position: absolute;
+                padding: 2px 0;
+                text-align: center;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.3);
+                font-size: 9px;
+                color: rgba(255, 235, 196, 0.8);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .sub-panels {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+    width: 240px;
+
+    .card:not(:last-child) {
+      margin-bottom: 15px;
+    }
+
+    .utility {
+      display: flex;
+      flex-direction: column;
+
+      .body {
+        padding: 0;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+
+        .option {
+          display: flex;
+          font-size: 13px;
+          height: 30px;
+          align-items: center;
+          padding: 0 10px;
+          color: rgb(154, 144, 119);
+          cursor: pointer;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid rgb(62, 59, 49);
+          }
+
+          &:hover {
+            background-color: rgb(62, 59, 49);
+          }
+
+          .icon {
+            display: flex;
+            align-items: center;
+            width: 22px;
+          }
+
+          .text {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+
+    .candidate-list {
+      display: flex;
+      flex-direction: column;
+
+      .body {
+        padding: 0;
+      }
+
+      .searcher {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 10px;
+
+        .searcher-wrapper {
+          display: flex;
+          align-items: center;
+          background-color: rgba(0, 0, 0, 0.393);
+          width: 100%;
+          padding: 5px 8px;
+          font-size: 13px;
+          border-radius: 3px;
+          overflow: hidden;
+        }
+      }
+
+      .candidates {
+        display: flex;
+        flex-direction: column;
+
+        .candidate {
+          display: flex;
+          height: 28px;
+          padding: 5px 10px;
+          cursor: pointer;
+          font-size: 12px;
+          align-items: center;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid rgb(62, 59, 49);
+          }
+
+          &:hover {
+            background-color: rgb(62, 59, 49);
+          }
+
+          .profile-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            overflow: hidden;
+          }
+
+          .name {
+            margin-left: 5px;
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}

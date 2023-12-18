@@ -1,12 +1,12 @@
 <script>
-  import PlayerContentTotal from "../fragments/player/contents/PlayerContentTotal.svelte";
-  import PlayerHeader from "../fragments/player/PlayerHeader.svelte";
-  import PlayerSearcher from "../fragments/player/PlayerSearcher.svelte";
-  import PlayerStatMenu from "../fragments/player/PlayerStatMenu.svelte";
+  import PlayerContentTotal from "../organisms/player/contents/PlayerContentTotal.svelte";
+  import PlayerHeader from "../organisms/player/PlayerHeader.svelte";
+  import PlayerSearcher from "../organisms/player/PlayerSearcher.svelte";
+  import PlayerStatMenu from "../organisms/player/PlayerStatMenu.svelte";
   import { PlayerInfoMenu } from "../types/General";
   import { getSummonerInfo, loadMoreMatches, renewSummonerInfo } from "../thunks/GeneralThunk";
-  import PlayerContentMastery from "../fragments/player/contents/PlayerContentMastery.svelte";
-  import PlayerContentIngame from "../fragments/player/contents/PlayerContentIngame.svelte";
+  import PlayerContentMastery from "../organisms/player/contents/PlayerContentMastery.svelte";
+  import PlayerContentIngame from "../organisms/player/contents/PlayerContentIngame.svelte";
   import { location, push } from "svelte-spa-router";
 
   export let params = {};

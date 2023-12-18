@@ -2,22 +2,49 @@ import axios from "axios";
 
 const ServerHost = `http://${APP_SERVER_HOST}:${APP_SERVER_PORT}/v1`;
 
+const instance = axios.create({
+  baseURL: ServerHost,
+  timeout: 3000,
+  withCredentials: true,
+});
+
+export const login = async (id, encryptedPassword) => {
+  const response = await instance.post(`/auth/login`, {
+    userId: id,
+    encryptedPassword: encryptedPassword,
+  });
+  return response.data;
+};
+
+export const signup = async (id, encryptedPassword) => {
+  const response = await instance.post(`/auth/signup`, {
+    userId: id,
+    encryptedPassword: encryptedPassword,
+  });
+  return response.data;
+};
+
+export const logout = async () => {
+  const response = await instance.post(`/auth/logout`);
+  return response.data;
+};
+
 export const getSummonerInfo = async (gameName = null, tagLine = null) => {
   const encodedGameName = encodeURIComponent(gameName);
   const encodedTagLine = encodeURIComponent(tagLine);
-  const response = await axios.get(`${ServerHost}/summoner?gameName=${encodedGameName}&tagLine=${encodedTagLine}`);
+  const response = await instance.get(`/summoner?gameName=${encodedGameName}&tagLine=${encodedTagLine}`);
   return response.data;
 };
 
 export const renewSummonerInfo = async (puuid) => {
-  const response = await axios.post(`${ServerHost}/renewSummoner`, {
+  const response = await instance.post(`/renewSummoner`, {
     puuid: puuid,
   });
   return response.data;
 };
 
 export const loadMoreMatches = async (puuid, before) => {
-  const response = await axios.post(`${ServerHost}/loadMatches`, {
+  const response = await instance.post(`/loadMatches`, {
     puuid: puuid,
     before: before,
   });
@@ -25,9 +52,27 @@ export const loadMoreMatches = async (puuid, before) => {
 };
 
 export const getIngameInfo = async (puuid) => {
-  const response = await axios.get(`${ServerHost}/ingame?puuid=${puuid}`);
+  const response = await instance.get(`/ingame?puuid=${puuid}`);
   return response.data;
 };
+
+/* ---------------------- platform ---------------------- */
+export const getCustomGameConfigurations = async () => {
+  const response = await instance.get(`/platform/custom-game/list`);
+  return response.data;
+};
+
+export const createCustomGameConfiguration = async (config) => {
+  const response = await instance.post(`/platform/custom-game/create`);
+  return response.data;
+};
+
+export const getCustomGameConfigurationInfo = async (id) => {
+  const response = await instance.get(`/platform/custom-game/info?id=${id}`);
+  return response.data;
+};
+
+/* ---------------------- links ---------------------- */
 
 export const profileIconUrl = (profileIconId) => {
   return `${ServerHost}/icon/profile?id=${profileIconId}`;
