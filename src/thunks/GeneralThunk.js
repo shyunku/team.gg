@@ -4,7 +4,6 @@ const ServerHost = `http://${APP_SERVER_HOST}:${APP_SERVER_PORT}/v1`;
 
 const instance = axios.create({
   baseURL: ServerHost,
-  timeout: 3000,
   withCredentials: true,
 });
 
@@ -26,6 +25,11 @@ export const signup = async (id, encryptedPassword) => {
 
 export const logout = async () => {
   const response = await instance.post(`/auth/logout`);
+  return response.data;
+};
+
+export const testTokenReq = async () => {
+  const response = await instance.get(`/platform/tokenTest`);
   return response.data;
 };
 
@@ -69,6 +73,38 @@ export const createCustomGameConfiguration = async (config) => {
 
 export const getCustomGameConfigurationInfo = async (id) => {
   const response = await instance.get(`/platform/custom-game/info?id=${id}`);
+  return response.data;
+};
+
+export const addCustomGameCandidateReq = async (customGameConfigId, name, tagLine) => {
+  const response = await instance.put(`/platform/custom-game/candidate`, {
+    customGameConfigId,
+    name,
+    tagLine,
+  });
+
+  return response.data;
+};
+
+export const arrangeCustomGameParticipantReq = async (customGameConfigId, puuid, team, position) => {
+  const response = await instance.post(`/platform/custom-game/arrange`, {
+    customGameConfigId,
+    puuid,
+    team,
+    targetPosition: position,
+  });
+
+  return response.data;
+};
+
+export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId, puuid, position, enabled) => {
+  const response = await instance.post(`/platform/custom-game/favor-position`, {
+    customGameConfigId,
+    puuid,
+    favorPosition: position,
+    enabled,
+  });
+
   return response.data;
 };
 

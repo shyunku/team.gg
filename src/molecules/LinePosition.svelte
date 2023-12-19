@@ -10,6 +10,7 @@
   export let position = "";
   export let enabled = false;
   export let interactive = false;
+  export let onClick = () => {};
 
   let hovered = false;
 
@@ -60,6 +61,7 @@
   on:mouseleave={(e) => {
     hovered = false;
   }}
+  on:mouseup={(e) => interactive && onClick(!enabled)}
 >
   <SafeImg src={sourceByCondition} />
 </div>

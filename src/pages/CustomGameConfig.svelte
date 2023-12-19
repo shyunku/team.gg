@@ -27,4 +27,9 @@
 
 <CustomGameHeader name={data?.name} lastUpdatedAt={data?.lastUpdatedAt} />
 <CustomGameSummary fairness={data?.fairness} lineFairness={data?.lineFairness} tierFairness={data?.tierFairness} />
-<CustomGameContent />
+<CustomGameContent
+  configId={data?.id}
+  candidates={data?.candidates}
+  team1Participants={data?.team1}
+  team2Participants={data?.team2}
+/>

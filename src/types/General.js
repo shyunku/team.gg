@@ -23,9 +23,17 @@ export const QueueType = {
 export const TeamPositionType = {
   TOP: "탑",
   JUNGLE: "정글",
-  MIDDLE: "미드",
-  BOTTOM: "바텀",
-  UTILITY: "서포터",
+  MID: "미드",
+  ADC: "바텀",
+  SUPPORT: "서포터",
+};
+
+export const TeamPositionKeyType = {
+  TOP: "TOP",
+  JUNGLE: "JUNGLE",
+  MID: "MID",
+  ADC: "ADC",
+  SUPPORT: "SUPPORT",
 };
 
 // https://static.developer.riotgames.com/docs/lol/maps.json

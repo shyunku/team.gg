@@ -17,3 +17,11 @@ export const bgColorByRate = (rate) => {
     return "rgb(19, 83, 30)";
   }
 };
+
+export const formatMasteryPoints = (points) => {
+  if (points < 10000) {
+    return `${Math.floor(points)}`;
+  } else {
+    return `${Math.floor(points / 10000)}만`;
+  }
+};

@@ -2,20 +2,29 @@
   import { onMount, tick } from "svelte";
   import JsxUtil from "../utils/JsxUtil";
 
+  const defaultTag = "KR1";
+
   let content = "";
   let width = 0;
   let spanRef;
-  let tagPadding = "#KR1";
+  let tagPadding = "#" + defaultTag;
+  let inputValue = "";
 
   export let summonerName = "";
   export let summonerTag = "";
 
   export let onEnter = () => {};
 
+  let onEnterHandler = (...args) => {
+    onEnter(...args);
+    inputValue = "";
+    content = "";
+  };
+
   const changeHandler = (event) => {
     content = event.target.value;
     // change tag padding if value has tag
-    tagPadding = "#KR1";
+    tagPadding = "#" + defaultTag;
     if ((content.match(/\#/g) || []).length === 1 && content.startsWith("#")) return;
     if (content.endsWith("#")) {
       tagPadding = "KR1";
@@ -46,8 +55,9 @@
     type="text"
     on:input={changeHandler}
     spellcheck="false"
+    bind:value={inputValue}
     on:keydown={(e) => {
-      if (e.key === "Enter") onEnter();
+      if (e.key === "Enter") onEnterHandler(summonerName, summonerTag ?? defaultTag);
     }}
   />
   <div class="tag-padding" style="left: {width}px">{tagPadding}</div>

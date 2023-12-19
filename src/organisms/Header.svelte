@@ -4,7 +4,8 @@
   import { location, push } from "svelte-spa-router";
   import { authStore } from "../stores/AuthStore";
   import { toasts } from "svelte-toasts";
-  import { logout } from "../thunks/GeneralThunk";
+  import { testTokenReq, logout } from "../thunks/GeneralThunk";
+  import { AxiosError } from "axios";
 
   let isCustomGame = false;
   let isAuthorized = false;
@@ -31,8 +32,31 @@
     }
   };
 
+  const checkIsAuthorized = async () => {
+    try {
+      const resp = await testTokenReq();
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const code = err?.response?.status;
+
+        switch (code) {
+          case 401:
+            authStore.initialize();
+            toasts.add({ title: "인증 정보", description: "인증 정보가 만료되었습니다.", type: "warning" });
+            return;
+        }
+      }
+
+      toasts.add({ title: "인증 정보", description: "인증 정보를 확인하던 중 오류가 발생했습니다.", type: "error" });
+    }
+  };
+
   authStore.subscribe((value) => {
     isAuthorized = value?.authorized;
+
+    if (isAuthorized) {
+      checkIsAuthorized();
+    }
   });
 
   $: {
