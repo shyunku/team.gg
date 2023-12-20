@@ -16,31 +16,39 @@
     getSummonerInfo,
     profileIconUrl,
     setCustomGameCandidateFavorPositionReq,
+    unArrangeCustomGameParticipantReq,
   } from "../../thunks/GeneralThunk";
   import { toasts } from "svelte-toasts";
   import { TeamPositionKeyType, TeamPositionType } from "../../types/General";
   import { AxiosError } from "axios";
   import { formatMasteryPoints } from "../../utils/Util";
+  import TierRank from "../../molecules/TierRank.svelte";
+  import CustomGameContentTeam from "./custom-game-content/CustomGameContentTeam.svelte";
 
   export let configId;
   export let candidates = [];
-  export let team1Participants = [];
-  export let team2Participants = [];
-  let team1ParitcipantsMap = {};
-  let team2ParitcipantsMap = {};
+
+  export let team1TotalRatingPoint;
+  export let team2TotalRatingPoint;
+
+  export let updateBalance;
+
+  export let team1ParticipantsMap = {};
+  export let team2ParticipantsMap = {};
 
   const positions = ["TOP", "JUNGLE", "MID", "ADC", "SUPPORT"];
 
-  let dragging = false;
+  let draggingCandidate = false;
+  let draggingParticipant = false;
   let candidateHoverTarget = null;
   let candidateMap = {};
   let visibleCandidates = [];
   let team1 = Object.keys(TeamPositionType).reduce((acc, cur) => {
-    acc[cur] = team1ParitcipantsMap[cur] ?? null;
+    acc[cur] = null;
     return acc;
   }, {});
   let team2 = Object.keys(TeamPositionType).reduce((acc, cur) => {
-    acc[cur] = team2ParitcipantsMap[cur] ?? null;
+    acc[cur] = null;
     return acc;
   }, {});
 
@@ -92,15 +100,16 @@
   };
 
   const onCandidateDragStart = (e, puuid) => {
-    e.dataTransfer.setData("text/plain", puuid);
-    // console.log("start");
-    dragging = true;
+    e.dataTransfer.setData("puuid", puuid);
+    e.dataTransfer.setData("type", "candidate");
+    draggingCandidate = true;
   };
 
   const onCandidateDragEnd = (e) => {
     // e.preventDefault();
     // console.log("end");
-    dragging = false;
+    draggingCandidate = false;
+    candidateHoverTarget = null;
   };
 
   const onCandidateDragEnter = (e, key) => {
@@ -120,28 +129,67 @@
   };
 
   const onCandidateDrop = async (e, team, position) => {
-    // e.stopPropagation();
-    const puuid = e.dataTransfer.getData("text/plain");
+    console.log("dropped on", team, position);
+    const puuid = e.dataTransfer.getData("puuid");
+    const type = e.dataTransfer.getData("type");
+    const srcPos = e.dataTransfer.getData("position");
+    const srcTeam = e.dataTransfer.getData("team", team);
+    const destPos = position;
+    const destTeam = team;
+
     let toast;
     try {
+      const isParticipant = type === "participant";
       toast = toasts.add({
         title: "소환사 배치",
         description: "처리중입니다...",
         type: "info",
         duration: 0,
       });
-      await arrangeCustomGameParticipantReq(configId, puuid, team, position);
-      if (team === 1) {
-        team1[position] = candidateMap[puuid];
-      } else {
-        team2[position] = candidateMap[puuid];
+      await arrangeCustomGameParticipantReq(configId, puuid, destTeam, destPos);
+      if (isParticipant) {
+        // source is participant
+
+        let destPuuid;
+        if (destTeam == 1) {
+          destPuuid = team1ParticipantsMap[destPos] ?? null;
+        } else {
+          destPuuid = team2ParticipantsMap[destPos] ?? null;
+        }
+
+        console.log(
+          `team ${srcTeam} ${srcPos} (${candidateMap?.[puuid]?.summary?.name})`,
+          "->",
+          `team ${destTeam} ${destPos} (${candidateMap?.[destPuuid]?.summary?.name})`,
+          "destPuuid",
+          destPuuid
+        );
+
+        if (srcTeam == 1) {
+          team1ParticipantsMap[srcPos] = destPuuid != null ? destPuuid : null;
+        } else {
+          team2ParticipantsMap[srcPos] = destPuuid != null ? destPuuid : null;
+        }
       }
+
+      console.log(team1ParticipantsMap);
+
+      if (destTeam == 1) {
+        team1ParticipantsMap[destPos] = puuid;
+      } else {
+        team2ParticipantsMap[destPos] = puuid;
+      }
+
+      console.log(team1ParticipantsMap);
+
       toast.update({
         title: "소환사 배치",
         description: "소환사를 배치했습니다.",
         type: "success",
         duration: 3000,
       });
+
+      await updateBalance();
     } catch (err) {
       toasts.add({
         title: "소환사 배치 오류",
@@ -153,22 +201,24 @@
     }
   };
 
-  const onParticipantDragStart = (e, puuid) => {
-    e.dataTransfer.setData("text/plain", puuid);
+  const onParticipantDragStart = (e, puuid, position, team) => {
+    e.dataTransfer.setData("puuid", puuid);
+    e.dataTransfer.setData("type", "participant");
+    e.dataTransfer.setData("position", position);
+    e.dataTransfer.setData("team", team);
+    console.log("source", position, team);
     // console.log("start");
-    dragging = true;
+    draggingParticipant = true;
   };
 
   const onParticipantDragEnd = (e) => {
     // e.preventDefault();
     // console.log("end");
-    dragging = false;
+    draggingParticipant = false;
   };
 
   const onParticipantDragEnter = (e, key) => {
     e.preventDefault();
-    // console.log("enter");
-    participantHoverTarget = key;
   };
 
   const onParticipantDragOver = (e) => {
@@ -177,16 +227,35 @@
 
   const onParticipantDragLeave = (e, key) => {
     e.preventDefault();
-    // console.log("leave");
-    participantHoverTarget = null;
   };
 
-  const onParticipantDrop = (e) => {};
+  const onParticipantDrop = async (e) => {
+    const puuid = e.dataTransfer.getData("puuid");
+    console.log("unarrange", puuid);
 
-  const onCandidateChangeFavorPosition = async (puuid, position, enabled) => {
     try {
-      await setCustomGameCandidateFavorPositionReq(configId, puuid, position, enabled);
-      candidateMap[puuid].positionFavor[position.toLowerCase()] = enabled;
+      await unArrangeCustomGameParticipantReq(configId, puuid);
+      for (let team1pPos in team1ParticipantsMap) {
+        if (team1ParticipantsMap[team1pPos] === puuid) {
+          team1ParticipantsMap[team1pPos] = null;
+        }
+      }
+      for (let team2pPos in team2ParticipantsMap) {
+        if (team2ParticipantsMap[team2pPos] === puuid) {
+          team2ParticipantsMap[team2pPos] = null;
+        }
+      }
+      await updateBalance();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onCandidateChangeFavorPosition = async (puuid, position, strength) => {
+    try {
+      await setCustomGameCandidateFavorPositionReq(configId, puuid, position, strength);
+      candidateMap[puuid].positionFavor[position.toLowerCase()] = strength;
+      await updateBalance();
     } catch (err) {
       console.error(err);
       toasts.add({
@@ -203,28 +272,20 @@
       return acc;
     }, {});
 
-    team1ParitcipantsMap = team1Participants.reduce((acc, cur) => {
-      acc[cur?.position] = cur;
-      return acc;
-    }, {});
-    team2ParitcipantsMap = team2Participants.reduce((acc, cur) => {
-      acc[cur?.position] = cur;
-      return acc;
-    }, {});
-
-    for (let team1pPos in team1ParitcipantsMap) {
-      const team1p = team1ParitcipantsMap[team1pPos];
-      team1[team1pPos] = candidateMap[team1p?.puuid];
+    for (let pos in TeamPositionType) {
+      const team1puuid = team1ParticipantsMap[pos] ?? null;
+      team1[pos] = candidateMap[team1puuid];
+      console.log("team1", pos, team1puuid);
     }
-    for (let team2pPos in team2ParitcipantsMap) {
-      const team2p = team2ParitcipantsMap[team2pPos];
-      team2[team2pPos] = candidateMap[team2p?.puuid];
+    for (let pos in TeamPositionType) {
+      const team2puuid = team2ParticipantsMap[pos] ?? null;
+      team2[pos] = candidateMap[team2puuid];
     }
 
     visibleCandidates = candidates.filter((c) => {
       return !Object.values(team1).includes(c) && !Object.values(team2).includes(c);
     });
-    console.log(candidateMap);
+    // console.log(candidateMap);
   }
 </script>
 
@@ -232,151 +293,38 @@
   <MainContentLayout>
     <div class="content">
       <div class="teams">
-        <div class="team team1 card">
-          <div class="header">
-            <div class="title">팀 1</div>
-            <div class="rating">
-              <div class="label">총 레이팅</div>
-              <div class="value">1234 LP</div>
-            </div>
-            <div class="avg-tier">
-              <div class="label">평균 티어</div>
-              <div class="value">플레티넘 1</div>
-            </div>
-          </div>
-          <div class="body">
-            <div class="placeholder">팀에 배정된 후보가 없습니다.</div>
-            <div class="summoners">
-              {#each Array(5).fill(null) as c}
-                <div class="summoner">
-                  <div class="profile-icon img">
-                    <SafeImg src="https://ddragon.leagueoflegends.com/cdn/11.16.1/img/profileicon/588.png" />
-                  </div>
-                  <div class="name">플레이어 1</div>
-                  <div class="tiers">
-                    <div class="tier">플레티넘 1</div>
-                    <div class="tier">다이아몬드 3</div>
-                  </div>
-                  <div class="rating">1234 LP</div>
-                  <div class="available-lines">
-                    <div class="line">
-                      <LinePosition position="top" interactive={true} />
-                    </div>
-                    <div class="line">
-                      <LinePosition position="jungle" interactive={true} />
-                    </div>
-                    <div class="line">
-                      <LinePosition position="mid" interactive={true} />
-                    </div>
-                    <div class="line">
-                      <LinePosition position="adc" interactive={true} enabled={true} />
-                    </div>
-                    <div class="line">
-                      <LinePosition position="support" interactive={true} enabled={true} />
-                    </div>
-                  </div>
-                  <div class="most-champions">
-                    {#each Array(5).fill(null) as m}
-                      <div class="most-champion">
-                        <div class="champion-icon img">
-                          <SafeImg src="https://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/Yasuo.png" />
-                        </div>
-                        <div class="score">139만</div>
-                      </div>
-                    {/each}
-                  </div>
-                </div>
-              {/each}
-            </div>
-          </div>
-        </div>
-        <div class="team team2 card">
-          <div class="header">
-            <div class="title">팀 2</div>
-            <div class="rating">
-              <div class="label">총 레이팅</div>
-              <div class="value">1234 LP</div>
-            </div>
-            <div class="avg-tier">
-              <div class="label">평균 티어</div>
-              <div class="value">플레티넘 1</div>
-            </div>
-          </div>
-          <div class="body">
-            <div class="placeholder">팀에 배정된 후보가 없습니다.</div>
-            <div class="summoners">
-              {#each positions as pos}
-                {@const p = team2[pos]}
-                {@const puuid = p?.summary?.puuid ?? null}
-                {@const dropKey = `team2-${pos}`}
-                {@const posFavor = p?.positionFavor}
-                {@const participantRanks = [p?.customRank, p?.soloRank, p?.flexRank]}
-                {@const masteries = (p?.mastery ?? [])
-                  .sort((a, b) => b?.championPoints - a?.championPoints)
-                  .slice(0, 5)}
-                {@const pRank = participantRanks.reduce((acc, cur) => {
-                  if (cur == null) return acc;
-                  if (acc != null) return acc;
-                  return cur;
-                }, null)}
-                <div
-                  class="summoner"
-                  draggable="true"
-                  on:dragstart={(e) => onParticipantDragStart(e, puuid)}
-                  on:dragend={onParticipantDragEnd}
-                >
-                  {#if dragging}
-                    <div
-                      class="droppable-zone"
-                      on:drop={(e) => onCandidateDrop(e, 2, pos)}
-                      on:dragenter={(e) => onCandidateDragEnter(e, dropKey)}
-                      on:dragover={onCandidateDragOver}
-                      on:dragleave={onCandidateDragLeave}
-                    >
-                      {#if candidateHoverTarget === dropKey}
-                        <div class="hover-placeholder">{TeamPositionType[pos]}에 후보 배정</div>
-                      {/if}
-                    </div>
-                  {/if}
-                  <div class="profile-icon img">
-                    <SafeImg src={profileIconUrl(p?.summary?.profileIconId)} />
-                  </div>
-                  <div class="name">{p?.summary?.name ?? "-"}</div>
-                  <div class="tiers">
-                    <div class="tier">플레티넘 1</div>
-                    <div class="tier">다이아몬드 3</div>
-                  </div>
-                  <div class="rating">{pRank?.ratingPoint ?? 0} RP</div>
-                  <div class="available-lines">
-                    {#each Object.keys(TeamPositionKeyType) as key}
-                      {@const lowerKey = key?.toLowerCase() ?? "-"}
-                      <div class="line">
-                        <LinePosition
-                          position={lowerKey}
-                          interactive={true}
-                          enabled={posFavor?.[lowerKey] ?? false}
-                          onClick={(en) => {
-                            onCandidateChangeFavorPosition(p?.summary?.puuid, key, en);
-                          }}
-                        />
-                      </div>
-                    {/each}
-                  </div>
-                  <div class="most-champions">
-                    {#each masteries as m}
-                      <div class="most-champion">
-                        <div class="champion-icon img">
-                          <SafeImg src={championIconUrl(m?.championId)} />
-                        </div>
-                        <div class="score">{formatMasteryPoints(m?.championPoints)}</div>
-                      </div>
-                    {/each}
-                  </div>
-                </div>
-              {/each}
-            </div>
-          </div>
-        </div>
+        <CustomGameContentTeam
+          {positions}
+          bind:totalRatingPoint={team1TotalRatingPoint}
+          team={team1}
+          teamIndex={1}
+          {onParticipantDragStart}
+          {onParticipantDragEnd}
+          {onCandidateDrop}
+          {onCandidateDragEnter}
+          {onCandidateDragOver}
+          {onCandidateDragLeave}
+          {onCandidateChangeFavorPosition}
+          {draggingCandidate}
+          {draggingParticipant}
+          {candidateHoverTarget}
+        />
+        <CustomGameContentTeam
+          {positions}
+          bind:totalRatingPoint={team2TotalRatingPoint}
+          team={team2}
+          teamIndex={2}
+          {onParticipantDragStart}
+          {onParticipantDragEnd}
+          {onCandidateDrop}
+          {onCandidateDragEnter}
+          {onCandidateDragOver}
+          {onCandidateDragLeave}
+          {onCandidateChangeFavorPosition}
+          {draggingCandidate}
+          {draggingParticipant}
+          {candidateHoverTarget}
+        />
       </div>
       <div class="sub-panels">
         <div class="utility card">
@@ -415,12 +363,23 @@
               </div>
             </div>
             <div class="candidates">
-              {#if visibleCandidates.length === 0}
+              {#if visibleCandidates.length === 0 && !draggingParticipant}
                 {#if candidates.length === 0}
                   <div class="placeholder">후보를 검색하여 추가할 수 있습니다.</div>
                 {:else}
                   <div class="placeholder">후보를 여기에 다시 끌어다 놓을 수 있습니다.</div>
                 {/if}
+              {/if}
+              {#if draggingParticipant}
+                <div
+                  class="droppable-zone"
+                  on:drop={onParticipantDrop}
+                  on:dragenter={onParticipantDragEnter}
+                  on:dragleave={onParticipantDragLeave}
+                  on:dragover={onParticipantDragOver}
+                >
+                  <div class="placeholder">여기에 놓기</div>
+                </div>
               {/if}
               {#each visibleCandidates as c}
                 {@const candidateRanks = [c?.customRank, c?.soloRank, c?.flexRank]}
@@ -443,7 +402,11 @@
                     <div class="game-name">{c?.summary?.gameName}</div>
                     <div class="tag">#{c?.summary?.tagLine}</div>
                   </div>
-                  <div class="tier">{cRank != null ? `${cRank?.tier} ${cRank?.rank}` : "-"}</div>
+                  {#if cRank != null}
+                    <TierRank tier={cRank.tier} rank={cRank.rank} compact={true} />
+                  {:else}
+                    <div class="tier">-</div>
+                  {/if}
                 </div>
               {/each}
             </div>

@@ -1,5 +1,6 @@
 import axios from "axios";
 
+export const ServerHostBase = `http://${APP_SERVER_HOST}:${APP_SERVER_PORT}`;
 const ServerHost = `http://${APP_SERVER_HOST}:${APP_SERVER_PORT}/v1`;
 
 const instance = axios.create({
@@ -97,14 +98,33 @@ export const arrangeCustomGameParticipantReq = async (customGameConfigId, puuid,
   return response.data;
 };
 
-export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId, puuid, position, enabled) => {
+export const unArrangeCustomGameParticipantReq = async (customGameConfigId, puuid) => {
+  const response = await instance.post(`/platform/custom-game/unarrange`, {
+    customGameConfigId,
+    puuid,
+  });
+
+  return response.data;
+};
+
+export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId, puuid, position, strength) => {
   const response = await instance.post(`/platform/custom-game/favor-position`, {
     customGameConfigId,
     puuid,
     favorPosition: position,
-    enabled,
+    strength,
   });
 
+  return response.data;
+};
+
+export const getCustomGameBalanceReq = async (customGameConfigId) => {
+  const response = await instance.get(`/platform/custom-game/balance?id=${customGameConfigId}`);
+  return response.data;
+};
+
+export const getTierRankByRatingPointReq = async (ratingPoint) => {
+  const response = await instance.get(`/platform/custom-game/tier-rank?ratingPoint=${ratingPoint}`);
   return response.data;
 };
 

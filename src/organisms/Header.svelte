@@ -4,9 +4,12 @@
   import { location, push } from "svelte-spa-router";
   import { authStore } from "../stores/AuthStore";
   import { toasts } from "svelte-toasts";
-  import { testTokenReq, logout } from "../thunks/GeneralThunk";
+  import { testTokenReq, logout, ServerHostBase } from "../thunks/GeneralThunk";
   import { AxiosError } from "axios";
+  import { onDestroy, onMount } from "svelte";
+  import SocketIoClient from "socket.io-client";
 
+  let socket = null;
   let isCustomGame = false;
   let isAuthorized = false;
 
@@ -56,6 +59,30 @@
 
     if (isAuthorized) {
       checkIsAuthorized();
+    }
+  });
+
+  onMount(() => {
+    // socket = SocketIoClient(`${ServerHostBase}/socket.io/`, {
+    //   transports: ["websocket"],
+    // });
+    // socket.on("connect", () => {
+    //   console.log("socket connected!");
+    // });
+    // socket.on("disconnect", () => {
+    //   console.log("socket disconnected");
+    // });
+    // socket.on("error", (err) => {
+    //   console.log("error", err);
+    // });
+    // socket.on("connect_error", (err) => {
+    //   console.log("connect_error", err.message);
+    // });
+  });
+
+  onDestroy(() => {
+    if (socket) {
+      socket.disconnect();
     }
   });
 

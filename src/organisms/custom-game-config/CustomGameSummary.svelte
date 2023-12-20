@@ -6,9 +6,30 @@
   import DaughnutChart from "../../molecules/DoughnutRateChart.svelte";
   import { bgColorByRate } from "../../utils/Util";
 
-  export let fairness = 0;
-  export let lineFairness = 0;
-  export let tierFairness = 0;
+  export let balance;
+
+  export let team1TotalRatingPoint;
+  export let team2TotalRatingPoint;
+
+  let rpDifference = 0;
+  let rpDifferenceRate = 0;
+
+  let fairness = 0;
+  let lineFairness = 0;
+  let tierFairness = 0;
+
+  $: if (balance) {
+    fairness = balance?.fairness ?? 0;
+    lineFairness = balance?.lineFairness ?? 0;
+    tierFairness = balance?.tierFairness ?? 0;
+  }
+
+  $: if (team1TotalRatingPoint != null && team2TotalRatingPoint != null) {
+    rpDifference = Math.abs(team1TotalRatingPoint - team2TotalRatingPoint);
+    rpDifferenceRate =
+      1 -
+      Math.min(team1TotalRatingPoint, team2TotalRatingPoint) / Math.max(team1TotalRatingPoint, team2TotalRatingPoint);
+  }
 </script>
 
 <div class="custom-game-summary">
@@ -38,7 +59,7 @@
       <div class="stat">
         <div class="label">LP 차이</div>
         <div class="chart">
-          <DaughnutChart rate={0.4} text={`-1`} reversed={true} />
+          <DaughnutChart rate={rpDifferenceRate} text={`${rpDifference}`} reversed={true} />
         </div>
       </div>
     </div>

@@ -7,15 +7,7 @@
   export let text = null;
   export let reversed = false;
 
-  const data = {
-    labels: ["Red", "Blue"],
-    datasets: [
-      {
-        data: [rate, 1 - rate],
-        backgroundColor: [colorByRate(reversed ? 1 - rate : rate), "#00000040"],
-      },
-    ],
-  };
+  let data = {};
 
   const options = {
     responsive: true,
@@ -31,6 +23,18 @@
     },
     cutout: 32,
   };
+
+  $: {
+    data = {
+      labels: ["Red", "Blue"],
+      datasets: [
+        {
+          data: [rate, 1 - rate],
+          backgroundColor: [colorByRate(reversed ? 1 - rate : rate), "#00000040"],
+        },
+      ],
+    };
+  }
 </script>
 
 <div class="chart-wrapper">

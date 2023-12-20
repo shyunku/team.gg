@@ -63,7 +63,7 @@
           <div class="recent-custom-game-configure" on:mouseup={(e) => goToCustomGameConfigPage(r?.id)}>
             <div class="name">{r?.name}</div>
             <div class="created-at">{toRelativeTime(lastUpdatedDt.getTime())} 수정됨</div>
-            <div class="fairness">밸런스: {r?.fairness}%</div>
+            <div class="fairness">밸런스: {((r?.balance?.fairness ?? 0) * 100).toFixed(0)}%</div>
           </div>
         {/each}
       </div>
