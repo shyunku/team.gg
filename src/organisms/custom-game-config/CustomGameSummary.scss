@@ -6,16 +6,10 @@
   background-color: $sub-bg-color;
   padding: 20px 0;
   color: rgb(195, 190, 169);
-
-  .summary {
-    display: flex;
-    // margin-right: 25px;
-    color: rgb(80, 219, 108);
-  }
+  height: 180px;
 
   .stats {
     display: flex;
-    flex: 1;
 
     // flex-direction: column;
 
@@ -27,6 +21,7 @@
       padding: 15px;
       border-radius: 3px;
       box-sizing: border-box;
+      justify-content: center;
 
       &:not(:last-child) {
         margin-right: 10px;
@@ -40,13 +35,172 @@
 
       .label {
         font-size: 13px;
-        margin-bottom: 15px;
+        margin-bottom: 25px;
       }
 
       .chart {
         display: flex;
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
+      }
+    }
+  }
+
+  .controller {
+    display: flex;
+    color: $main-fg-color;
+    flex: 1;
+    justify-content: flex-start;
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      margin-left: 30px;
+      justify-content: space-between;
+      // flex: 1;
+
+      .option-panel {
+        display: flex;
+        flex-direction: column;
+        // flex: 1;
+
+        &:not(:last-child) {
+          // margin-bottom: 10px;
+        }
+
+        & > .header {
+          display: flex;
+          align-items: center;
+          margin-bottom: 8px;
+          font-size: 13px;
+
+          button {
+            margin-left: 10px;
+            border: none;
+            background-color: rgb(111, 107, 98);
+            font-size: 11px;
+            padding: 1px 5px;
+            color: rgb(185, 185, 185);
+            cursor: pointer;
+          }
+        }
+
+        .option {
+          display: flex;
+          // flex-direction: column;
+          padding: 3px 0;
+
+          & > .label {
+            font-size: 12px;
+            margin-right: 10px;
+            width: 100px;
+            color: rgb(103, 96, 83);
+          }
+
+          .slider {
+            flex: 1;
+            width: 170px;
+
+            & > * {
+              margin: 3px;
+            }
+
+            .rangeSlider {
+              height: 5px;
+              background-color: rgba(255, 255, 255, 0.1);
+
+              .rangeBar {
+                background-color: rgb(104, 104, 104);
+                height: 5px;
+              }
+
+              .rangeHandle {
+                width: 10px;
+                height: 10px;
+                top: 2px;
+
+                .rangeNub {
+                  background-color: rgb(145, 145, 145);
+                  transition: 0.2s ease transform;
+
+                  &:hover {
+                    background-color: rgb(220, 168, 106);
+                    transform: scale(1.3);
+                  }
+                }
+              }
+
+              &.focus {
+                .rangeBar {
+                  background-color: rgb(177, 137, 87);
+                }
+
+                .rangeNub {
+                  background-color: rgb(220, 168, 106);
+                  transform: scale(1.3);
+                }
+              }
+            }
+          }
+
+          .value {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 45px;
+            font-size: 11px;
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+
+    .process {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      .process-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .label {
+          font-size: 12px;
+          font-weight: bold;
+          opacity: 0.7;
+        }
+
+        .progress-bar {
+          width: 100px;
+          height: 100px;
+          margin-top: 20px;
+        }
+      }
+
+      button.find-optimized {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 130px;
+        height: 32px;
+        border: none;
+        background-color: rgb(133, 97, 38);
+        cursor: pointer;
+        border-radius: 3px;
+        color: white;
+        font-size: 13px;
+
+        &:hover {
+          background-color: rgb(162, 119, 49);
+        }
+
+        &:disabled {
+          background-color: rgb(50, 50, 50);
+          color: rgb(93, 93, 93);
+          cursor: not-allowed;
+        }
       }
     }
   }

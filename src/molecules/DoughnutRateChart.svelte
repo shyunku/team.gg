@@ -6,8 +6,19 @@
   export let rate = 0.5;
   export let text = null;
   export let reversed = false;
+  export let cutout = 38;
+  export let color = null;
 
-  let data = {};
+  let fgColor = color ?? colorByRate(reversed ? 1 - rate : rate);
+  let data = {
+    labels: ["Red", "Blue"],
+    datasets: [
+      {
+        data: [rate, 1 - rate],
+        backgroundColor: [fgColor, "#00000040"],
+      },
+    ],
+  };
 
   const options = {
     responsive: true,
@@ -21,19 +32,13 @@
         enabled: false,
       },
     },
-    cutout: 32,
+    cutout,
   };
 
   $: {
-    data = {
-      labels: ["Red", "Blue"],
-      datasets: [
-        {
-          data: [rate, 1 - rate],
-          backgroundColor: [colorByRate(reversed ? 1 - rate : rate), "#00000040"],
-        },
-      ],
-    };
+    fgColor = color ?? colorByRate(reversed ? 1 - rate : rate);
+    data.datasets[0].data = [rate, 1 - rate];
+    data.datasets[0].backgroundColor = [fgColor, "#00000040"];
   }
 </script>
 

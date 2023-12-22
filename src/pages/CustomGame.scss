@@ -26,6 +26,10 @@
     background-color: rgb(133, 97, 38);
     cursor: pointer;
     border-radius: 3px;
+
+    &:hover {
+      background-color: rgb(162, 119, 49);
+    }
   }
 }
 

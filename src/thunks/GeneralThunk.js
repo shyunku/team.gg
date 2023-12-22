@@ -123,6 +123,43 @@ export const getCustomGameBalanceReq = async (customGameConfigId) => {
   return response.data;
 };
 
+export const findMostBalancedCustomGameReq = async (customGameConfigId, data) => {
+  const response = await instance.post(`/platform/custom-game/optimize`, {
+    id: customGameConfigId,
+    ...data,
+  });
+  return response.data;
+};
+
+export const arrangeAllCandidatesReq = async (customGameConfigId) => {
+  const response = await instance.post(`/platform/custom-game/arrange-all`, {
+    id: customGameConfigId,
+  });
+  return response.data;
+};
+
+export const unArrangeAllCandidatesReq = async (customGameConfigId) => {
+  const response = await instance.post(`/platform/custom-game/unarrange-all`, {
+    id: customGameConfigId,
+  });
+  return response.data;
+};
+
+export const swapCustomGameTeamReq = async (customGameConfigId, puuid) => {
+  const response = await instance.post(`/platform/custom-game/swap-team`, {
+    id: customGameConfigId,
+    puuid,
+  });
+  return response.data;
+};
+
+export const shuffleCustomGameTeamReq = async (customGameConfigId) => {
+  const response = await instance.post(`/platform/custom-game/shuffle`, {
+    id: customGameConfigId,
+  });
+  return response.data;
+};
+
 export const getTierRankByRatingPointReq = async (ratingPoint) => {
   const response = await instance.get(`/platform/custom-game/tier-rank?ratingPoint=${ratingPoint}`);
   return response.data;

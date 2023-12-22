@@ -11,11 +11,16 @@
   import LinePosition from "../../molecules/LinePosition.svelte";
   import {
     addCustomGameCandidateReq,
+    arrangeAllCandidatesReq,
     arrangeCustomGameParticipantReq,
     championIconUrl,
+    findMostBalancedCustomGameReq,
     getSummonerInfo,
     profileIconUrl,
     setCustomGameCandidateFavorPositionReq,
+    shuffleCustomGameTeamReq,
+    swapCustomGameTeamReq,
+    unArrangeAllCandidatesReq,
     unArrangeCustomGameParticipantReq,
   } from "../../thunks/GeneralThunk";
   import { toasts } from "svelte-toasts";
@@ -32,6 +37,7 @@
   export let team2TotalRatingPoint;
 
   export let updateBalance;
+  export let fetchAllData;
 
   export let team1ParticipantsMap = {};
   export let team2ParticipantsMap = {};
@@ -96,6 +102,78 @@
       });
     } finally {
       toast.remove();
+    }
+  };
+
+  const selectMaxCandidates = async () => {
+    try {
+      await arrangeAllCandidatesReq(configId);
+      try {
+        fetchAllData();
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "후보 선택 오류",
+        description: "후보를 선택하던 중 오류가 발생했습니다.",
+        type: "error",
+      });
+    }
+  };
+
+  const unselectParticipants = async () => {
+    try {
+      await unArrangeAllCandidatesReq(configId);
+      try {
+        fetchAllData();
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "후보 선택 오류",
+        description: "후보를 선택하던 중 오류가 발생했습니다.",
+        type: "error",
+      });
+    }
+  };
+
+  const swapTeam = async () => {
+    try {
+      await swapCustomGameTeamReq(configId);
+      try {
+        fetchAllData();
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "팀 교체 오류",
+        description: "팀을 교체하던 중 오류가 발생했습니다.",
+        type: "error",
+      });
+    }
+  };
+
+  const shuffleTeam = async () => {
+    try {
+      await shuffleCustomGameTeamReq(configId);
+      try {
+        fetchAllData();
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "팀 섞기 오류",
+        description: "팀을 섞던 중 오류가 발생했습니다.",
+        type: "error",
+      });
     }
   };
 
@@ -172,15 +250,11 @@
         }
       }
 
-      console.log(team1ParticipantsMap);
-
       if (destTeam == 1) {
         team1ParticipantsMap[destPos] = puuid;
       } else {
         team2ParticipantsMap[destPos] = puuid;
       }
-
-      console.log(team1ParticipantsMap);
 
       toast.update({
         title: "소환사 배치",
@@ -275,7 +349,6 @@
     for (let pos in TeamPositionType) {
       const team1puuid = team1ParticipantsMap[pos] ?? null;
       team1[pos] = candidateMap[team1puuid];
-      console.log("team1", pos, team1puuid);
     }
     for (let pos in TeamPositionType) {
       const team2puuid = team2ParticipantsMap[pos] ?? null;
@@ -331,26 +404,26 @@
           <div class="header">유틸리티</div>
           <div class="body">
             <div class="options">
-              <div class="option">
+              <div class="option" on:mouseup={selectMaxCandidates}>
                 <div class="icon"><IoIosArrowRoundBack /></div>
-                <div class="text">10명 랜덤 차출</div>
+                <div class="text">최대 10명 뽑기</div>
               </div>
-              <div class="option">
+              <div class="option" on:mouseup={unselectParticipants}>
                 <div class="icon"><IoIosArrowRoundForward /></div>
                 <div class="text">전부 후보 리스트로 이동</div>
               </div>
-              <div class="option">
+              <div class="option" on:mouseup={swapTeam}>
                 <div class="icon"><IoIosSwap /></div>
                 <div class="text">팀 바꾸기</div>
               </div>
-              <div class="option">
+              <div class="option" on:mouseup={shuffleTeam}>
                 <div class="icon"><IoIosShuffle /></div>
                 <div class="text">팀 섞기</div>
               </div>
-              <div class="option">
+              <!-- <div class="option">
                 <div class="icon"><IoMdClose /></div>
                 <div class="text">지정 랭크 초기화</div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

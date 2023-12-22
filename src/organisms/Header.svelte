@@ -62,30 +62,6 @@
     }
   });
 
-  onMount(() => {
-    // socket = SocketIoClient(`${ServerHostBase}/socket.io/`, {
-    //   transports: ["websocket"],
-    // });
-    // socket.on("connect", () => {
-    //   console.log("socket connected!");
-    // });
-    // socket.on("disconnect", () => {
-    //   console.log("socket disconnected");
-    // });
-    // socket.on("error", (err) => {
-    //   console.log("error", err);
-    // });
-    // socket.on("connect_error", (err) => {
-    //   console.log("connect_error", err.message);
-    // });
-  });
-
-  onDestroy(() => {
-    if (socket) {
-      socket.disconnect();
-    }
-  });
-
   $: {
     isCustomGame = $location.includes("/custom-game");
   }

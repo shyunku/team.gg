@@ -28,7 +28,7 @@
       const resp = await getCustomGameConfigurations();
       recentCustoms = resp
         .sort((a, b) => new Date(b.lastUpdatedAt ?? 0).getTime() - new Date(a.lastUpdatedAt ?? 0).getTime())
-        .slice(0, 5);
+        .slice(0, 10);
       console.log(resp);
     } catch (err) {
       console.error(err);
