@@ -104,6 +104,7 @@ export default {
       APP_SERVER_HOST: JSON.stringify(process.env.APP_SERVER_HOST),
       APP_SERVER_PORT: JSON.stringify(process.env.APP_SERVER_PORT),
       APP_VERSION: JSON.stringify(PackageJson.version),
+      APP_SECURE: JSON.stringify(isProduction ? true : false),
     }),
 
     // In dev mode, call `npm run start` once

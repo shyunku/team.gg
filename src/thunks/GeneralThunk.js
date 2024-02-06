@@ -1,7 +1,12 @@
 import axios from "axios";
 
-export const ServerHostBase = `http://${APP_SERVER_HOST}:${APP_SERVER_PORT}`;
-const ServerHost = `http://${APP_SERVER_HOST}:${APP_SERVER_PORT}/v1`;
+const useHttps = APP_SECURE;
+const prefix = useHttps ? "https" : "http";
+
+export const ServerHostBase = `${prefix}://${APP_SERVER_HOST}:${APP_SERVER_PORT}`;
+const ServerHost = `${ServerHostBase}/v1`;
+
+console.log("ServerHost", ServerHost);
 
 const instance = axios.create({
   baseURL: ServerHost,

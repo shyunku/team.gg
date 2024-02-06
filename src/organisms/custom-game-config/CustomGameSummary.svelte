@@ -30,6 +30,7 @@
   let fairness = 0;
   let lineFairness = 0;
   let tierFairness = 0;
+  let lineSatisfaction = 0;
 
   let calculatingOptimization = false;
 
@@ -125,6 +126,7 @@
     fairness = balance?.fairness ?? 0;
     lineFairness = balance?.lineFairness ?? 0;
     tierFairness = balance?.tierFairness ?? 0;
+    lineSatisfaction = balance?.lineSatisfaction ?? 0;
   }
 
   $: if (team1TotalRatingPoint != null && team2TotalRatingPoint != null) {
@@ -141,6 +143,7 @@
         processType = type;
         processRate = progress;
         calculatingOptimization = true;
+        // console.log(data);
       } catch (err) {
         console.error(err);
       }
@@ -376,6 +379,12 @@
         <div class="label">티어 공정성</div>
         <div class="chart">
           <DaughnutChart rate={tierFairness} />
+        </div>
+      </div>
+      <div class="stat">
+        <div class="label">라인 만족도</div>
+        <div class="chart">
+          <DaughnutChart rate={lineSatisfaction} />
         </div>
       </div>
       <div class="stat">
