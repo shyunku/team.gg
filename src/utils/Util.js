@@ -68,3 +68,19 @@ export const formatRankKr = (rank) => {
       return "";
   }
 };
+
+export const reverseFormatRankKr = (rank) => {
+  rank = `${rank}`;
+  switch (rank) {
+    case "1":
+      return "I";
+    case "2":
+      return "II";
+    case "3":
+      return "III";
+    case "4":
+      return "IV";
+    default:
+      return "";
+  }
+};

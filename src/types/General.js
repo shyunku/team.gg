@@ -58,3 +58,17 @@ export const TierType = {
   GRANDMASTER: "그랜드마스터",
   CHALLENGER: "챌린저",
 };
+
+export const ValidTierRanks = Object.freeze({
+  UNRANKED: [0],
+  IRON: [1, 2, 3, 4],
+  BRONZE: [1, 2, 3, 4],
+  SILVER: [1, 2, 3, 4],
+  GOLD: [1, 2, 3, 4],
+  PLATINUM: [1, 2, 3, 4],
+  EMERALD: [1, 2, 3, 4],
+  DIAMOND: [1, 2, 3, 4],
+  MASTER: [1],
+  GRANDMASTER: [1],
+  CHALLENGER: [1],
+});

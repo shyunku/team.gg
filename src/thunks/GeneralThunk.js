@@ -123,6 +123,17 @@ export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId,
   return response.data;
 };
 
+export const setCustomGameCandidateCustomTierRankReq = async (customGameConfigId, puuid, tier, rank) => {
+  const response = await instance.post(`/platform/custom-game/custom-tier-rank`, {
+    customGameConfigId,
+    puuid,
+    tier,
+    rank,
+  });
+
+  return response.data;
+};
+
 export const getCustomGameBalanceReq = async (customGameConfigId) => {
   const response = await instance.get(`/platform/custom-game/balance?id=${customGameConfigId}`);
   return response.data;

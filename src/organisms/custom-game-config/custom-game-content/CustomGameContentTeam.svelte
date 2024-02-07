@@ -7,6 +7,9 @@
   import { TeamPositionKeyType, TeamPositionType } from "../../../types/General";
   import { formatMasteryPoints } from "../../../utils/Util";
   import "./CustomGameContentTeam.scss";
+  import ContextDiv from "../../../components/ContextDiv.svelte";
+  import ContextMenu from "../../../components/ContextMenu.svelte";
+  import TierRankGroup from "../../../molecules/TierRankGroup.svelte";
 
   export let positions;
   export let team;
@@ -20,6 +23,7 @@
   export let onCandidateDragLeave;
 
   export let onCandidateChangeFavorPosition;
+  export let setCustomCandidateCustomTierRank;
 
   export let draggingCandidate;
   export let draggingParticipant;
@@ -111,19 +115,26 @@
         {@const customRank = p?.customRank}
         {@const soloRank = p?.soloRank}
         {@const flexRank = p?.flexRank}
-        <div
+        <ContextDiv
           class="summoner"
           draggable="true"
-          on:dragstart={(e) => onParticipantDragStart(e, puuid, pos, teamIndex)}
-          on:dragend={onParticipantDragEnd}
+          onDragStart={(e) => onParticipantDragStart(e, puuid, pos, teamIndex)}
+          onDragEnd={onParticipantDragEnd}
         >
+          <ContextMenu className="summoner-custom-tier-ranks">
+            <TierRankGroup
+              onSelect={(tier, rank) => {
+                setCustomCandidateCustomTierRank(puuid, tier, rank);
+              }}
+            />
+          </ContextMenu>
           {#if draggingCandidate || draggingParticipant}
             <div
               class="droppable-zone"
               on:drop={(e) => onCandidateDrop(e, teamIndex, pos)}
               on:dragenter={(e) => onCandidateDragEnter(e, dropKey)}
               on:dragover={onCandidateDragOver}
-              on:dragleave={onCandidateDragLeave}
+              on:dragleave={(e) => onCandidateDragLeave(e, dropKey)}
             >
               {#if candidateHoverTarget === dropKey}
                 <div class="hover-placeholder">{TeamPositionType[pos]}에 후보 배정</div>
@@ -178,6 +189,7 @@
                     strength={posFavor?.[lowerKey] ?? 0}
                     showStrength={true}
                     onClick={(en) => {
+                      en.stopPropagation();
                       onCandidateChangeFavorPosition(p?.summary?.puuid, key, en);
                     }}
                   />
@@ -197,7 +209,7 @@
           {:else}
             <div class="empty-placeholder">배정된 소환사가 없습니다.</div>
           {/if}
-        </div>
+        </ContextDiv>
       {/each}
     </div>
   </div>

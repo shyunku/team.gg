@@ -8,9 +8,18 @@
   export let ratingPoint;
   export let lp;
   export let compact = false;
+
+  export let onClick;
 </script>
 
-<div class={"tier-rank" + JsxUtil.class(tier?.toLowerCase()) + JsxUtil.classByCondition(compact, "compact")}>
+<div
+  class={"tier-rank" +
+    JsxUtil.class(tier?.toLowerCase()) +
+    JsxUtil.classByCondition(compact, "compact") +
+    JsxUtil.classByEqual(label, "지정", "custom") +
+    JsxUtil.classByCondition(onClick != null, "interactive")}
+  on:mouseup={onClick}
+>
   {#if label != null}
     <div class="label">{label}</div>
   {/if}
@@ -32,6 +41,20 @@
     padding: 5px 8px;
     border-radius: 3px;
     font-size: 12px;
+
+    &.interactive {
+      cursor: pointer;
+      transition: filter 0.1s linear;
+      filter: brightness(80%);
+
+      &:hover {
+        filter: brightness(100%);
+      }
+    }
+
+    &.custom {
+      border: 1px solid rgb(255, 195, 98);
+    }
 
     &.compact {
       background-color: transparent !important;

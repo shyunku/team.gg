@@ -94,3 +94,13 @@ button {
     color: rgb(154, 144, 119);
   }
 }
+
+*::-webkit-scrollbar {
+  width: 6px;
+  background-color: black;
+
+  &-thumb {
+    background-color: rgb(86, 78, 59);
+    border-radius: 10px;
+  }
+}

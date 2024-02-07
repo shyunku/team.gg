@@ -17,6 +17,7 @@
     findMostBalancedCustomGameReq,
     getSummonerInfo,
     profileIconUrl,
+    setCustomGameCandidateCustomTierRankReq,
     setCustomGameCandidateFavorPositionReq,
     shuffleCustomGameTeamReq,
     swapCustomGameTeamReq,
@@ -24,7 +25,7 @@
     unArrangeCustomGameParticipantReq,
   } from "../../thunks/GeneralThunk";
   import { toasts } from "svelte-toasts";
-  import { TeamPositionKeyType, TeamPositionType } from "../../types/General";
+  import { TeamPositionKeyType, TeamPositionType, TierType } from "../../types/General";
   import { AxiosError } from "axios";
   import { formatMasteryPoints } from "../../utils/Util";
   import TierRank from "../../molecules/TierRank.svelte";
@@ -177,6 +178,27 @@
     }
   };
 
+  const setCustomCandidateCustomTierRank = async (puuid, tier, rank) => {
+    try {
+      const isUnranked = tier === "UNRANKED";
+      console.log(tier, rank, isUnranked);
+      await setCustomGameCandidateCustomTierRankReq(
+        configId,
+        puuid,
+        isUnranked ? null : tier,
+        isUnranked ? null : rank
+      );
+    } catch (err) {
+      console.log(err);
+      toasts.add({
+        title: "지정 랭크 변경 오류",
+        description: "랭크 지정에 실패했습니다.",
+        duration: 3000,
+        type: "error",
+      });
+    }
+  };
+
   const onCandidateDragStart = (e, puuid) => {
     e.dataTransfer.setData("puuid", puuid);
     e.dataTransfer.setData("type", "candidate");
@@ -192,7 +214,7 @@
 
   const onCandidateDragEnter = (e, key) => {
     e.preventDefault();
-    // console.log("enter");
+    // console.log("enter", key);
     candidateHoverTarget = key;
   };
 
@@ -202,12 +224,15 @@
 
   const onCandidateDragLeave = (e, key) => {
     e.preventDefault();
-    // console.log("leave");
-    candidateHoverTarget = null;
+    // console.log("leave", key);
+    if (candidateHoverTarget === key) candidateHoverTarget = null;
   };
 
   const onCandidateDrop = async (e, team, position) => {
     console.log("dropped on", team, position);
+
+    draggingParticipant = false;
+
     const puuid = e.dataTransfer.getData("puuid");
     const type = e.dataTransfer.getData("type");
     const srcPos = e.dataTransfer.getData("position");
@@ -287,7 +312,7 @@
 
   const onParticipantDragEnd = (e) => {
     // e.preventDefault();
-    // console.log("end");
+    console.log("drag end");
     draggingParticipant = false;
   };
 
@@ -306,6 +331,8 @@
   const onParticipantDrop = async (e) => {
     const puuid = e.dataTransfer.getData("puuid");
     console.log("unarrange", puuid);
+
+    draggingParticipant = false;
 
     try {
       await unArrangeCustomGameParticipantReq(configId, puuid);
@@ -378,6 +405,7 @@
           {onCandidateDragOver}
           {onCandidateDragLeave}
           {onCandidateChangeFavorPosition}
+          {setCustomCandidateCustomTierRank}
           {draggingCandidate}
           {draggingParticipant}
           {candidateHoverTarget}
@@ -394,6 +422,7 @@
           {onCandidateDragOver}
           {onCandidateDragLeave}
           {onCandidateChangeFavorPosition}
+          {setCustomCandidateCustomTierRank}
           {draggingCandidate}
           {draggingParticipant}
           {candidateHoverTarget}
