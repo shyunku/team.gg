@@ -14,8 +14,6 @@
     x = e.clientX;
     y = e.clientY;
 
-    console.log(window.innerWidth, window.innerHeight);
-
     const target = document.getElementById(id);
     const menus = target.getElementsByClassName("context-menu");
     for (let menu of menus) {
