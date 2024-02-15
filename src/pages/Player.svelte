@@ -95,6 +95,7 @@
   $: onTryRenew = async () => {
     renewing = true;
 
+    let success;
     let puuid = summonerInfo?.summary?.puuid;
     if (puuid == null) {
       return;
@@ -102,13 +103,16 @@
 
     try {
       await renewSummonerInfo(puuid);
-      summonerInfo = await getSummonerInfo(summonerInfo?.summary?.name);
-      console.log("renewed summonerInfo", summonerInfo);
+      await loadSummonerInfo();
+      success = true;
     } catch (e) {
       console.error(e);
+      success = false;
     } finally {
       renewing = false;
     }
+
+    return success;
   };
 </script>
 

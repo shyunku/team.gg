@@ -1,4 +1,6 @@
 import axios from "axios";
+import { authStore } from "../stores/AuthStore";
+import { toasts } from "svelte-toasts";
 
 const useHttps = APP_SECURE;
 const prefix = useHttps ? "https" : "http";
@@ -12,6 +14,34 @@ const instance = axios.create({
   baseURL: ServerHost,
   withCredentials: true,
 });
+
+instance.interceptors.request.use(
+  (config) => {
+    return config;
+  },
+  (error) => {
+    console.error(error);
+    // 요청 에러 직전 호출됩니다.
+    return Promise.reject(error);
+  }
+);
+
+instance.interceptors.response.use(
+  (resp) => {
+    return resp;
+  },
+  (error) => {
+    const status = error?.response?.status;
+    switch (status) {
+      case 401:
+        authStore.set("authorized", false);
+        toasts.warning("세션이 만료되었습니다. 다시 로그인해주세요.");
+        window.location.href = "#/login";
+        break;
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const login = async (id, encryptedPassword) => {
   const response = await instance.post(`/auth/login`, {
@@ -171,6 +201,13 @@ export const swapCustomGameTeamReq = async (customGameConfigId, puuid) => {
 
 export const shuffleCustomGameTeamReq = async (customGameConfigId) => {
   const response = await instance.post(`/platform/custom-game/shuffle`, {
+    id: customGameConfigId,
+  });
+  return response.data;
+};
+
+export const renewCustomGameTeamRankReq = async (customGameConfigId) => {
+  const response = await instance.post(`/platform/custom-game/renew-ranks`, {
     id: customGameConfigId,
   });
   return response.data;

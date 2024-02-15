@@ -5,6 +5,7 @@
   import IoIosArrowRoundForward from "svelte-icons/io/IoIosArrowRoundForward.svelte";
   import IoIosSwap from "svelte-icons/io/IoIosSwap.svelte";
   import IoIosShuffle from "svelte-icons/io/IoIosShuffle.svelte";
+  import IoIosRepeat from "svelte-icons/io/IoIosRepeat.svelte";
   import IoMdClose from "svelte-icons/io/IoMdClose.svelte";
   import "./CustomGameContent.scss";
   import NameTagSearchInput from "../../molecules/NameTagSearchInput.svelte";
@@ -17,6 +18,7 @@
     findMostBalancedCustomGameReq,
     getSummonerInfo,
     profileIconUrl,
+    renewCustomGameTeamRankReq,
     setCustomGameCandidateCustomTierRankReq,
     setCustomGameCandidateFavorPositionReq,
     shuffleCustomGameTeamReq,
@@ -173,6 +175,24 @@
       toasts.add({
         title: "팀 섞기 오류",
         description: "팀을 섞던 중 오류가 발생했습니다.",
+        type: "error",
+      });
+    }
+  };
+
+  const renewRanks = async () => {
+    try {
+      await renewCustomGameTeamRankReq(configId);
+      try {
+        fetchAllData();
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "랭크 갱신 오류",
+        description: "랭크 갱신 도중 오류가 발생했습니다.",
         type: "error",
       });
     }
@@ -448,6 +468,10 @@
               <div class="option" on:mouseup={shuffleTeam}>
                 <div class="icon"><IoIosShuffle /></div>
                 <div class="text">팀 섞기</div>
+              </div>
+              <div class="option" on:mouseup={renewRanks}>
+                <div class="icon"><IoIosRepeat /></div>
+                <div class="text">팀원 랭크 갱신</div>
               </div>
               <!-- <div class="option">
                 <div class="icon"><IoMdClose /></div>

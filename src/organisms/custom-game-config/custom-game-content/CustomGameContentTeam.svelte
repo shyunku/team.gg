@@ -52,6 +52,10 @@
     }
   };
 
+  const goToPlayerPage = (gameName, tagLine) => {
+    window.open(`#/player/${gameName}/${tagLine ?? "KR1"}`, "_blank");
+  };
+
   $: if (team) {
     totalRatingPoint = Object.values(team).reduce((acc, cur) => {
       if (cur == null) return acc;
@@ -148,7 +152,7 @@
             <div class="profile-icon img">
               <SafeImg src={profileIconUrl(p?.summary?.profileIconId)} />
             </div>
-            <div class="name">
+            <div class="name" on:mouseup={(e) => goToPlayerPage(p?.summary?.gameName, p?.summary?.tagLine)}>
               {#if p?.summary?.gameName != null && p?.summary?.tagLine != null}
                 <div class="game-name">{p?.summary?.gameName}</div>
                 <div class="tag">#{p?.summary?.tagLine}</div>
@@ -189,7 +193,6 @@
                     strength={posFavor?.[lowerKey] ?? 0}
                     showStrength={true}
                     onClick={(en) => {
-                      en.stopPropagation();
                       onCandidateChangeFavorPosition(p?.summary?.puuid, key, en);
                     }}
                   />

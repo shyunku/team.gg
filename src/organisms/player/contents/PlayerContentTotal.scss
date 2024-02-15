@@ -28,7 +28,12 @@
       .rank-icon {
         width: 60px;
         height: 60px;
-        background: radial-gradient(circle, rgba(0, 0, 0, 0.207) 0%, transparent 70%) !important;
+        background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, transparent 70%) !important;
+        border-radius: 5px;
+
+        &.null {
+          background: rgba(0, 0, 0, 0.3) !important;
+        }
       }
 
       .rank-info {
@@ -108,9 +113,30 @@
         }
 
         .player-name {
+          display: flex;
+          align-items: center;
           flex: 1;
           text-align: left;
           color: rgb(211, 202, 179);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          &:hover {
+            filter: brightness(1.2);
+            cursor: pointer;
+          }
+
+          .game-name {
+          }
+
+          .game-tag {
+            margin-left: 5px;
+            color: rgba(211, 202, 179, 0.3);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
         }
 
         .player-game-count {

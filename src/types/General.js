@@ -18,6 +18,7 @@ export const QueueType = {
   440: "자랭",
   450: "칼바람",
   490: "빠른 대전",
+  1900: "U.R.F.",
 };
 
 export const TeamPositionType = {

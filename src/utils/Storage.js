@@ -9,6 +9,8 @@ export const toggleSummonerFavorite = (puuid, info = null) => {
       return;
     }
 
+    console.log(favorites);
+
     // find if the summoner is already in favorites
     for (const f of favorites) {
       if (f.puuid === puuid) {

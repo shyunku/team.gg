@@ -94,6 +94,8 @@
           duoMap[p?.puuid] = {
             puuid: p?.puuid,
             name: p?.summonerName,
+            gameName: p?.riotIdName,
+            gameTag: p?.riotIdTagLine,
             gameCount: 1,
             winCount: p?.win ? 1 : 0,
             profileIcon: p?.profileIcon,
@@ -182,8 +184,8 @@
       <div class="solo-rank rank card">
         <div class="rank-header header">솔로랭크</div>
         <div class="rank-body">
-          <div class="rank-icon img">
-            <img src={srTierImgUrl} />
+          <div class={"rank-icon img" + JsxUtil.classByEqual(srTierImgUrl, null, "null")}>
+            <SafeImg src={srTierImgUrl} />
           </div>
           <div class="rank-info">
             <div class="rank-row">
@@ -204,8 +206,8 @@
       <div class="flex-rank rank card">
         <div class="rank-header header">자유랭크</div>
         <div class="rank-body">
-          <div class="rank-icon img">
-            <img src={frTierImgUrl} />
+          <div class={"rank-icon img" + JsxUtil.classByEqual(frTierImgUrl, null, "null")}>
+            <SafeImg src={frTierImgUrl} />
           </div>
           <div class="rank-info">
             <div class="rank-row">
@@ -239,7 +241,10 @@
               <div class="player-icon img">
                 <SafeImg src={profileIconUrl(duo?.profileIcon)} />
               </div>
-              <div class="player-name">{duo?.name ?? "-"}</div>
+              <div class="player-name">
+                <div class="game-name">{duo?.gameName}</div>
+                <div class="game-tag">#{duo?.gameTag ?? "KR1"}</div>
+              </div>
               <div class="player-game-count">{duo?.gameCount ?? "-"}</div>
               <div class="player-win-lose">
                 {duo?.winCount ?? "-"}승 {lossCount}패
@@ -448,7 +453,7 @@
             loadMoreBefore(oldestMatchStartTimestamp);
           }}
         >
-          {loadingMoreMatches ? "불러오는 중..." : "20개 더보기"}
+          {loadingMoreMatches ? "불러오는 중..." : "10개 더보기"}
         </div>
       </div>
     </div>
