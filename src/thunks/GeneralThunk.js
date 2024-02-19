@@ -218,6 +218,12 @@ export const getTierRankByRatingPointReq = async (ratingPoint) => {
   return response.data;
 };
 
+/* ---------------------- statistics ---------------------- */
+export const getChampionStatisticsReq = async () => {
+  const response = await instance.get(`/platform/statistics/champion`);
+  return response.data;
+};
+
 /* ---------------------- links ---------------------- */
 
 export const profileIconUrl = (profileIconId) => {

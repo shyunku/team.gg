@@ -10,7 +10,9 @@
   import SocketIoClient from "socket.io-client";
 
   let socket = null;
-  let isCustomGame = false;
+  let isMainPage = false;
+  let isCustomGamePage = false;
+  let isStatisticsPage = false;
   let isAuthorized = false;
 
   const goToHome = () => {
@@ -19,6 +21,10 @@
 
   const goToCustomGame = () => {
     window.location.href = "#/custom-game";
+  };
+
+  const goToStatistics = () => {
+    window.location.href = "#/statistics";
   };
 
   const goToLogin = () => {
@@ -63,7 +69,9 @@
   });
 
   $: {
-    isCustomGame = $location.includes("/custom-game");
+    isCustomGamePage = $location.includes("/custom-game");
+    isStatisticsPage = $location.includes("/statistics");
+    isMainPage = !isCustomGamePage && !isStatisticsPage;
   }
 </script>
 
@@ -75,8 +83,11 @@
       </div>
     </div>
     <div class="app-menu">
-      <div class={"app-menu-item" + (!isCustomGame ? " selected" : "")} on:mouseup={goToHome}>전적</div>
-      <div class={"app-menu-item" + (isCustomGame ? " selected" : "")} on:mouseup={goToCustomGame}>내전 팀 구성</div>
+      <div class={"app-menu-item" + (isMainPage ? " selected" : "")} on:mouseup={goToHome}>전적</div>
+      <div class={"app-menu-item" + (isCustomGamePage ? " selected" : "")} on:mouseup={goToCustomGame}>
+        내전 팀 구성
+      </div>
+      <div class={"app-menu-item" + (isStatisticsPage ? " selected" : "")} on:mouseup={goToStatistics}>통계</div>
     </div>
     <div class="user-menu">
       {#if isAuthorized}

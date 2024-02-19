@@ -2,198 +2,198 @@
 
 .custom-game-content {
   margin-top: 30px;
-}
 
-.content {
-  display: flex;
-  width: 100%;
-  padding-bottom: 40px;
-
-  .teams {
+  .content {
     display: flex;
-    flex-direction: column;
-    flex: 1;
+    width: 100%;
+    padding-bottom: 40px;
 
-    .card:not(:last-child) {
-      margin-bottom: 15px;
-    }
-
-    .header {
-      display: flex;
-
-      .title {
-        flex: 1;
-      }
-
-      .rating {
-        display: flex;
-      }
-
-      .avg-tier {
-        display: flex;
-        margin-left: 15px;
-      }
-    }
-  }
-
-  .sub-panels {
-    display: flex;
-    flex-direction: column;
-    margin-left: 15px;
-    width: 240px;
-
-    .card:not(:last-child) {
-      margin-bottom: 15px;
-    }
-
-    .utility {
+    .teams {
       display: flex;
       flex-direction: column;
+      flex: 1;
 
-      .body {
-        padding: 0;
+      .card:not(:last-child) {
+        margin-bottom: 15px;
       }
 
-      .options {
+      .header {
+        display: flex;
+
+        .title {
+          flex: 1;
+        }
+
+        .rating {
+          display: flex;
+        }
+
+        .avg-tier {
+          display: flex;
+          margin-left: 15px;
+        }
+      }
+    }
+
+    .sub-panels {
+      display: flex;
+      flex-direction: column;
+      margin-left: 15px;
+      width: 240px;
+
+      .card:not(:last-child) {
+        margin-bottom: 15px;
+      }
+
+      .utility {
         display: flex;
         flex-direction: column;
 
-        .option {
+        .body {
+          padding: 0;
+        }
+
+        .options {
           display: flex;
-          font-size: 13px;
-          height: 30px;
+          flex-direction: column;
+
+          .option {
+            display: flex;
+            font-size: 13px;
+            height: 30px;
+            align-items: center;
+            padding: 0 10px;
+            color: rgb(154, 144, 119);
+            cursor: pointer;
+
+            &:not(:last-child) {
+              border-bottom: 1px solid rgb(62, 59, 49);
+            }
+
+            &:hover {
+              background-color: rgb(62, 59, 49);
+              color: rgb(255, 228, 161);
+            }
+
+            .icon {
+              display: flex;
+              align-items: center;
+              width: 22px;
+            }
+
+            .text {
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+
+      .candidate-list {
+        display: flex;
+        flex-direction: column;
+
+        .body {
+          padding: 0;
+        }
+
+        .searcher {
+          display: flex;
           align-items: center;
-          padding: 0 10px;
-          color: rgb(154, 144, 119);
-          cursor: pointer;
+          justify-content: center;
+          padding: 7px 10px;
 
-          &:not(:last-child) {
-            border-bottom: 1px solid rgb(62, 59, 49);
-          }
-
-          &:hover {
-            background-color: rgb(62, 59, 49);
-            color: rgb(255, 228, 161);
-          }
-
-          .icon {
+          .searcher-wrapper {
             display: flex;
             align-items: center;
-            width: 22px;
-          }
-
-          .text {
-            margin-left: 10px;
-          }
-        }
-      }
-    }
-
-    .candidate-list {
-      display: flex;
-      flex-direction: column;
-
-      .body {
-        padding: 0;
-      }
-
-      .searcher {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 7px 10px;
-
-        .searcher-wrapper {
-          display: flex;
-          align-items: center;
-          background-color: rgba(0, 0, 0, 0.393);
-          width: 100%;
-          padding: 5px 8px;
-          font-size: 13px;
-          border-radius: 3px;
-          overflow: hidden;
-        }
-      }
-
-      .candidates {
-        display: flex;
-        flex-direction: column;
-        min-height: 80px;
-        position: relative;
-
-        .droppable-zone {
-          display: flex;
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 3;
-          background-color: rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(2px);
-        }
-
-        .placeholder {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 70%;
-          text-align: center;
-          transform: translate(-50%, -50%);
-          color: rgb(134, 122, 88);
-          font-size: 13px;
-          line-height: 20px;
-          word-break: keep-all;
-        }
-
-        .candidate {
-          display: flex;
-          height: 28px;
-          padding: 5px 10px;
-          cursor: pointer;
-          font-size: 12px;
-          align-items: center;
-
-          &:not(:last-child) {
-            border-bottom: 1px solid rgb(62, 59, 49);
-          }
-
-          &:hover {
-            background-color: rgb(62, 59, 49);
-          }
-
-          .profile-icon {
-            width: 24px;
-            height: 24px;
+            background-color: rgba(0, 0, 0, 0.393);
+            width: 100%;
+            padding: 5px 8px;
+            font-size: 13px;
             border-radius: 3px;
             overflow: hidden;
           }
+        }
 
-          .name {
+        .candidates {
+          display: flex;
+          flex-direction: column;
+          min-height: 80px;
+          position: relative;
+
+          .droppable-zone {
             display: flex;
-            align-items: center;
-            margin-left: 8px;
-            flex: 1;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+          }
 
-            .game-name {
-              color: $main-fg-color;
+          .placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 70%;
+            text-align: center;
+            transform: translate(-50%, -50%);
+            color: rgb(134, 122, 88);
+            font-size: 13px;
+            line-height: 20px;
+            word-break: keep-all;
+          }
+
+          .candidate {
+            display: flex;
+            height: 28px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            align-items: center;
+
+            &:not(:last-child) {
+              border-bottom: 1px solid rgb(62, 59, 49);
             }
 
-            .tag {
-              margin-left: 3px;
-              opacity: 0.5;
+            &:hover {
+              background-color: rgb(62, 59, 49);
+            }
 
+            .profile-icon {
+              width: 24px;
+              height: 24px;
+              border-radius: 3px;
+              overflow: hidden;
+            }
+
+            .name {
+              display: flex;
+              align-items: center;
+              margin-left: 8px;
+              flex: 1;
               overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
-            }
-          }
 
-          .tier {
-            // margin-left: 5px;
+              .game-name {
+                color: $main-fg-color;
+              }
+
+              .tag {
+                margin-left: 3px;
+                opacity: 0.5;
+
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+            }
+
+            .tier {
+              // margin-left: 5px;
+            }
           }
         }
       }
