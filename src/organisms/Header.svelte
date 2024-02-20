@@ -102,13 +102,35 @@
 <style lang="scss">
   @import "../styles/variables.scss";
 
+  @media screen and (max-width: 700px) {
+    .app-icon-wrapper {
+      display: none !important;
+    }
+
+    .app-menu {
+      margin-left: 0 !important;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .header {
+      height: 40px;
+    }
+
+    .app-menu-item,
+    .user-menu-item {
+      font-size: 16px !important;
+      padding: 0 12px !important;
+    }
+  }
+
   .header {
     display: flex;
     align-items: center;
     // background-color: rgb(118, 25, 180);
     color: white;
     height: 60px;
-    padding: 0 12px;
+    // padding: 0 12px;
     border-bottom: 1px solid $main-border-color;
   }
 
@@ -144,7 +166,8 @@
       font-size: 21px;
       padding: 0 18px;
       background: linear-gradient(180deg, transparent 50%, transparent 100%);
-      transition: 0.5s linear;
+      transition: 0.2s linear;
+      white-space: nowrap;
 
       &:hover {
         background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);
@@ -173,7 +196,7 @@
       font-size: 21px;
       padding: 0 18px;
       background: linear-gradient(180deg, transparent 50%, transparent 100%);
-      transition: 0.5s linear;
+      transition: 0.2s linear;
 
       &:hover {
         background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);

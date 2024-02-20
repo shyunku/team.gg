@@ -18,7 +18,17 @@
     align-items: center;
     justify-content: center;
     flex: 1;
+    width: 100%;
     height: 100%;
+  }
+
+  @media (max-width: 1300px) {
+    .main-content-wrapper {
+      width: 100% !important;
+      padding: 0 20px;
+      box-sizing: border-box;
+      // overflow-x: overlay;
+    }
   }
 
   .main-content-wrapper {

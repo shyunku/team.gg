@@ -11,6 +11,7 @@
 
   const onContextMenu = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     x = e.clientX;
     y = e.clientY;
 

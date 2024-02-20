@@ -5,11 +5,12 @@
   import TierRank from "../../../molecules/TierRank.svelte";
   import { championIconUrl, getTierRankByRatingPointReq, profileIconUrl } from "../../../thunks/GeneralThunk";
   import { TeamPositionKeyType, TeamPositionType } from "../../../types/General";
-  import { formatMasteryPoints } from "../../../utils/Util";
+  import { formatMasteryPoints, formatRankKr, formatTierKr } from "../../../utils/Util";
   import "./CustomGameContentTeam.scss";
   import ContextDiv from "../../../components/ContextDiv.svelte";
   import ContextMenu from "../../../components/ContextMenu.svelte";
   import TierRankGroup from "../../../molecules/TierRankGroup.svelte";
+  import JsxUtil from "../../../utils/JsxUtil";
 
   export let positions;
   export let team;
@@ -52,7 +53,8 @@
     }
   };
 
-  const goToPlayerPage = (gameName, tagLine) => {
+  const goToPlayerPage = (e, gameName, tagLine) => {
+    e.stopPropagation();
     window.open(`#/player/${gameName}/${tagLine ?? "KR1"}`, "_blank");
   };
 
@@ -110,7 +112,7 @@
           { key: "솔랭", tierRank: p?.soloRank },
           { key: "자랭", tierRank: p?.flexRank },
         ]}
-        {@const masteries = (p?.mastery ?? []).sort((a, b) => b?.championPoints - a?.championPoints).slice(0, 4)}
+        {@const masteries = (p?.mastery ?? []).sort((a, b) => b?.championPoints - a?.championPoints).slice(0, 8)}
         {@const pRank = participantRanks.reduce((acc, cur) => {
           if (cur?.tierRank == null) return acc;
           if (acc != null) return acc;
@@ -152,37 +154,34 @@
             <div class="profile-icon img">
               <SafeImg src={profileIconUrl(p?.summary?.profileIconId)} />
             </div>
-            <div class="name" on:mouseup={(e) => goToPlayerPage(p?.summary?.gameName, p?.summary?.tagLine)}>
-              {#if p?.summary?.gameName != null && p?.summary?.tagLine != null}
-                <div class="game-name">{p?.summary?.gameName}</div>
-                <div class="tag">#{p?.summary?.tagLine}</div>
-              {:else}
-                <div class="game-name">-</div>
-              {/if}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="name">
+              <div class="name-bundle" on:click={(e) => goToPlayerPage(e, p?.summary?.gameName, p?.summary?.tagLine)}>
+                {#if p?.summary?.gameName != null && p?.summary?.tagLine != null}
+                  <div class="game-name">{p?.summary?.gameName}</div>
+                  <div class="tag">#{p?.summary?.tagLine}</div>
+                {:else}
+                  <div class="game-name">-</div>
+                {/if}
+              </div>
             </div>
-            <div class="tier-ranks">
+            <!-- <div class="tier-ranks">
               {#if pRank != null}
                 <div class="tier-rank-item">
                   <TierRank label={pRank.key} tier={pRank.tierRank?.tier} rank={pRank.tierRank?.rank} />
                 </div>
               {/if}
-              <!-- {#if customRank != null}
-                <div class="tier-rank-item">
-                  <TierRank label={"지정"} tier={customRank.tier} rank={customRank.rank} />
+            </div> -->
+            <div class="most-champions">
+              {#each masteries as m}
+                <div class="most-champion">
+                  <div class="champion-icon img">
+                    <SafeImg src={championIconUrl(m?.championId)} />
+                  </div>
+                  <div class="score">{formatMasteryPoints(m?.championPoints)}</div>
                 </div>
-              {/if}
-              {#if soloRank != null}
-                <div class="tier-rank-item">
-                  <TierRank label={"솔랭"} tier={soloRank.tier} rank={soloRank.rank} />
-                </div>
-              {/if}
-              {#if (customRank == null || soloRank == null) && flexRank != null}
-                <div class="tier-rank-item">
-                  <TierRank label={"자랭"} tier={flexRank.tier} rank={flexRank.rank} />
-                </div>
-              {/if} -->
+              {/each}
             </div>
-            <div class="rating">{pRank?.tierRank?.ratingPoint ?? 0} RP</div>
             <div class="available-lines">
               {#each Object.keys(TeamPositionKeyType) as key}
                 {@const lowerKey = key?.toLowerCase() ?? "-"}
@@ -199,15 +198,14 @@
                 </div>
               {/each}
             </div>
-            <div class="most-champions">
-              {#each masteries as m}
-                <div class="most-champion">
-                  <div class="champion-icon img">
-                    <SafeImg src={championIconUrl(m?.championId)} />
-                  </div>
-                  <div class="score">{formatMasteryPoints(m?.championPoints)}</div>
-                </div>
-              {/each}
+            <!-- <div class="rating">{pRank?.tierRank?.ratingPoint ?? 0} RP</div> -->
+            <div class={"representative-tier-rank" + JsxUtil.class(pRank?.tierRank?.tier?.toLowerCase())}>
+              {#if pRank != null}
+                <div class="rank-type">{pRank.key}</div>
+                <div class="tier">{formatTierKr(pRank.tierRank?.tier)} {formatRankKr(pRank.tierRank?.rank)}</div>
+              {:else}
+                <div class="tier unranked">Unranked</div>
+              {/if}
             </div>
           {:else}
             <div class="empty-placeholder">배정된 소환사가 없습니다.</div>

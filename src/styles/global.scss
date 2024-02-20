@@ -31,9 +31,7 @@ body {
   overflow-y: overlay;
 
   font-family: "rix", sans-serif;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased; /* 크롬, 사파리 등 웹킷 기반 브라우저용 */
-  -moz-osx-font-smoothing: grayscale; /* 파이어폭스용 */
+  // text-rendering: optimizeLegibility;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -44,6 +42,20 @@ body {
     background-color: rgb(113, 103, 82);
     border-radius: 10px;
   }
+}
+
+* {
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased; /* 크롬, 사파리 등 웹킷 기반 브라우저용 */
+  -moz-osx-font-smoothing: grayscale; /* 파이어폭스용 */
+  // font-smooth: always; /* IE용 */
+
+  // only-css tricks
+  // -webkit-text-stroke: 0.3px;
+  // or
+  // -webkit-text-stroke: 0.45px rgba(0, 0, 0, 0.1);
+  // or
+  // text-shadow: #fff 0px 1px 1px;
 }
 
 input,

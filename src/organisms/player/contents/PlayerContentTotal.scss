@@ -8,6 +8,22 @@
   padding-bottom: 100px;
 }
 
+@media screen and (max-width: 1250px) {
+  .content-wrapper {
+    flex-direction: column;
+
+    .rank-summary {
+      width: 100%;
+    }
+
+    .match-info {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 20px;
+    }
+  }
+}
+
 .rank-summary {
   display: flex;
   flex-direction: column;
@@ -215,6 +231,12 @@
 
     $color-flag-width: 6px;
 
+    @media screen and (max-width: 900px) {
+      .ingame-stat-section {
+        display: none !important;
+      }
+    }
+
     .match {
       display: flex;
       position: relative;
@@ -324,7 +346,7 @@
           height: 100%;
           padding: 15px 0;
           box-sizing: border-box;
-          width: 250px;
+          flex: 1;
 
           .champion-section {
             display: flex;
@@ -381,10 +403,10 @@
             .kda-section {
               display: flex;
               flex-direction: column;
-              // margin-left: 15px;
+              width: 130px;
               align-items: center;
               justify-content: center;
-              flex: 1;
+              // flex: 1;
 
               .kda {
                 display: flex;
@@ -442,7 +464,7 @@
         .ingame-stat-section {
           display: flex;
           flex-direction: column;
-          flex: 1;
+          width: 200px;
           margin-left: 10px;
           height: 100%;
           padding: 15px 0;
@@ -565,6 +587,18 @@
           height: 100%;
           // padding: 10px 0;
           box-sizing: border-box;
+
+          @media screen and (max-width: 700px) {
+            .team:not(.my-team) {
+              display: none;
+            }
+          }
+
+          @media screen and (max-width: 575px) {
+            .team {
+              display: none !important;
+            }
+          }
 
           .team {
             display: flex;

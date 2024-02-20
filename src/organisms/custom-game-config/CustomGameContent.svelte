@@ -188,6 +188,11 @@
       } catch (err) {
         console.error(err);
       }
+      toasts.add({
+        title: "랭크 갱신",
+        description: "랭크를 갱신했습니다.",
+        type: "success",
+      });
     } catch (err) {
       console.error(err);
       toasts.add({

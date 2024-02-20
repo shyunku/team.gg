@@ -15,6 +15,7 @@
   import JsxUtil from "../../../utils/JsxUtil";
   import "./PlayerContentTotal.scss";
   import { push } from "svelte-spa-router";
+  import { formatRankKr, formatTierKr } from "../../../utils/Util";
 
   export let sr = {};
   export let fr = {};
@@ -45,7 +46,7 @@
 
   $: {
     if (sr?.tier != null && sr?.rank != null) {
-      srTierRank = sr.tier + " " + sr.rank;
+      srTierRank = formatTierKr(sr.tier) + " " + formatRankKr(sr.rank);
     } else {
       srTierRank = "언랭";
     }
@@ -65,7 +66,7 @@
 
   $: {
     if (fr?.tier != null && fr?.rank != null) {
-      frTierRank = fr.tier + " " + fr.rank;
+      frTierRank = formatTierKr(fr.tier) + " " + formatRankKr(fr.rank);
     } else {
       frTierRank = "언랭";
     }
@@ -282,6 +283,7 @@
           {@const dealtPercentageInTeam = getDamageDealtPercentageInTeam(match)}
           {@const dealtRanking = getDamageDealtRanking(match)}
           {@const earlySurrender = match?.myStat?.gameEndedInEarlySurrender ?? false}
+          {@const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid)}
           <div class={"match " + (earlySurrender ? "early-surrender" : match?.myStat?.win ? "win" : "lose")}>
             <div class="color-flag"></div>
             <div class="header">
@@ -382,7 +384,7 @@
                 </div>
               </div>
               <div class="ingame-summoners-section">
-                <div class="team team-1">
+                <div class={"team team-1" + JsxUtil.classByCondition(isTeam1, "my-team")}>
                   {#each match?.team1 ?? [] as teammate}
                     {@const name =
                       teammate?.riotIdName != null && teammate?.riotIdName.length > 0
@@ -410,7 +412,7 @@
                     </div>
                   {/each}
                 </div>
-                <div class="team team-2">
+                <div class={"team team-2" + JsxUtil.classByCondition(!isTeam1, "my-team")}>
                   {#each match?.team2 ?? [] as teammate}
                     {@const name =
                       teammate?.riotIdName != null && teammate?.riotIdName.length > 0

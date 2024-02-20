@@ -2,7 +2,6 @@
   import { toasts } from "svelte-toasts";
   import CustomGameContent from "../organisms/custom-game-config/CustomGameContent.svelte";
   import CustomGameHeader from "../organisms/custom-game-config/CustomGameHeader.svelte";
-  import CustomGameOptions from "../organisms/custom-game-config/CustomGameOptions.svelte";
   import CustomGameSummary from "../organisms/custom-game-config/CustomGameSummary.svelte";
   import { getCustomGameBalanceReq, getCustomGameConfigurationInfo } from "../thunks/GeneralThunk";
   import { onDestroy, onMount } from "svelte";

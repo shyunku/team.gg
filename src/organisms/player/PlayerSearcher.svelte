@@ -33,9 +33,11 @@
   @import "../../styles/variables.scss";
 
   .player-searcher {
+    display: flex;
     background-color: $highlight-color;
     width: 100%;
     padding: 8px 0;
+    box-sizing: border-box;
 
     .searcher {
       display: flex;

@@ -35,8 +35,9 @@
   let calculatingOptimization = false;
 
   let defaultWeights = {
-    lineFairnessWeight: 50,
-    tierFairnessWeight: 50,
+    lineFairnessWeight: 33,
+    tierFairnessWeight: 33,
+    lineSatisfactionWeight: 34,
     topInfluence: 20,
     jungleInfluence: 20,
     midInfluence: 20,
@@ -47,6 +48,7 @@
   // weights
   let lineFairnessWeight;
   let tierFairnessWeight;
+  let lineSatisfactionWeight;
 
   let topInfluence;
   let jungleInfluence;
@@ -63,6 +65,7 @@
       await findMostBalancedCustomGameReq(configId, {
         lineFairnessWeight: lineFairnessWeight / 100,
         tierFairnessWeight: tierFairnessWeight / 100,
+        lineSatisfactionWeight: lineSatisfactionWeight / 100,
         topInfluenceWeight: topInfluence / 100,
         jungleInfluenceWeight: jungleInfluence / 100,
         midInfluenceWeight: midInfluence / 100,
@@ -90,7 +93,8 @@
 
   const initFairnessWeights = () => {
     lineFairnessWeight = defaultWeights.lineFairnessWeight;
-    tierFairnessWeight = 100 - lineFairnessWeight;
+    tierFairnessWeight = defaultWeights.tierFairnessWeight;
+    lineSatisfactionWeight = 100 - lineFairnessWeight - tierFairnessWeight;
   };
 
   const initInfluenceWeights = () => {
@@ -103,8 +107,9 @@
 
   $: if (weights != null) {
     defaultWeights = {
-      lineFairnessWeight: (weights?.lineFairness ?? 1) * 100,
-      tierFairnessWeight: 100 - (weights?.lineFairness ?? 1) * 100,
+      lineFairnessWeight: (weights?.lineFairness ?? 0.33) * 100,
+      tierFairnessWeight: (weights?.tierFairness ?? 0.33) * 100,
+      lineSatisfactionWeight: 100 * (1 - (weights?.lineFairness ?? 0.33) - (weights?.tierFairness ?? 0.33)),
       topInfluence: (weights?.topInfluence ?? 0.2) * 100,
       jungleInfluence: (weights?.jungleInfluence ?? 0.2) * 100,
       midInfluence: (weights?.midInfluence ?? 0.2) * 100,
@@ -201,15 +206,20 @@
             <div class="label">라인 공정성 우선</div>
             <div class="slider">
               <RangeSlider
-                min={0}
-                max={100}
+                min={5}
+                max={80}
                 range={"min"}
                 values={[lineFairnessWeight]}
                 step={0.01}
                 disabled={calculatingOptimization}
                 on:change={(e) => {
+                  let remain = 100 - lineFairnessWeight;
                   lineFairnessWeight = e?.detail?.value;
-                  tierFairnessWeight = 100 - lineFairnessWeight;
+                  let afterRemain = 100 - lineFairnessWeight;
+
+                  tierFairnessWeight = (tierFairnessWeight * afterRemain) / remain;
+                  if (isNaN(tierFairnessWeight)) tierFairnessWeight = 5;
+                  lineSatisfactionWeight = 100 - lineFairnessWeight - tierFairnessWeight;
                 }}
               />
             </div>
@@ -219,19 +229,47 @@
             <div class="label">티어 공정성 우선</div>
             <div class="slider">
               <RangeSlider
-                min={0}
-                max={100}
+                min={5}
+                max={80}
                 range={"min"}
                 values={[tierFairnessWeight]}
                 step={0.01}
                 disabled={calculatingOptimization}
                 on:change={(e) => {
+                  let remain = 100 - tierFairnessWeight;
                   tierFairnessWeight = e?.detail?.value;
-                  lineFairnessWeight = 100 - tierFairnessWeight;
+                  let afterRemain = 100 - tierFairnessWeight;
+
+                  lineFairnessWeight = (lineFairnessWeight * afterRemain) / remain;
+                  if (isNaN(lineFairnessWeight)) lineFairnessWeight = 5;
+                  lineSatisfactionWeight = 100 - lineFairnessWeight - tierFairnessWeight;
                 }}
               />
             </div>
             <div class="value">{tierFairnessWeight.toFixed(0)}%</div>
+          </div>
+          <div class="option">
+            <div class="label">라인 만족도 우선</div>
+            <div class="slider">
+              <RangeSlider
+                min={5}
+                max={80}
+                range={"min"}
+                values={[lineSatisfactionWeight]}
+                step={0.01}
+                disabled={calculatingOptimization}
+                on:change={(e) => {
+                  let remain = 100 - lineSatisfactionWeight;
+                  lineSatisfactionWeight = e?.detail?.value;
+                  let afterRemain = 100 - lineSatisfactionWeight;
+
+                  lineFairnessWeight = (lineFairnessWeight * afterRemain) / remain;
+                  if (isNaN(lineFairnessWeight)) lineFairnessWeight = 5;
+                  tierFairnessWeight = 100 - lineFairnessWeight - lineSatisfactionWeight;
+                }}
+              />
+            </div>
+            <div class="value">{lineSatisfactionWeight.toFixed(0)}%</div>
           </div>
         </div>
         <div class="option-panel">
