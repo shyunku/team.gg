@@ -1,9 +1,13 @@
 <script>
   import { onDestroy, onMount } from "svelte";
   import { v4 } from "uuid";
+  import JsxUtil from "../utils/JsxUtil";
 
   export let onDragStart;
   export let onDragEnter;
+  export let onDragEnd;
+
+  let { class: class_ } = $$props;
 
   const id = `context_div_${v4()}`;
   let x = 0;
@@ -36,6 +40,18 @@
         menu.style.bottom = "auto";
       }
     }
+
+    // hide other context menus
+    const contextDivs = document.getElementsByClassName("context-div");
+    for (let div of contextDivs) {
+      if (div.id !== id) {
+        // find context menu
+        const menus = div.getElementsByClassName("context-menu");
+        for (let menu of menus) {
+          menu.style.display = "none";
+        }
+      }
+    }
   };
 
   const hideMenu = (e) => {
@@ -63,6 +79,14 @@
   });
 </script>
 
-<div {id} on:contextmenu={onContextMenu} on:dragstart={onDragStart} on:dragenter={onDragEnter} {...$$props}>
+<div
+  {id}
+  on:contextmenu={onContextMenu}
+  on:dragstart={onDragStart}
+  on:dragenter={onDragEnter}
+  on:dragend={onDragEnd}
+  {...$$restProps}
+  class={"context-div" + JsxUtil.class(class_)}
+>
   <slot />
 </div>

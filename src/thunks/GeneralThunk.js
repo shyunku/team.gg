@@ -122,6 +122,14 @@ export const addCustomGameCandidateReq = async (customGameConfigId, name, tagLin
   return response.data;
 };
 
+export const deleteCustomGameCandidateReq = async (customGameConfigId, puuid) => {
+  const response = await instance.delete(
+    `/platform/custom-game/candidate?customGameConfigId=${customGameConfigId}&puuid=${puuid}`
+  );
+
+  return response.data;
+};
+
 export const arrangeCustomGameParticipantReq = async (customGameConfigId, puuid, team, position) => {
   const response = await instance.post(`/platform/custom-game/arrange`, {
     customGameConfigId,

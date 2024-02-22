@@ -15,6 +15,7 @@
     arrangeAllCandidatesReq,
     arrangeCustomGameParticipantReq,
     championIconUrl,
+    deleteCustomGameCandidateReq,
     findMostBalancedCustomGameReq,
     getSummonerInfo,
     profileIconUrl,
@@ -32,6 +33,8 @@
   import { formatMasteryPoints } from "../../utils/Util";
   import TierRank from "../../molecules/TierRank.svelte";
   import CustomGameContentTeam from "./custom-game-content/CustomGameContentTeam.svelte";
+  import ContextDiv from "../../components/ContextDiv.svelte";
+  import ContextMenu from "../../components/ContextMenu.svelte";
 
   export let configId;
   export let candidates = [];
@@ -392,6 +395,20 @@
     }
   };
 
+  const onCandidateDelete = async (puuid) => {
+    try {
+      console.log(configId, puuid);
+      await deleteCustomGameCandidateReq(configId, puuid);
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "후보 삭제 오류",
+        description: "후보를 삭제하던 중 오류가 발생했습니다.",
+        type: "error",
+      });
+    }
+  };
+
   $: {
     candidateMap = candidates.reduce((acc, cur) => {
       acc[cur?.summary?.puuid] = cur;
@@ -520,12 +537,15 @@
                   return cur;
                 }, null)}
                 {@const puuid = c?.summary?.puuid ?? null}
-                <div
+                <ContextDiv
                   class="candidate"
                   draggable="true"
-                  on:dragstart={(e) => onCandidateDragStart(e, puuid)}
-                  on:dragend={onCandidateDragEnd}
+                  onDragStart={(e) => onCandidateDragStart(e, puuid)}
+                  onDragEnd={onCandidateDragEnd}
                 >
+                  <ContextMenu className="candidate-menu">
+                    <div class="menu" on:click={(e) => onCandidateDelete(puuid)}>후보에서 제거</div>
+                  </ContextMenu>
                   <div class="profile-icon img">
                     <SafeImg src={profileIconUrl(c?.summary?.profileIconId)} />
                   </div>
@@ -538,7 +558,7 @@
                   {:else}
                     <div class="tier">-</div>
                   {/if}
-                </div>
+                </ContextDiv>
               {/each}
             </div>
           </div>

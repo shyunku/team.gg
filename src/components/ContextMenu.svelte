@@ -17,8 +17,10 @@
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.75);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
     border-radius: 5px;
-    height: 500px;
+    // height: 500px;
     overflow-y: overlay;
+    cursor: initial;
   }
 </style>

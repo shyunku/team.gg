@@ -161,6 +161,26 @@
               background-color: rgb(62, 59, 49);
             }
 
+            .candidate-menu {
+              // display: flex;
+              flex-direction: column;
+              padding: 8px;
+
+              .menu {
+                display: flex;
+                align-items: center;
+                padding: 8px 12px;
+                width: 120px;
+                cursor: pointer;
+                border-radius: 5px;
+                color: rgb(241, 222, 181);
+
+                &:hover {
+                  background-color: rgba(255, 255, 255, 0.1);
+                }
+              }
+            }
+
             .profile-icon {
               width: 24px;
               height: 24px;

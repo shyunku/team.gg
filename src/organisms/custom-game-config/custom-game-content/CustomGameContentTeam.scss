@@ -60,7 +60,7 @@
       position: relative;
 
       &:not(:last-child) {
-        border-bottom: 1px solid rgb(62, 59, 49);
+        // border-bottom: 1px solid rgb(62, 59, 49);
       }
 
       &:hover {
@@ -69,6 +69,7 @@
 
       .summoner-custom-tier-ranks {
         padding: 5px;
+        height: 500px;
       }
 
       .droppable-zone {
@@ -241,13 +242,30 @@
         top: 0;
         right: 0;
         height: 100%;
-        width: 12%;
-        $tier-blank-rate: 20%;
+        width: 100%;
+
+        $tier-blank-rate: 85%;
         $tier-blank-angle: 115deg;
+        $tier-blank-offset-1: 95%;
+        $tier-blank-offset-2: 99%;
+
+        $tier-border-rate: 75%;
+        $tier-border-angle: 160deg;
         background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgba(238, 238, 238, 0.2));
         padding: 0 12px;
         color: white;
-        z-index: 0;
+        z-index: 1;
+
+        pointer-events: none;
+
+        border: 1px solid;
+        border-top: 0px;
+        border-left: 0px;
+        border-image: linear-gradient($tier-blank-angle, transparent 50%, red 100%);
+        border-image-slice: 1;
+        $border-image-default: rgb(62, 59, 49);
+
+        box-sizing: border-box;
 
         .rank-type {
           font-size: 11px;
@@ -263,51 +281,107 @@
         &.iron {
           background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(69, 69, 69)) !important;
           color: rgb(189, 189, 189);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(92, 92, 92) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.bronze {
           background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(108, 78, 56)) !important;
           color: rgb(189, 189, 189);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(163, 109, 71) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.silver {
           background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(97, 97, 97)) !important;
           color: rgb(221, 221, 221);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(171, 171, 171) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.gold {
           background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(165, 126, 54)) !important;
           color: rgb(221, 221, 221);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(255, 213, 134) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.platinum {
           background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(38, 115, 114)) !important;
           color: rgb(221, 221, 221);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(129, 202, 255) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.emerald {
           background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(42, 136, 95)) !important;
           color: rgb(221, 221, 221);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(172, 255, 214) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.diamond {
           background: linear-gradient(
             $tier-blank-angle,
             transparent $tier-blank-rate,
-            rgb(55, 68, 115) 70%,
+            rgb(55, 68, 115) $tier-blank-offset-1,
             rgb(147, 107, 196)
           ) !important;
           color: rgb(233, 233, 233);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(198, 182, 255) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.master {
           background: linear-gradient(
             $tier-blank-angle,
             transparent $tier-blank-rate,
-            rgb(136, 56, 104) 70%,
+            rgb(136, 56, 104) $tier-blank-offset-1,
             rgb(152, 106, 178)
           ) !important;
           color: rgb(255, 255, 255);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(245, 157, 255) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.grandmaster {
@@ -316,10 +390,17 @@
             transparent $tier-blank-rate,
             rgb(81, 46, 46),
             rgb(176, 52, 52),
-            rgb(193, 131, 131) 95%,
+            rgb(193, 131, 131) $tier-blank-offset-2,
             rgb(255, 202, 202)
           ) !important;
           color: rgb(255, 255, 255);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(255, 177, 191) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
 
         &.challenger {
@@ -328,10 +409,17 @@
             transparent $tier-blank-rate,
             rgb(53, 66, 79),
             rgb(83, 122, 166),
-            rgb(199, 180, 98) 95%,
+            rgb(199, 180, 98) $tier-blank-offset-2,
             rgb(255, 235, 196)
           ) !important;
           color: rgb(255, 255, 255);
+
+          border-image: linear-gradient(
+            $tier-border-angle,
+            $border-image-default $tier-border-rate,
+            rgb(255, 252, 236) 100%
+          ) !important;
+          border-image-slice: 1 !important;
         }
       }
     }
