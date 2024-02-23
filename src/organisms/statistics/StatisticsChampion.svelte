@@ -4,9 +4,13 @@
   import SortVisualizer from "../../molecules/SortVisualizer.svelte";
   import { championIconUrl, getChampionStatisticsReq } from "../../thunks/GeneralThunk";
   import "./StatisticsChampion.scss";
+  import moment from "moment";
+  import "moment/locale/ko";
+  moment.locale("ko");
 
   let rawData = null;
   let refinedData = [];
+  let lastUpdateTime = null;
 
   let reverseSort = false;
   let sortBy = null;
@@ -41,6 +45,7 @@
     try {
       const resp = await getChampionStatisticsReq();
       const { updatedAt, data } = resp;
+      lastUpdateTime = updatedAt;
       rawData = data;
       console.log(data);
     } catch (e) {
@@ -77,6 +82,8 @@
 
 <div class="content card">
   <div class="title">챔피언 통계</div>
+  <div class="description">해당 지표들은 team.gg에서 검색 또는 추적되는 데이터들로 구성되었습니다.</div>
+  <div class="updated-at">{moment(lastUpdateTime).format("YYYY년 M월 D일 a h시 mm분에 업데이트됨")}</div>
   <div class="champion-list">
     <div class="champion-item header">
       {#each sortOptions as option}

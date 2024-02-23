@@ -5,9 +5,15 @@
   import JsxUtil from "../../utils/JsxUtil";
   import TierRank from "../../molecules/TierRank.svelte";
   import "./StatisticsTier.scss";
+  import moment from "moment";
+  import "moment/locale/ko";
+  moment.locale("ko");
 
   let rawData = null;
+
   let refinedData = {};
+  let lastUpdateTime = null;
+
   let queueData = [];
   let rankType = RankQueueType.SOLO_RANK;
   let totalSummoners = 0;
@@ -21,6 +27,7 @@
       const resp = await getTierStatisticsReq();
       const { updatedAt, queueGroups } = resp;
       rawData = queueGroups;
+      lastUpdateTime = updatedAt;
       for (let queueGroup of queueGroups) {
         refinedData[queueGroup.queueType] = queueGroup.rankGroups
           .sort((a, b) => b.level - a.level)
@@ -77,12 +84,14 @@
   <div class="content card">
     <div class="title">플레이어 통계 (티어 및 랭크)</div>
     <div class="description">해당 지표들은 team.gg에서 검색 또는 추적되는 플레이어들만 해당됩니다.</div>
+    <div class="updated-at">{moment(lastUpdateTime).format("YYYY년 M월 D일 a h시 mm분에 업데이트됨")}</div>
     <div class="options">
       <div
         class={"option" + JsxUtil.classByEqual(rankType, RankQueueType.SOLO_RANK, "selected")}
         on:click={(e) => {
           rankType = RankQueueType.SOLO_RANK;
           selectedGroup = null;
+          rankers = null;
         }}
       >
         솔로랭크
@@ -92,6 +101,7 @@
         on:click={(e) => {
           rankType = RankQueueType.FLEX_RANK;
           selectedGroup = null;
+          rankers = null;
         }}
       >
         자유랭크
