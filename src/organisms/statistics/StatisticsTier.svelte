@@ -11,6 +11,7 @@
   let queueData = [];
   let rankType = RankQueueType.SOLO_RANK;
   let totalSummoners = 0;
+  let maxSummoners = 0;
 
   let selectedGroup = null;
   let rankers = null;
@@ -53,6 +54,14 @@
       queueData = refinedData[rankType];
       totalSummoners = queueData.reduce(
         (acc, cur) => acc + cur.rankGroups.reduce((acc2, cur2) => acc2 + cur2.summoners, 0),
+        0
+      );
+      maxSummoners = queueData.reduce(
+        (acc, cur) =>
+          Math.max(
+            acc,
+            cur.rankGroups.reduce((acc2, cur2) => Math.max(acc2, cur2.summoners), 0)
+          ),
         0
       );
       if (selectedGroup == null) selectedGroup = queueData[0]?.tier + "-" + queueData[0]?.rankGroups[0]?.rank;
@@ -98,12 +107,17 @@
             {#each q.rankGroups as r}
               {@const groupKey = `${q.tier}-${r.rank}`}
               <div
-                class={"rank-group" + JsxUtil.classByCondition(selectedGroup == groupKey, "selected")}
+                class={"rank-group" +
+                  JsxUtil.classByCondition(selectedGroup == groupKey, "selected") +
+                  JsxUtil.class(q.tier?.toLowerCase())}
                 on:click={(e) => {
                   selectedGroup = groupKey;
                   rankers = r.rankers;
                 }}
               >
+                <div class="ratio-filler">
+                  <div class="ratio" style={`width: ${(100 * r.summoners) / maxSummoners}%`}></div>
+                </div>
                 <div class="tier-rank">
                   <div class="tier">{q.tier}</div>
                   <div class="rank">{r.rank}</div>
