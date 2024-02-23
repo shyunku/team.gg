@@ -232,6 +232,11 @@ export const getChampionStatisticsReq = async () => {
   return response.data;
 };
 
+export const getTierStatisticsReq = async () => {
+  const response = await instance.get(`/platform/statistics/tier`);
+  return response.data;
+};
+
 /* ---------------------- links ---------------------- */
 
 export const profileIconUrl = (profileIconId) => {

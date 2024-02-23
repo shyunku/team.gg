@@ -68,6 +68,10 @@ export default {
           ],
         },
       }),
+      onwarn: (warning, handler) => {
+        if (warning.code === "a11y-click-events-have-key-events") return;
+        handler(warning);
+      },
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance

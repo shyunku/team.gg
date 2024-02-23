@@ -46,6 +46,11 @@ export const MapType = {
   30: "아레나",
 };
 
+export const RankQueueType = {
+  SOLO_RANK: "RANKED_SOLO_5x5",
+  FLEX_RANK: "RANKED_FLEX_SR",
+};
+
 export const TierType = {
   UNRANKED: "언랭",
   IRON: "아이언",

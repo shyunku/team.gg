@@ -4,26 +4,26 @@
   import { championIconUrl, getChampionStatisticsReq } from "../thunks/GeneralThunk";
   import SafeImg from "../atoms/SafeImg.svelte";
   import StatisticsContent from "../organisms/statistics/StatisticsContent.svelte";
+  import JsxUtil from "../utils/JsxUtil";
+  import "./Statistics.scss";
 
-  let championStatistics = [];
-
-  const getChampionStatistics = async () => {
-    try {
-      const data = await getChampionStatisticsReq();
-      const { updatedAt, stats } = data;
-      championStatistics = stats;
-      console.log(stats);
-    } catch (e) {
-      console.error(e);
-      toasts.add({
-        title: "챔피언 통계",
-        description: "챔피언 통계를 불러오는 중 오류가 발생했습니다.",
-        type: "error",
-      });
-    }
+  export const StatisticsMenu = {
+    CHAMPION: { key: "champion", label: "챔피언" },
+    TIER: { key: "tier", label: "티어" },
+    MASTERY: { key: "mastery", label: "숙련도" },
   };
 
-  getChampionStatistics();
+  export let params = {};
+  let menu = StatisticsMenu.CHAMPION.key;
+
+  let currentPath = window.location.pathname + window.location.hash;
+  window.onhashchange = () => {
+    currentPath = window.location.pathname + window.location.hash;
+  };
+
+  $: if (params) {
+    menu = params.menu ?? StatisticsMenu.CHAMPION.key;
+  }
 </script>
 
 <svelte:head>
@@ -43,74 +43,19 @@
 <div class="statistics-menu">
   <MainContentLayout>
     <div class="menu">
-      <div class="menu-item selected">챔피언</div>
-      <div class="menu-item">티어</div>
-      <div class="menu-item">숙련도</div>
+      {#each Object.values(StatisticsMenu) as m}
+        <div
+          class={"menu-item" + JsxUtil.classByEqual(m.key, menu, "selected")}
+          on:click={() => (window.location.href = `#/statistics/${m.key}`)}
+        >
+          {m.label}
+        </div>
+      {/each}
     </div>
   </MainContentLayout>
 </div>
-<StatisticsContent {championStatistics} />
-
-<style lang="scss">
-  @import "../styles/variables.scss";
-
-  .statistics-header {
-    width: 100%;
-    background-color: $sub-bg-color;
-    border-bottom: 1px solid $sub-border-color;
-    color: rgb(195, 190, 169);
-    padding: 20px 0;
-
-    .content {
-      display: flex;
-      flex-direction: column;
-
-      .title {
-        font-size: 24px;
-        font-weight: 700;
-      }
-
-      .description {
-        margin-top: 10px;
-        font-size: 13px;
-        color: rgb(129, 126, 113);
-      }
-    }
-  }
-
-  .statistics-menu {
-    width: 100%;
-    background-color: $sub-bg-color;
-    border-bottom: 1px solid $sub-border-color;
-    color: rgb(195, 190, 169);
-    padding: 5px 0;
-
-    .menu {
-      display: flex;
-      justify-content: center;
-
-      .menu-item {
-        display: flex;
-        justify-content: center;
-        width: 80px;
-        font-size: 14px;
-        font-weight: bold;
-        padding: 6px 0;
-        border-radius: 3px;
-        cursor: pointer;
-
-        &:not(:last-child) {
-          margin-right: 5px;
-        }
-
-        &:hover {
-          background-color: rgb(53, 49, 41);
-        }
-
-        &.selected {
-          background-color: rgb(84, 78, 65);
-        }
-      }
-    }
-  }
-</style>
+<div class="statistics-content">
+  <MainContentLayout>
+    <StatisticsContent {menu} />
+  </MainContentLayout>
+</div>

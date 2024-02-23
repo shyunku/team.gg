@@ -12,7 +12,7 @@ const routes = {
   "/custom-game": CustomGame,
   "/custom-game/:id": CustomGameConfig,
   "/player/:summonerName/:summonerTag/:menu?": Player,
-  "/statistics": Statistics,
+  "/statistics/:menu?": Statistics,
   "/login": Login,
   "/signup": Signup,
   "*": NotFound,

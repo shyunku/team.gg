@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
 @import "./variables.scss";
 
 @font-face {
@@ -31,6 +32,7 @@ body {
   overflow-y: overlay;
 
   font-family: "rix", sans-serif;
+  // font-family: "Noto Sans KR", sans-serif;
   // text-rendering: optimizeLegibility;
 
   &::-webkit-scrollbar {

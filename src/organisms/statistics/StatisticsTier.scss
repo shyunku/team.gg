@@ -1,0 +1,179 @@
+.statistics-tier {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .content {
+    .options {
+      display: flex;
+      margin-top: 15px;
+      align-items: center;
+
+      .option {
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        padding: 5px 8px;
+        width: 80px;
+        border-radius: 3px;
+        font-size: 13px;
+        background-color: rgb(40, 38, 33);
+
+        &:hover {
+          background-color: rgb(59, 55, 47);
+        }
+
+        &.selected {
+          background-color: rgb(84, 78, 65);
+        }
+
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .tier-content {
+    display: flex;
+    margin-top: 15px;
+    align-items: flex-start;
+
+    .tier-list {
+      display: flex;
+      flex-direction: column;
+      width: 320px;
+
+      .tiers {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .tier-group {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          color: rgb(159, 151, 139);
+
+          &:not(:last-child) {
+            border-bottom: 1px solid #ffffff21;
+          }
+
+          .rank-group {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            box-sizing: border-box;
+            font-size: 13px;
+            cursor: pointer;
+
+            &:not(:last-child) {
+              border-bottom: 1px solid #ffffff21;
+            }
+
+            &:hover {
+              background-color: rgb(53, 49, 41);
+            }
+
+            &.selected {
+              background-color: rgb(88, 75, 46);
+              color: white;
+            }
+
+            .tier-rank {
+              display: flex;
+              align-items: center;
+              flex: 1;
+
+              .rank {
+                margin-left: 5px;
+              }
+            }
+
+            .summoner-count {
+              width: 70px;
+              text-align: center;
+            }
+
+            .summoner-rate {
+              width: 50px;
+              margin-left: 10px;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+
+    .summoner-list {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-left: 15px;
+
+      .summoner {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        font-size: 13px;
+        color: rgb(195, 189, 178);
+
+        &:not(:last-child) {
+          border-bottom: 1px solid #ffffff21;
+        }
+
+        .summoner-rank {
+          width: 35px;
+          text-align: center;
+          font-weight: bold;
+        }
+
+        .profile-img {
+          width: 30px;
+          height: 30px;
+          border-radius: 3px;
+          margin-left: 15px;
+        }
+
+        .name-tag {
+          display: flex;
+          align-items: center;
+          margin-left: 15px;
+          flex: 1;
+
+          .tag-line {
+            margin-left: 5px;
+          }
+        }
+
+        .tier-rank-wrapper {
+          display: flex;
+          width: 150px;
+          justify-content: center;
+        }
+
+        .league-points {
+          width: 90px;
+          text-align: center;
+        }
+
+        .win-lose {
+          display: flex;
+          align-items: center;
+          width: 150px;
+          justify-content: center;
+
+          .losses {
+            margin-left: 3px;
+          }
+        }
+
+        .win-rate {
+          width: 50px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}

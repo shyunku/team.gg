@@ -258,12 +258,12 @@
 
         pointer-events: none;
 
+        $border-image-default: rgb(62, 59, 49);
         border: 1px solid;
         border-top: 0px;
         border-left: 0px;
-        border-image: linear-gradient($tier-blank-angle, transparent 50%, red 100%);
+        border-image: linear-gradient($tier-blank-angle, $border-image-default $tier-border-rate, #676767 100%);
         border-image-slice: 1;
-        $border-image-default: rgb(62, 59, 49);
 
         box-sizing: border-box;
 

@@ -1,0 +1,105 @@
+.statistics-content {
+  .champion-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+
+    .champion-item {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #ffffff28;
+      box-sizing: border-box;
+      color: rgb(214, 198, 171);
+
+      &.header {
+        background-color: rgb(81, 73, 49);
+
+        & > * {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          user-select: none;
+
+          .label {
+            width: auto !important;
+          }
+
+          .sort {
+            margin-left: 3px;
+          }
+        }
+      }
+
+      .champion-img {
+        width: 40px;
+        height: 30px;
+      }
+
+      .champion-name {
+        flex: 1;
+        margin-left: 20px;
+      }
+
+      .champion-played {
+        width: 120px;
+        text-align: center;
+      }
+
+      .champion-winrate,
+      .champion-pickrate,
+      .champion-banrate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-right: 10px;
+        $bar-width: 70px;
+        $label-width: 70px;
+        width: calc(#{$bar-width} + #{$label-width});
+
+        .label {
+          width: 70px;
+        }
+
+        .bar-wrapper {
+          width: $bar-width;
+          background-color: rgb(16, 15, 13);
+          height: 8px;
+
+          .bar {
+            height: 100%;
+            background-color: rgb(89, 178, 83);
+          }
+        }
+      }
+
+      .champion-pickrate .bar {
+        background-color: rgb(181, 150, 66) !important;
+      }
+
+      .champion-banrate .bar {
+        background-color: rgb(215, 96, 96) !important;
+      }
+
+      .champion-kda {
+        width: 100px;
+        text-align: center;
+      }
+
+      .champion-minions {
+        width: 100px;
+        text-align: center;
+      }
+
+      .champion-gold-earned {
+        width: 100px;
+        text-align: center;
+      }
+    }
+  }
+}
