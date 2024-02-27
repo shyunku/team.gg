@@ -1,6 +1,9 @@
 <script>
   import { onMount, tick } from "svelte";
   import JsxUtil from "../utils/JsxUtil";
+  import SafeImg from "../atoms/SafeImg.svelte";
+  import "./NameTagSearchInput.scss";
+  import { profileIconUrl, quickSearchSummonerReq } from "../thunks/GeneralThunk";
 
   const defaultTag = "KR1";
 
@@ -9,6 +12,11 @@
   let spanRef;
   let tagPadding = "#" + defaultTag;
   let inputValue = "";
+  let focused = false;
+  let results = [];
+
+  let inputElement;
+  let resultIndex = -1;
 
   export let summonerName = "";
   export let summonerTag = "";
@@ -34,12 +42,51 @@
 
     summonerName = (content.split("#")?.[0] ?? "").trim();
     summonerTag = content.split("#")?.[1]?.trim() ?? null;
+
+    quickSearchSummoner();
+  };
+
+  const quickSearchSummoner = async () => {
+    let keyword = summonerName + (summonerTag != null && summonerTag.length > 0 ? "#" + summonerTag : "");
+    try {
+      if (keyword.length === 0) {
+        results = [];
+      } else {
+        const resp = await quickSearchSummonerReq(keyword);
+        results = resp;
+      }
+    } catch (err) {
+      console.error(err);
+      results = [];
+    } finally {
+      resultIndex = -1;
+    }
+  };
+
+  const onInputKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (resultIndex !== -1) {
+        const selected = results[resultIndex];
+        onEnterHandler(selected?.gameName, selected?.tagLine);
+      } else {
+        onEnterHandler(summonerName, summonerTag ?? defaultTag);
+      }
+    }
+    if (e.key === "ArrowDown") {
+      resultIndex = Math.min(resultIndex + 1, results.length - 1);
+    } else if (e.key === "ArrowUp") {
+      resultIndex = Math.max(resultIndex - 1, -1);
+    }
   };
 
   onMount(async () => {
     await tick();
     width = spanRef.offsetWidth;
   });
+
+  $: {
+    console.log(resultIndex);
+  }
 
   $: if (spanRef && content.length >= 0) {
     requestAnimationFrame(() => {
@@ -56,61 +103,33 @@
     on:input={changeHandler}
     spellcheck="false"
     bind:value={inputValue}
-    on:keydown={(e) => {
-      if (e.key === "Enter") onEnterHandler(summonerName, summonerTag ?? defaultTag);
-    }}
+    bind:this={inputElement}
+    on:keydown={onInputKeyDown}
+    on:focus={() => (focused = true)}
+    on:blur={() => (focused = false)}
   />
   <div class="tag-padding" style="left: {width}px">{tagPadding}</div>
+  <div
+    class={"quick-search-results" +
+      JsxUtil.classByCondition(focused, "focused") +
+      JsxUtil.classByCondition(results.length === 0, "inactive")}
+  >
+    {#each results as r, ind}
+      <div class={"result" + JsxUtil.classByEqual(ind, resultIndex, "selected")}>
+        <div class="profile-img img">
+          <SafeImg src={profileIconUrl(r?.profileIconId)} />
+        </div>
+        <div class="summoner-name">
+          <div class="name">
+            <div class="game-name">{r?.gameName}</div>
+            <div class="tag">#{r?.tagLine}</div>
+          </div>
+          <div class="prev-name">Prev. {r?.name}</div>
+        </div>
+        <div class="metadata">
+          <div class="summoner-level">{r?.summonerLevel} 레벨</div>
+        </div>
+      </div>
+    {/each}
+  </div>
 </div>
-
-<style lang="scss">
-  #hide {
-    position: absolute;
-    opacity: 0;
-    z-index: -100;
-    white-space: pre;
-  }
-
-  .name-tag-search-input {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    cursor: text;
-
-    &.unempty {
-      .placeholder {
-        display: none;
-      }
-
-      .tag-padding {
-        display: block;
-      }
-    }
-
-    .placeholder {
-      position: absolute;
-      color: rgb(67, 67, 67);
-      pointer-events: none;
-    }
-
-    .tag-padding {
-      display: none;
-      position: absolute;
-      left: 0;
-      color: rgba(255, 255, 255, 0.3);
-      margin-left: 5px;
-      pointer-events: none;
-    }
-
-    input {
-      color: white;
-      padding: 0;
-      min-width: 1px;
-      background-color: transparent;
-      border: none;
-      width: 100%;
-    }
-  }
-</style>

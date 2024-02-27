@@ -1,5 +1,6 @@
 <script>
   import StatisticsChampion from "./StatisticsChampion.svelte";
+  import StatisticsMastery from "./StatisticsMastery.svelte";
   import StatisticsTier from "./StatisticsTier.svelte";
 
   export let menu;
@@ -10,5 +11,5 @@
 {:else if menu === "tier"}
   <StatisticsTier />
 {:else}
-  <div>준비중입니다.</div>
+  <StatisticsMastery />
 {/if}

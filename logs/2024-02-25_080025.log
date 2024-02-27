@@ -1,0 +1,13 @@
+[2024-02-25 08:00:25.881] [debug] 24/02/25 08:00:25.880 DEBUG  loader(316).module_job(217).main(50) [Platform/OS] Windows (win)
+[2024-02-25 08:00:25.885] [debug] 24/02/25 08:00:25.884 DEBUG  loader(316).module_job(217).main(51) [Build Level] 0
+[2024-02-25 08:00:25.886] [debug] 24/02/25 08:00:25.886 DEBUG  loader(316).module_job(217).main(52) [Execution Mode] development
+[2024-02-25 08:00:25.887] [debug] 24/02/25 08:00:25.887 DEBUG  loader(316).module_job(217).main(53) [Production Mode] false
+[2024-02-25 08:00:25.888] [debug] 24/02/25 08:00:25.888 DEBUG  loader(316).module_job(217).main(54) [Build Mode] false
+[2024-02-25 08:00:25.888] [debug] 24/02/25 08:00:25.888 DEBUG  loader(316).module_job(217).main(55) [AppData Path] D:\desktop\Core\Projects\team.gg\team-gg
+[2024-02-25 08:00:25.909] [debug] 24/02/25 08:00:25.908 DEBUG  loader(316).module_job(217).main(56) [UserData Path] D:\desktop\Core\
+[2024-02-25 08:00:26.289] [error] 24/02/25 08:00:26.288 ERROR  node:events(514).main(81)            [Trace: events:514(514).main(72)] Cannot read properties of undefined (reading 'invokeUpdateChecker')
+[2024-02-25 08:00:26.291] [error] 24/02/25 08:00:26.291 ERROR  node:events(514).warning(123).&(60)  (node:9736) UnhandledPromiseRejectionWarning: TypeError: Cannot read properties of undefined (reading 'invokeUpdateChecker')
+    at App.<anonymous> (file:///D:/desktop/Core/Projects/team.gg/team-gg/public/electron/core/main.js:72:39)
+    at App.emit (node:events:514:28)
+(Use `electron --trace-warnings ...` to show where the warning was created)
+[2024-02-25 08:00:26.297] [error] 24/02/25 08:00:26.297 ERROR  node:events(514).warning(123).&(60)  (node:9736) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)

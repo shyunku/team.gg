@@ -9,6 +9,8 @@
   import "./Home.scss";
   import { profileIconUrl } from "../thunks/GeneralThunk";
   import { toggleSummonerFavorite } from "../utils/Storage";
+  import PlayerSearcher from "../organisms/player/PlayerSearcher.svelte";
+  import NameTagSearchInput from "../molecules/NameTagSearchInput.svelte";
 
   let summonerName = "";
   let summonerTag = null;
@@ -38,18 +40,29 @@
       <SafeImg src="/img/common/app_logo.png" />
       <div class="version">v{APP_VERSION}</div>
     </div>
-    <div class="summoner-searcher">
+    <!-- <div class="summoner-searcher">
       <div class="summoner-region">
         <select>
           <option>KR</option>
-          <!-- <option>NA</option>
-          <option>EU</option> -->
         </select>
       </div>
       <div class={"id-tag-searcher" + JsxUtil.classByCondition(summonerName.length > 0, "unempty")}>
         <NameTagSearcher bind:summonerName bind:summonerTag onEnter={onPlayerSearch} />
       </div>
       <button id="search" on:click={onPlayerSearch}>검색</button>
+    </div> -->
+    <div class="summoner-searcher">
+      <div class="searcher-region">
+        <select id="region_selector">
+          <option>KR</option>
+          <option>NA</option>
+          <option>EU</option>
+        </select>
+      </div>
+      <div class="searcher-input">
+        <NameTagSearchInput bind:summonerName bind:summonerTag onEnter={onPlayerSearch} />
+      </div>
+      <button id="search_btn" on:click={(e) => onPlayerSearch(summonerName, summonerTag)}>검색</button>
     </div>
     <div class="favorites card">
       <div class="header">즐겨찾기 (최대 5개)</div>

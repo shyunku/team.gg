@@ -1,0 +1,7 @@
+[2024-02-25 08:01:48.916] [debug] 24/02/25 08:01:48.915 DEBUG  loader(316).module_job(217).main(50) [Platform/OS] Windows (win)
+[2024-02-25 08:01:48.919] [debug] 24/02/25 08:01:48.918 DEBUG  loader(316).module_job(217).main(51) [Build Level] 0
+[2024-02-25 08:01:48.921] [debug] 24/02/25 08:01:48.920 DEBUG  loader(316).module_job(217).main(52) [Execution Mode] development
+[2024-02-25 08:01:48.921] [debug] 24/02/25 08:01:48.921 DEBUG  loader(316).module_job(217).main(53) [Production Mode] false
+[2024-02-25 08:01:48.922] [debug] 24/02/25 08:01:48.922 DEBUG  loader(316).module_job(217).main(54) [Build Mode] false
+[2024-02-25 08:01:48.922] [debug] 24/02/25 08:01:48.922 DEBUG  loader(316).module_job(217).main(55) [AppData Path] D:\desktop\Core\Projects\team.gg\team-gg
+[2024-02-25 08:01:48.924] [debug] 24/02/25 08:01:48.923 DEBUG  loader(316).module_job(217).main(56) [UserData Path] D:\desktop\Core\

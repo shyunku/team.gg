@@ -84,3 +84,17 @@ export const reverseFormatRankKr = (rank) => {
       return "";
   }
 };
+
+export const formatStdKr = (num) => {
+  if (num > 10000 * 10000) {
+    return `${Math.floor(num / 100000000)}억`;
+  } else if (num > 10000) {
+    return `${Math.floor(num / 10000)}만`;
+  } else {
+    return `${num.toFixed(0)}`;
+  }
+};
+
+export const formatStd = (num) => {
+  return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

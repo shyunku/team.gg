@@ -1,0 +1,129 @@
+.statistics-mastery {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .mastery-content {
+    display: flex;
+    margin-top: 15px;
+    align-items: flex-start;
+
+    .champion-list {
+      display: flex;
+      flex-direction: column;
+      width: 480px;
+
+      .champions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .champion {
+          display: flex;
+          align-items: center;
+          padding: 6px 12px;
+          box-sizing: border-box;
+          font-size: 13px;
+          position: relative;
+          border-left: 5px solid rgba(0, 0, 0, 0.2);
+          box-sizing: border-box;
+          color: rgb(154, 147, 135);
+
+          &:not(:last-child) {
+            border-bottom: 1px solid #ffffff21;
+          }
+
+          &.header {
+            padding: 8px 12px;
+            font-size: 13px;
+            // font-weight: bold;
+            color: rgb(211, 189, 156);
+            border-left: none;
+          }
+
+          &:not(.header) {
+            cursor: pointer;
+            &:hover {
+              border-left: 5px solid rgb(160, 138, 88);
+            }
+
+            &.selected {
+              border-left: 5px solid rgb(231, 199, 129);
+              color: white;
+            }
+          }
+
+          .champion-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-right: 10px;
+
+            img {
+              transform: scale(1.2);
+            }
+          }
+
+          .champion-name {
+            flex: 1;
+          }
+
+          .avg-mastery,
+          .max-mastery,
+          .total-mastery,
+          .summoners {
+            width: 90px;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    .summoner-list {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-left: 15px;
+
+      .summoner {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        font-size: 13px;
+        color: rgb(165, 156, 140);
+
+        &:not(:last-child) {
+          border-bottom: 1px solid #ffffff21;
+        }
+
+        .summoner-rank {
+          width: 35px;
+          text-align: center;
+          font-weight: bold;
+          color: rgb(122, 116, 107);
+        }
+
+        .profile-img {
+          width: 30px;
+          height: 30px;
+          border-radius: 3px;
+          margin-left: 15px;
+        }
+
+        .name-tag {
+          display: flex;
+          align-items: center;
+          margin-left: 15px;
+          flex: 1;
+          color: rgb(188, 181, 168);
+
+          .tag-line {
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+}

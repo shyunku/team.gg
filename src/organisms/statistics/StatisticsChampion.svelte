@@ -69,6 +69,14 @@
       })
       .sort((a, b) => {
         if (sortBy == null) return 0;
+        if (typeof a[sortBy] === "string") {
+          if (reverseSort) {
+            return a[sortBy].localeCompare(b[sortBy]);
+          } else {
+            return b[sortBy].localeCompare(a[sortBy]);
+          }
+        }
+
         if (reverseSort) {
           return a[sortBy] - b[sortBy];
         } else {
@@ -80,54 +88,56 @@
   getChampionStatistics();
 </script>
 
-<div class="content card">
-  <div class="title">챔피언 통계</div>
-  <div class="description">해당 지표들은 team.gg에서 검색 또는 추적되는 데이터들로 구성되었습니다.</div>
-  <div class="updated-at">{moment(lastUpdateTime).format("YYYY년 M월 D일 a h시 mm분에 업데이트됨")}</div>
-  <div class="champion-list">
-    <div class="champion-item header">
-      {#each sortOptions as option}
-        <div class={option.class} on:mouseup={(e) => applySortOption(option.key)}>
-          <div class="label">{option.label}</div>
-          <div class="sort">
-            <SortVisualizer direction={sortBy == option.key ? (reverseSort ? 1 : -1) : 0} />
+<div class="statistics-champion">
+  <div class="content card">
+    <div class="title">챔피언 통계</div>
+    <div class="description">해당 지표들은 team.gg에서 검색 또는 추적되는 데이터들로 구성되었습니다.</div>
+    <div class="updated-at">{moment(lastUpdateTime).format("YYYY년 M월 D일 a h시 mm분에 업데이트됨")}</div>
+    <div class="champion-list">
+      <div class="champion-item header">
+        {#each sortOptions as option}
+          <div class={option.class} on:mouseup={(e) => applySortOption(option.key)}>
+            <div class="label">{option.label}</div>
+            <div class="sort">
+              <SortVisualizer direction={sortBy == option.key ? (reverseSort ? 1 : -1) : 0} />
+            </div>
           </div>
+        {/each}
+      </div>
+      {#each refinedData as c}
+        <div class="champion-item">
+          <div class="champion-img img">
+            <SafeImg src={championIconUrl(c?.championId)} />
+          </div>
+          <div class="champion-name">{c?.championName ?? "-"}</div>
+          <div class="champion-played">{c?.total ?? 0}판</div>
+          <div class="champion-winrate">
+            <div class="label">{(c.winRate * 100).toFixed(2)}%</div>
+            <div class="bar-wrapper">
+              <div class="bar" style={`width: ${c.winRate * 100}%`}></div>
+            </div>
+          </div>
+          <div class="champion-pickrate">
+            <div class="label">{(c.avgPickRate * 100).toFixed(2)}%</div>
+            <div class="bar-wrapper">
+              <div class="bar" style={`width: ${c.avgPickRate * 100}%`}></div>
+            </div>
+          </div>
+          <div class="champion-banrate">
+            <div class="label">{(c.avgBanRate * 100).toFixed(2)}%</div>
+            <div class="bar-wrapper">
+              <div class="bar" style={`width: ${c.avgBanRate * 100}%`}></div>
+            </div>
+          </div>
+          <div class="champion-kda">
+            {c.kda.toFixed(2)}
+          </div>
+          <div class="champion-minions">
+            {(c?.avgMinionsKilled ?? 0).toFixed(0)} CS
+          </div>
+          <div class="champion-gold-earned">{(c?.avgGoldEarned ?? 0).toFixed(0)} 골드</div>
         </div>
       {/each}
     </div>
-    {#each refinedData as c}
-      <div class="champion-item">
-        <div class="champion-img img">
-          <SafeImg src={championIconUrl(c?.championId)} />
-        </div>
-        <div class="champion-name">{c?.championName ?? "-"}</div>
-        <div class="champion-played">{c?.total ?? 0}판</div>
-        <div class="champion-winrate">
-          <div class="label">{(c.winRate * 100).toFixed(2)}%</div>
-          <div class="bar-wrapper">
-            <div class="bar" style={`width: ${c.winRate * 100}%`}></div>
-          </div>
-        </div>
-        <div class="champion-pickrate">
-          <div class="label">{(c.avgPickRate * 100).toFixed(2)}%</div>
-          <div class="bar-wrapper">
-            <div class="bar" style={`width: ${c.avgPickRate * 100}%`}></div>
-          </div>
-        </div>
-        <div class="champion-banrate">
-          <div class="label">{(c.avgBanRate * 100).toFixed(2)}%</div>
-          <div class="bar-wrapper">
-            <div class="bar" style={`width: ${c.avgBanRate * 100}%`}></div>
-          </div>
-        </div>
-        <div class="champion-kda">
-          {c.kda.toFixed(2)}
-        </div>
-        <div class="champion-minions">
-          {(c?.avgMinionsKilled ?? 0).toFixed(0)} CS
-        </div>
-        <div class="champion-gold-earned">{(c?.avgGoldEarned ?? 0).toFixed(0)} 골드</div>
-      </div>
-    {/each}
   </div>
 </div>

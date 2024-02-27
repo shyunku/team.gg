@@ -58,7 +58,7 @@
 
   $: {
     if (rawData) {
-      queueData = refinedData[rankType];
+      queueData = refinedData[rankType] ?? [];
       totalSummoners = queueData.reduce(
         (acc, cur) => acc + cur.rankGroups.reduce((acc2, cur2) => acc2 + cur2.summoners, 0),
         0

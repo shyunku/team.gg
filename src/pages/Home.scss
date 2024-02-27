@@ -26,40 +26,27 @@
 
 .summoner-searcher {
   display: flex;
-  align-items: center;
   width: 650px;
+  align-items: center;
+  background-color: rgb(112, 96, 60);
+  padding: 8px 12px;
+  box-sizing: border-box;
+  border-radius: 3px;
+
+  .searcher-input {
+    flex: 1;
+    margin-left: 12px;
+  }
 
   select,
   input,
   button {
-    background-color: black;
-    color: white;
-    border: 1px solid rgb(67, 67, 67);
-    height: 40px;
-    padding: 8px 12px;
-    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    border: none !important;
   }
 
-  select {
-  }
-
-  .id-tag-searcher {
-    display: flex;
-    position: relative;
-    align-items: center;
-    margin-left: 15px;
-    width: 500px;
-    border: 1px solid rgb(67, 67, 67);
-    height: 40px;
-    border-radius: 5px;
-    padding: 8px 12px;
-    box-sizing: border-box;
-    flex: 1;
-  }
-
-  #search {
-    margin-left: 15px;
-    cursor: pointer;
+  .placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
   }
 }
 

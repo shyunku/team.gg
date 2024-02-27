@@ -76,6 +76,11 @@ export const getSummonerInfo = async (gameName = null, tagLine = null) => {
   return response.data;
 };
 
+export const quickSearchSummonerReq = async (keyword) => {
+  const response = await instance.get(`/quickSearch?keyword=${encodeURIComponent(keyword ?? "")}`);
+  return response.data;
+};
+
 export const renewSummonerInfo = async (puuid) => {
   const response = await instance.post(`/renewSummoner`, {
     puuid: puuid,
@@ -234,6 +239,11 @@ export const getChampionStatisticsReq = async () => {
 
 export const getTierStatisticsReq = async () => {
   const response = await instance.get(`/platform/statistics/tier`);
+  return response.data;
+};
+
+export const getMasteryStatisticsReq = async () => {
+  const response = await instance.get(`/platform/statistics/mastery`);
   return response.data;
 };
 

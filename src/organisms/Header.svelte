@@ -33,9 +33,9 @@
 
   const tryLogout = async () => {
     try {
-      await logout();
       authStore.initialize();
       window.location.href = "/";
+      await logout();
     } catch (err) {
       toasts.add({ title: "로그아웃 실패", description: "알 수 없는 오류가 발생했습니다.", type: "warning" });
     }
