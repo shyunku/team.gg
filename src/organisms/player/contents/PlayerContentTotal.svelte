@@ -8,7 +8,7 @@
     profileIconUrl,
     summonerSpellIconUrl,
   } from "../../../thunks/GeneralThunk";
-  import { MultiKill, QueueType, TeamPositionType } from "../../../types/General";
+  import { MultiKill, QueueType, TeamLaneType, TeamPositionType } from "../../../types/General";
   import { formatDecimalBy3 } from "../../../utils/Common";
   import { toDuration, toRelativeTime } from "../../../utils/Datetime";
   import IoIosArrowDown from "svelte-icons/io/IoIosArrowDown.svelte";
@@ -16,6 +16,9 @@
   import "./PlayerContentTotal.scss";
   import { push } from "svelte-spa-router";
   import { formatRankKr, formatTierKr } from "../../../utils/Util";
+  import { toasts } from "svelte-toasts";
+  import DoughnutChart from "../../../molecules/DoughnutChart.svelte";
+  import LinePosition from "../../../molecules/LinePosition.svelte";
 
   export let sr = {};
   export let fr = {};
@@ -42,7 +45,67 @@
 
   let sortedMatches = [];
   let duoList = [];
-  $: sortedMatches = (matches ?? []).sort((a, b) => b.gameCreation - a.gameCreation);
+  let matchWins = 0;
+  let matchLosses = 0;
+  let matchAvgKills = 0;
+  let matchAvgDeaths = 0;
+  let matchAvgAssists = 0;
+  let matchKda = 0;
+  let matchKillAssistRate = 0;
+  let matchAvgDealt = 0;
+  let recentChampions = [];
+  let positionMap = {};
+  $: {
+    sortedMatches = (matches ?? []).sort((a, b) => b.gameCreation - a.gameCreation);
+    matchWins = sortedMatches.filter((match) => match.myStat.win).length;
+    matchLosses = sortedMatches.filter((match) => !match.myStat.win).length;
+    matchAvgKills = sortedMatches.reduce((acc, match) => acc + match.myStat.kills, 0) / sortedMatches.length;
+    matchAvgDeaths = sortedMatches.reduce((acc, match) => acc + match.myStat.deaths, 0) / sortedMatches.length;
+    matchAvgAssists = sortedMatches.reduce((acc, match) => acc + match.myStat.assists, 0) / sortedMatches.length;
+    matchKda = matchAvgDeaths === 0 ? "Perfect" : ((matchAvgKills + matchAvgAssists) / matchAvgDeaths).toFixed(3);
+    matchKillAssistRate =
+      sortedMatches.reduce((acc, match) => acc + getKillAssistRate(match), 0) / sortedMatches.length;
+    matchAvgDealt =
+      sortedMatches.reduce((acc, match) => acc + getDamageDealtPercentageInTeam(match), 0) / sortedMatches.length;
+
+    let recentChampionMap = {};
+    sortedMatches.forEach((match) => {
+      const championId = match.myStat.championId;
+      if (recentChampionMap[championId] == null) {
+        recentChampionMap[championId] = {
+          championId: championId,
+          gameCount: 1,
+          winCount: match.myStat.win ? 1 : 0,
+          kills: match.myStat.kills,
+          deaths: match.myStat.deaths,
+          assists: match.myStat.assists,
+          gameEndTimestamp: match.gameEndTimestamp,
+        };
+      } else {
+        recentChampionMap[championId].gameCount += 1;
+        recentChampionMap[championId].winCount += match.myStat.win ? 1 : 0;
+        recentChampionMap[championId].kills += match.myStat.kills;
+        recentChampionMap[championId].deaths += match.myStat.deaths;
+        recentChampionMap[championId].assists += match.myStat.assists;
+      }
+    });
+    recentChampions = Object.values(recentChampionMap).sort((a, b) => {
+      if (b.gameCount === a.gameCount) {
+        return b.gameEndTimestamp - a.gameEndTimestamp;
+      }
+      return b.gameCount - a.gameCount;
+    });
+    positionMap = {};
+    sortedMatches.forEach((match) => {
+      const position = match.myStat.teamPosition;
+      if (TeamLaneType[position] == null) return;
+      if (positionMap[position] == null) {
+        positionMap[position] = 1;
+      } else {
+        positionMap[position] += 1;
+      }
+    });
+  }
 
   $: {
     if (sr?.tier != null && sr?.rank != null) {
@@ -177,6 +240,15 @@
     const myIndex = participants.findIndex((participant) => participant?.puuid === match?.myStat?.puuid);
     return myIndex + 1;
   };
+
+  const expandMatchDetail = () => {
+    // TODO :: implement match detail expansion
+    toasts.add({ title: "기능 미구현", description: "이 기능은 아직 구현되지 않았어요... ㅠㅅㅠ", type: "warning" });
+  };
+
+  const goToPlayerPage = (summonerName, tagLine) => {
+    push(`#/player/${summonerName}/${tagLine}`);
+  };
 </script>
 
 <MainContentLayout>
@@ -242,7 +314,7 @@
               <div class="player-icon img">
                 <SafeImg src={profileIconUrl(duo?.profileIcon)} />
               </div>
-              <div class="player-name">
+              <div class="player-name" on:click={(e) => goToPlayerPage(duo?.gameName, duo?.gameTag ?? "KR1")}>
                 <div class="game-name">{duo?.gameName}</div>
                 <div class="game-tag">#{duo?.gameTag ?? "KR1"}</div>
               </div>
@@ -261,12 +333,77 @@
         <div class="header">
           <div class="menu">
             <div class="menu-item selected">전체</div>
-            <div class="menu-item">솔로랭크</div>
-            <div class="menu-item">자유랭크</div>
+            <div class="menu-item not-ready">솔로랭크</div>
+            <div class="menu-item not-ready">자유랭크</div>
           </div>
         </div>
         <div class="body">
           <!-- TODO :: implement summary of recent histories -->
+          <div class="win-rate-section">
+            <DoughnutChart rates={[matchWins, matchLosses]} colors={["#3CCA70", "#FF5252"]}>
+              <div class="label">
+                <div class="win-count">{matchWins}W {matchLosses}L</div>
+                <div class="win-rate">
+                  {((100 * matchWins) / (matchWins + matchLosses)).toFixed(0)}%
+                </div>
+              </div>
+            </DoughnutChart>
+          </div>
+          <div class="kda-section">
+            <div class="kda">
+              <div class="kda-segment kill">{matchAvgKills.toFixed(1)}</div>
+              <div class="kda-split">/</div>
+              <div class="kda-segment death">{matchAvgDeaths.toFixed(1)}</div>
+              <div class="kda-split">/</div>
+              <div class="kda-segment assist">{matchAvgAssists.toFixed(1)}</div>
+            </div>
+            <div class="kda-rate">평점 {matchKda}</div>
+            <div class="kill-assist-dealt-rate">
+              <div class="kill-assist">평균 킬 관여 {(100 * matchKillAssistRate).toFixed(0)}%</div>
+              <div class="split">/</div>
+              <div class="dealt-rate">평균 딜량 {(100 * matchAvgDealt).toFixed(0)}%</div>
+            </div>
+          </div>
+          <div class="recent-champions-section">
+            <div class="header">최근 플레이한 챔피언 ({sortedMatches.length} 게임)</div>
+            <div class="body">
+              {#each recentChampions.slice(0, 3) as champion, i}
+                <div class="champion row">
+                  <div class="champion-icon img">
+                    <SafeImg src={championIconUrl(champion?.championId)} />
+                  </div>
+                  <div class="champion-game-count">{champion?.gameCount}게임</div>
+                  <div class="win-rate">
+                    승률 {((100 * champion?.winCount) / champion?.gameCount).toFixed(0)}%
+                  </div>
+                  <div class="kda-rate">
+                    평점 {((champion?.kills + champion?.assists) / champion?.deaths).toFixed(2)}
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+          <div class="favorite-positions">
+            <!-- <div class="header">최근 선호 포지션</div> -->
+            <div class="body">
+              {#each Object.keys(TeamLaneType) as position}
+                {@const wholePositions = Object.values(positionMap).reduce((acc, cur) => acc + cur, 0)}
+                <div class={"position row" + JsxUtil.classByEqual(positionMap[position] ?? 0, 0, "none")}>
+                  <LinePosition {position} opacity={1} brightness={0.7} />
+                  <div class="position-name">{TeamLaneType[position]}</div>
+                  <div class="rate">
+                    <div
+                      class="filler"
+                      style={`width: ${((positionMap[position] ?? 0) * 100) / wholePositions}%`}
+                    ></div>
+                  </div>
+                  <div class={"position-count"}>
+                    {positionMap[position] ?? 0}게임
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
         </div>
       </div>
       <div class="match-history">
@@ -369,7 +506,12 @@
                     </div>
                     <!-- <div class="vision">시야점수 25</div> -->
                     <div class="lane">
-                      {TeamPositionType[teamPosition] ?? ""}
+                      {#if TeamLaneType?.[teamPosition] != null}
+                        <LinePosition position={teamPosition} opacity={1} />
+                        <div class="position">
+                          {TeamLaneType[teamPosition]}
+                        </div>
+                      {/if}
                     </div>
                     <!-- <div class="wards">와드 3</div> -->
                   </div>
@@ -442,7 +584,7 @@
                 </div>
               </div>
             </div>
-            <div class="expand-btn">
+            <div class="expand-btn" on:click={expandMatchDetail}>
               <div class="expand-icon">
                 <IoIosArrowDown />
               </div>

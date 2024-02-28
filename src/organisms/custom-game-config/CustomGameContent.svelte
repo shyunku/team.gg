@@ -507,7 +507,11 @@
           <div class="body">
             <div class="searcher">
               <div class="searcher-wrapper">
-                <NameTagSearchInput onEnter={onCandidateSearch} />
+                <NameTagSearchInput
+                  onEnter={onCandidateSearch}
+                  onResultClick={(name, tag) => onCandidateSearch(name, tag)}
+                  compact
+                />
               </div>
             </div>
             <div class="candidates">

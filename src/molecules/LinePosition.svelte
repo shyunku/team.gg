@@ -10,45 +10,71 @@
   export let position = "";
   export let strength = 0;
   export let interactive = false;
+  export let opacity = null;
+  export let brightness = null;
   export let showStrength = false;
   export let onClick = () => {};
 
   let hovered = false;
+  let style = {};
+
+  const TopImage = {
+    disabled: "/img/positions/icon-position-top-disabled.png",
+    default: "/img/positions/icon-position-top.png",
+    hovered: "/img/positions/icon-position-top-hover.png",
+  };
+  const JungleImage = {
+    disabled: "/img/positions/icon-position-jungle-disabled.png",
+    default: "/img/positions/icon-position-jungle.png",
+    hovered: "/img/positions/icon-position-jungle-hover.png",
+  };
+  const MidImage = {
+    disabled: "/img/positions/icon-position-middle-disabled.png",
+    default: "/img/positions/icon-position-middle.png",
+    hovered: "/img/positions/icon-position-middle-hover.png",
+  };
+  const AdcImage = {
+    disabled: "/img/positions/icon-position-bottom-disabled.png",
+    default: "/img/positions/icon-position-bottom.png",
+    hovered: "/img/positions/icon-position-bottom-hover.png",
+  };
+  const SupportImage = {
+    disabled: "/img/positions/icon-position-utility-disabled.png",
+    default: "/img/positions/icon-position-utility.png",
+    hovered: "/img/positions/icon-position-utility-hover.png",
+  };
 
   const sources = {
-    top: {
-      disabled: "/img/positions/icon-position-top-disabled.png",
-      default: "/img/positions/icon-position-top.png",
-      hovered: "/img/positions/icon-position-top-hover.png",
-    },
-    jungle: {
-      disabled: "/img/positions/icon-position-jungle-disabled.png",
-      default: "/img/positions/icon-position-jungle.png",
-      hovered: "/img/positions/icon-position-jungle-hover.png",
-    },
-    mid: {
-      disabled: "/img/positions/icon-position-middle-disabled.png",
-      default: "/img/positions/icon-position-middle.png",
-      hovered: "/img/positions/icon-position-middle-hover.png",
-    },
-    adc: {
-      disabled: "/img/positions/icon-position-bottom-disabled.png",
-      default: "/img/positions/icon-position-bottom.png",
-      hovered: "/img/positions/icon-position-bottom-hover.png",
-    },
-    support: {
-      disabled: "/img/positions/icon-position-utility-disabled.png",
-      default: "/img/positions/icon-position-utility.png",
-      hovered: "/img/positions/icon-position-utility-hover.png",
-    },
+    top: TopImage,
+    jungle: JungleImage,
+    mid: MidImage,
+    middle: MidImage,
+    adc: AdcImage,
+    bottom: AdcImage,
+    support: SupportImage,
+    utility: SupportImage,
   };
 
   let sourceByCondition;
   $: {
-    const source = sources[position];
-    if (hovered && interactive) sourceByCondition = source.hovered;
-    else if (strength > 0) sourceByCondition = source.default;
-    else sourceByCondition = source.disabled;
+    const source = sources[position?.toLowerCase()];
+    if (source) {
+      if (!interactive) sourceByCondition = source.default;
+      else {
+        if (hovered && interactive) sourceByCondition = source.hovered;
+        else if (strength > 0) sourceByCondition = source.default;
+        else sourceByCondition = source.disabled;
+      }
+    }
+
+    style = {};
+    if (opacity != null) {
+      style = { ...style, opacity };
+    }
+    if (brightness !== null) {
+      style = { ...style, filter: `brightness(${brightness})` };
+    }
+    console.log(style);
   }
 </script>
 
@@ -56,6 +82,9 @@
   class={"position-icon img" +
     JsxUtil.class(`strength-${strength}`) +
     JsxUtil.classByCondition(interactive, "interactive")}
+  style={Object.keys(style)
+    .map((k) => `${k}: ${style[k]} !important`)
+    .join("; ")}
   on:mouseenter={(e) => {
     hovered = true;
   }}

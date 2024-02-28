@@ -21,6 +21,14 @@ export const QueueType = {
   1900: "U.R.F.",
 };
 
+export const TeamLaneType = {
+  TOP: "탑",
+  JUNGLE: "정글",
+  MIDDLE: "미드",
+  BOTTOM: "원딜",
+  UTILITY: "서포터",
+};
+
 export const TeamPositionType = {
   TOP: "탑",
   JUNGLE: "정글",

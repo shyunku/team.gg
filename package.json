@@ -1,7 +1,7 @@
 {
   "name": "team.gg",
   "description": "cross-platform desktop application for team.gg",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "type": "module",
   "config": {
@@ -36,7 +36,6 @@
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-postcss": "4.0.2",
     "rollup-plugin-svelte": "^7.1.2",
-    "sass": "1.69.5",
     "svelte": "^3.55.0",
     "svelte-preprocess": "5.1.1"
   },
@@ -50,6 +49,7 @@
     "electron-log": "5.1.1",
     "logsh": "1.0.6",
     "moment": "2.30.1",
+    "sass": "1.71.1",
     "sha256": "0.2.0",
     "sirv-cli": "^2.0.0",
     "socket.io-client": "2.5.0",

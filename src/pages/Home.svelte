@@ -40,17 +40,6 @@
       <SafeImg src="/img/common/app_logo.png" />
       <div class="version">v{APP_VERSION}</div>
     </div>
-    <!-- <div class="summoner-searcher">
-      <div class="summoner-region">
-        <select>
-          <option>KR</option>
-        </select>
-      </div>
-      <div class={"id-tag-searcher" + JsxUtil.classByCondition(summonerName.length > 0, "unempty")}>
-        <NameTagSearcher bind:summonerName bind:summonerTag onEnter={onPlayerSearch} />
-      </div>
-      <button id="search" on:click={onPlayerSearch}>검색</button>
-    </div> -->
     <div class="summoner-searcher">
       <div class="searcher-region">
         <select id="region_selector">
@@ -76,7 +65,8 @@
             <div class="summoner-tag">#{p?.tagLine ?? "??"}</div>
             <div
               class="favorite-icon"
-              on:mouseup={(e) => {
+              on:click={(e) => {
+                e.stopPropagation();
                 toggleSummonerFavorite(p?.puuid);
                 renewFavorites();
               }}

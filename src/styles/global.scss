@@ -31,8 +31,7 @@ body {
   width: 100%;
   overflow-y: overlay;
 
-  font-family: "rix", sans-serif;
-  // font-family: "Noto Sans KR", sans-serif;
+  font-family: "rix", "Noto Sans KR", sans-serif;
   // text-rendering: optimizeLegibility;
 
   &::-webkit-scrollbar {
@@ -117,4 +116,10 @@ button {
     background-color: rgb(86, 78, 59);
     border-radius: 10px;
   }
+}
+
+.not-ready {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: not-allowed !important;
 }

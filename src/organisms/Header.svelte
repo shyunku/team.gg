@@ -13,6 +13,7 @@
   let isMainPage = false;
   let isCustomGamePage = false;
   let isStatisticsPage = false;
+  let isCommunityPage = false;
   let isAuthorized = false;
 
   const goToHome = () => {
@@ -25,6 +26,10 @@
 
   const goToStatistics = () => {
     window.location.href = "#/statistics";
+  };
+
+  const goToCommunity = () => {
+    window.location.href = "#/community";
   };
 
   const goToLogin = () => {
@@ -71,29 +76,29 @@
   $: {
     isCustomGamePage = $location.includes("/custom-game");
     isStatisticsPage = $location.includes("/statistics");
-    isMainPage = !isCustomGamePage && !isStatisticsPage;
+    isCommunityPage = $location.includes("/community");
+    isMainPage = !isCustomGamePage && !isStatisticsPage && !isCommunityPage;
   }
 </script>
 
 <div class="header">
   <MainContentWrapper>
     <div class="app-icon-wrapper">
-      <div class="app-icon img" on:mouseup={goToHome}>
+      <div class="app-icon img" on:click={goToHome}>
         <SafeImg src="/img/common/app_logo.png" />
       </div>
     </div>
     <div class="app-menu">
-      <div class={"app-menu-item" + (isMainPage ? " selected" : "")} on:mouseup={goToHome}>전적</div>
-      <div class={"app-menu-item" + (isCustomGamePage ? " selected" : "")} on:mouseup={goToCustomGame}>
-        내전 팀 구성
-      </div>
-      <div class={"app-menu-item" + (isStatisticsPage ? " selected" : "")} on:mouseup={goToStatistics}>통계</div>
+      <div class={"app-menu-item" + (isMainPage ? " selected" : "")} on:click={goToHome}>전적</div>
+      <div class={"app-menu-item" + (isStatisticsPage ? " selected" : "")} on:click={goToStatistics}>통계</div>
+      <div class={"app-menu-item" + (isCommunityPage ? " selected" : "")} on:click={goToCommunity}>커뮤니티</div>
+      <div class={"app-menu-item" + (isCustomGamePage ? " selected" : "")} on:click={goToCustomGame}>내전 팀 구성</div>
     </div>
     <div class="user-menu">
       {#if isAuthorized}
-        <div class="user-menu-item" on:mouseup={tryLogout}>로그아웃</div>
+        <div class="user-menu-item" on:click={tryLogout}>로그아웃</div>
       {:else if !isAuthorized}
-        <div class="user-menu-item" on:mouseup={goToLogin}>로그인</div>
+        <div class="user-menu-item" on:click={goToLogin}>로그인</div>
       {/if}
     </div>
   </MainContentWrapper>

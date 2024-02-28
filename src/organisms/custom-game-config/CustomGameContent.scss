@@ -91,6 +91,7 @@
       .candidate-list {
         display: flex;
         flex-direction: column;
+        overflow: initial;
 
         .body {
           padding: 0;
@@ -110,7 +111,7 @@
             padding: 5px 8px;
             font-size: 13px;
             border-radius: 3px;
-            overflow: hidden;
+            // overflow: hidden;
           }
         }
 
@@ -118,7 +119,9 @@
           display: flex;
           flex-direction: column;
           min-height: 80px;
+          max-height: 300px;
           position: relative;
+          overflow-y: overlay;
 
           .droppable-zone {
             display: flex;

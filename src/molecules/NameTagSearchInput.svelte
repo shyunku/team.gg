@@ -7,6 +7,11 @@
 
   const defaultTag = "KR1";
 
+  export let summonerName = "";
+  export let summonerTag = "";
+  export let onResultClick = null;
+  export let compact = false;
+
   let content = "";
   let width = 0;
   let spanRef;
@@ -18,13 +23,13 @@
   let inputElement;
   let resultIndex = -1;
 
-  export let summonerName = "";
-  export let summonerTag = "";
+  let mouseOnResults = false;
 
   export let onEnter = () => {};
 
   let onEnterHandler = (...args) => {
     onEnter(...args);
+    focused = false;
     inputValue = "";
     content = "";
   };
@@ -79,14 +84,18 @@
     }
   };
 
+  const goToPlayerPage = (gameName, tagLine) => {
+    if (onResultClick) onResultClick(gameName, tagLine);
+    else location.href = `#/player/${gameName}/${tagLine}`;
+    focused = false;
+    inputValue = "";
+    content = "";
+  };
+
   onMount(async () => {
     await tick();
     width = spanRef.offsetWidth;
   });
-
-  $: {
-    console.log(resultIndex);
-  }
 
   $: if (spanRef && content.length >= 0) {
     requestAnimationFrame(() => {
@@ -95,7 +104,12 @@
   }
 </script>
 
-<div class={"name-tag-search-input" + JsxUtil.classByCondition(content.length > 0, "unempty")}>
+<div
+  class={"name-tag-search-input" +
+    JsxUtil.classByCondition(content.length > 0, "unempty") +
+    JsxUtil.classByCondition(compact, "compact")}
+>
+  <!-- {compact} -->
   <div class="placeholder">Riot ID + #태그 검색</div>
   <span id="hide" bind:this={spanRef}>{content}</span>
   <input
@@ -106,7 +120,7 @@
     bind:this={inputElement}
     on:keydown={onInputKeyDown}
     on:focus={() => (focused = true)}
-    on:blur={() => (focused = false)}
+    on:blur={() => !mouseOnResults && (focused = false)}
   />
   <div class="tag-padding" style="left: {width}px">{tagPadding}</div>
   <div
@@ -115,7 +129,12 @@
       JsxUtil.classByCondition(results.length === 0, "inactive")}
   >
     {#each results as r, ind}
-      <div class={"result" + JsxUtil.classByEqual(ind, resultIndex, "selected")}>
+      <div
+        class={"result" + JsxUtil.classByEqual(ind, resultIndex, "selected")}
+        on:click={(e) => goToPlayerPage(r?.gameName, r?.tagLine)}
+        on:mouseenter={() => (mouseOnResults = true)}
+        on:mouseleave={() => (mouseOnResults = false)}
+      >
         <div class="profile-img img">
           <SafeImg src={profileIconUrl(r?.profileIconId)} />
         </div>
