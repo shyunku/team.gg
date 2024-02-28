@@ -25,6 +25,7 @@
   font-weight: 900;
 }
 
+html,
 body {
   background: $main-bg-color;
   color: white;
@@ -33,16 +34,6 @@ body {
 
   font-family: "rix", "Noto Sans KR", sans-serif;
   // text-rendering: optimizeLegibility;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-    background-color: rgb(50, 44, 33);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgb(113, 103, 82);
-    border-radius: 10px;
-  }
 }
 
 * {
@@ -110,10 +101,12 @@ button {
 
 *::-webkit-scrollbar {
   width: 6px;
-  background-color: black;
+  // height: 6px;
+  height: 0;
+  background-color: rgba(0, 0, 0, 0);
 
   &-thumb {
-    background-color: rgb(86, 78, 59);
+    background-color: rgb(61, 55, 42);
     border-radius: 10px;
   }
 }
@@ -122,4 +115,8 @@ button {
   opacity: 0.3;
   pointer-events: none;
   cursor: not-allowed !important;
+}
+
+div {
+  white-space: nowrap;
 }

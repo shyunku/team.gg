@@ -253,46 +253,48 @@
 
 <MainContentLayout>
   <div class="content-wrapper">
-    <div class="rank-summary">
-      <div class="solo-rank rank card">
-        <div class="rank-header header">솔로랭크</div>
-        <div class="rank-body">
-          <div class={"rank-icon img" + JsxUtil.classByEqual(srTierImgUrl, null, "null")}>
-            <SafeImg src={srTierImgUrl} />
-          </div>
-          <div class="rank-info">
-            <div class="rank-row">
-              <div class="rank-tier">{srTierRank}</div>
-              <div class="rank-lp">{sr?.lp ?? "0"} LP</div>
+    <div class="left-section">
+      <div class="rank-summary">
+        <div class="solo-rank rank card">
+          <div class="rank-header header">솔로랭크</div>
+          <div class="rank-body">
+            <div class={"rank-icon img" + JsxUtil.classByEqual(srTierImgUrl, null, "null")}>
+              <SafeImg src={srTierImgUrl} />
             </div>
-            <div class="rank-row">
-              <div class="rank-win-lose">
-                {sr?.wins ?? "0"}승 {sr?.losses ?? "0"}패
+            <div class="rank-info">
+              <div class="rank-row">
+                <div class="rank-tier">{srTierRank}</div>
+                <div class="rank-lp">{sr?.lp ?? "0"} LP</div>
               </div>
-              <div class="rank-win-rate">
-                승률 {(100 * srWinRate).toFixed(0)}%
+              <div class="rank-row">
+                <div class="rank-win-lose">
+                  {sr?.wins ?? "0"}승 {sr?.losses ?? "0"}패
+                </div>
+                <div class="rank-win-rate">
+                  승률 {(100 * srWinRate).toFixed(0)}%
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="flex-rank rank card">
-        <div class="rank-header header">자유랭크</div>
-        <div class="rank-body">
-          <div class={"rank-icon img" + JsxUtil.classByEqual(frTierImgUrl, null, "null")}>
-            <SafeImg src={frTierImgUrl} />
-          </div>
-          <div class="rank-info">
-            <div class="rank-row">
-              <div class="rank-tier">{frTierRank}</div>
-              <div class="rank-lp">{fr?.lp ?? "0"} LP</div>
+        <div class="flex-rank rank card">
+          <div class="rank-header header">자유랭크</div>
+          <div class="rank-body">
+            <div class={"rank-icon img" + JsxUtil.classByEqual(frTierImgUrl, null, "null")}>
+              <SafeImg src={frTierImgUrl} />
             </div>
-            <div class="rank-row">
-              <div class="rank-win-lose">
-                {fr?.wins ?? "0"}승 {fr?.losses ?? "0"}패
+            <div class="rank-info">
+              <div class="rank-row">
+                <div class="rank-tier">{frTierRank}</div>
+                <div class="rank-lp">{fr?.lp ?? "0"} LP</div>
               </div>
-              <div class="rank-win-rate">
-                승률 {(100 * frWinRate).toFixed(0)}%
+              <div class="rank-row">
+                <div class="rank-win-lose">
+                  {fr?.wins ?? "0"}승 {fr?.losses ?? "0"}패
+                </div>
+                <div class="rank-win-rate">
+                  승률 {(100 * frWinRate).toFixed(0)}%
+                </div>
               </div>
             </div>
           </div>

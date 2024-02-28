@@ -7,9 +7,37 @@
   width: 100%;
 }
 
+@media screen and (max-width: 690px) {
+  .summoner-searcher,
+  .favorites {
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .app-logo {
+    width: 200px !important;
+
+    .version {
+      font-size: 11px !important;
+      bottom: 10px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 335px) {
+  .app-logo {
+    width: 130px !important;
+
+    .version {
+      display: none;
+    }
+  }
+}
+
 .app-logo {
   position: relative;
-  margin-top: 100px;
+  margin-top: 200px;
   margin-bottom: 50px;
   width: 300px;
 

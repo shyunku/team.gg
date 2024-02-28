@@ -2,10 +2,12 @@
 
 .custom-game-content {
   margin-top: 30px;
+  width: 100%;
 
   .content {
     display: flex;
     width: 100%;
+    overflow-x: overlay;
     padding-bottom: 40px;
 
     .teams {
@@ -92,6 +94,7 @@
         display: flex;
         flex-direction: column;
         overflow: initial;
+        min-width: 240px;
 
         .body {
           padding: 0;

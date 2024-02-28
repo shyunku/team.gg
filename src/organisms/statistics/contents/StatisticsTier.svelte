@@ -1,9 +1,9 @@
 <script>
-  import SafeImg from "../../atoms/SafeImg.svelte";
-  import { getTierStatisticsReq, profileIconUrl } from "../../thunks/GeneralThunk";
-  import { RankQueueType } from "../../types/General";
-  import JsxUtil from "../../utils/JsxUtil";
-  import TierRank from "../../molecules/TierRank.svelte";
+  import SafeImg from "../../../atoms/SafeImg.svelte";
+  import { getTierStatisticsReq, profileIconUrl } from "../../../thunks/GeneralThunk";
+  import { RankQueueType } from "../../../types/General";
+  import JsxUtil from "../../../utils/JsxUtil";
+  import TierRank from "../../../molecules/TierRank.svelte";
   import "./StatisticsTier.scss";
   import moment from "moment";
   import "moment/locale/ko";

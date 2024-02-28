@@ -1,7 +1,7 @@
 <script>
-  import StatisticsChampion from "./StatisticsChampion.svelte";
-  import StatisticsMastery from "./StatisticsMastery.svelte";
-  import StatisticsTier from "./StatisticsTier.svelte";
+  import StatisticsChampion from "./contents/StatisticsChampion.svelte";
+  import StatisticsMastery from "./contents/StatisticsMastery.svelte";
+  import StatisticsTier from "./contents/StatisticsTier.svelte";
 
   export let menu;
 </script>

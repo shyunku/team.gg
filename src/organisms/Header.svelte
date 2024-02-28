@@ -8,6 +8,7 @@
   import { AxiosError } from "axios";
   import { onDestroy, onMount } from "svelte";
   import SocketIoClient from "socket.io-client";
+  import "./Header.scss";
 
   let socket = null;
   let isMainPage = false;
@@ -81,7 +82,7 @@
   }
 </script>
 
-<div class="header">
+<div class="app-header">
   <MainContentWrapper>
     <div class="app-icon-wrapper">
       <div class="app-icon img" on:click={goToHome}>
@@ -89,127 +90,23 @@
       </div>
     </div>
     <div class="app-menu">
-      <div class={"app-menu-item" + (isMainPage ? " selected" : "")} on:click={goToHome}>전적</div>
-      <div class={"app-menu-item" + (isStatisticsPage ? " selected" : "")} on:click={goToStatistics}>통계</div>
-      <div class={"app-menu-item" + (isCommunityPage ? " selected" : "")} on:click={goToCommunity}>커뮤니티</div>
-      <div class={"app-menu-item" + (isCustomGamePage ? " selected" : "")} on:click={goToCustomGame}>내전 팀 구성</div>
+      <div class={"menu-item app-menu-item" + (isMainPage ? " selected" : "")} on:click={goToHome}>전적</div>
+      <div class={"menu-item app-menu-item" + (isStatisticsPage ? " selected" : "")} on:click={goToStatistics}>
+        통계
+      </div>
+      <div class={"menu-item app-menu-item" + (isCommunityPage ? " selected" : "")} on:click={goToCommunity}>
+        커뮤니티
+      </div>
+      <div class={"menu-item app-menu-item" + (isCustomGamePage ? " selected" : "")} on:click={goToCustomGame}>
+        내전 팀 구성
+      </div>
     </div>
     <div class="user-menu">
       {#if isAuthorized}
-        <div class="user-menu-item" on:click={tryLogout}>로그아웃</div>
+        <div class="menu-item user-menu-item" on:click={tryLogout}>로그아웃</div>
       {:else if !isAuthorized}
-        <div class="user-menu-item" on:click={goToLogin}>로그인</div>
+        <div class="menu-item user-menu-item" on:click={goToLogin}>로그인</div>
       {/if}
     </div>
   </MainContentWrapper>
 </div>
-
-<style lang="scss">
-  @import "../styles/variables.scss";
-
-  @media screen and (max-width: 700px) {
-    .app-icon-wrapper {
-      display: none !important;
-    }
-
-    .app-menu {
-      margin-left: 0 !important;
-    }
-  }
-
-  @media screen and (max-width: 500px) {
-    .header {
-      height: 40px;
-    }
-
-    .app-menu-item,
-    .user-menu-item {
-      font-size: 16px !important;
-      padding: 0 12px !important;
-    }
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    // background-color: rgb(118, 25, 180);
-    color: white;
-    height: 60px;
-    // padding: 0 12px;
-    border-bottom: 1px solid $main-border-color;
-  }
-
-  .app-icon-wrapper {
-    display: flex;
-    height: 100%;
-    align-items: center;
-  }
-
-  .app-icon {
-    display: flex;
-    align-items: center;
-    width: 120px;
-    height: 32px;
-    cursor: pointer;
-  }
-
-  .app-menu {
-    display: flex;
-    margin-left: 30px;
-    align-items: center;
-    height: 100%;
-    font-weight: bold;
-    flex: 1;
-
-    .app-menu-item {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      font-weight: bold;
-      height: 100%;
-      color: $main-fg-color;
-      font-size: 21px;
-      padding: 0 18px;
-      background: linear-gradient(180deg, transparent 50%, transparent 100%);
-      transition: 0.2s linear;
-      white-space: nowrap;
-
-      &:hover {
-        background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);
-      }
-
-      &.selected {
-        background: linear-gradient(180deg, transparent 60%, $highlight-color 100%);
-      }
-
-      &:not(:last-child) {
-        // margin-right: 40px;
-      }
-    }
-  }
-
-  .user-menu {
-    display: flex;
-
-    .user-menu-item {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      font-weight: bold;
-      height: 100%;
-      color: $main-fg-color;
-      font-size: 21px;
-      padding: 0 18px;
-      background: linear-gradient(180deg, transparent 50%, transparent 100%);
-      transition: 0.2s linear;
-
-      &:hover {
-        background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);
-      }
-
-      &.selected {
-        background: linear-gradient(180deg, transparent 60%, $highlight-color 100%);
-      }
-    }
-  }
-</style>

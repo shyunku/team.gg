@@ -8,9 +8,18 @@
   color: rgb(195, 190, 169);
   height: 200px;
 
+  .content {
+    display: flex;
+    align-items: center;
+    // min-width: 1200px;
+    width: 100%;
+    overflow-x: overlay;
+  }
+
   .stats {
     display: flex;
-
+    height: 100%;
+    margin-left: 15px;
     // flex-direction: column;
 
     .stat {
@@ -65,7 +74,7 @@
         // flex: 1;
 
         &:not(:last-child) {
-          // margin-bottom: 10px;
+          margin-bottom: 10px;
         }
 
         & > .header {
@@ -147,7 +156,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            width: 45px;
+            width: 35px;
             font-size: 11px;
             opacity: 0.8;
           }

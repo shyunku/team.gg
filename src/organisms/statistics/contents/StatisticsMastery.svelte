@@ -1,10 +1,10 @@
 <script>
   import moment from "moment";
-  import "./STatisticsMastery.scss";
-  import SafeImg from "../../atoms/SafeImg.svelte";
-  import { championIconUrl, getMasteryStatisticsReq, profileIconUrl } from "../../thunks/GeneralThunk";
-  import JsxUtil from "../../utils/JsxUtil";
-  import { formatStd, formatStdKr } from "../../utils/Util";
+  import SafeImg from "../../../atoms/SafeImg.svelte";
+  import { championIconUrl, getMasteryStatisticsReq, profileIconUrl } from "../../../thunks/GeneralThunk";
+  import JsxUtil from "../../../utils/JsxUtil";
+  import { formatStd, formatStdKr } from "../../../utils/Util";
+  import "./StatisticsMastery.scss";
 
   let rawData = null;
 

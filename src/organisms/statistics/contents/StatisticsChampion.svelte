@@ -1,8 +1,7 @@
 <script>
-  import SafeImg from "../../atoms/SafeImg.svelte";
-  import MainContentLayout from "../../layouts/MainContentLayout.svelte";
-  import SortVisualizer from "../../molecules/SortVisualizer.svelte";
-  import { championIconUrl, getChampionStatisticsReq } from "../../thunks/GeneralThunk";
+  import SafeImg from "../../../atoms/SafeImg.svelte";
+  import SortVisualizer from "../../../molecules/SortVisualizer.svelte";
+  import { championIconUrl, getChampionStatisticsReq } from "../../../thunks/GeneralThunk";
   import "./StatisticsChampion.scss";
   import moment from "moment";
   import "moment/locale/ko";

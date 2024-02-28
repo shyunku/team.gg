@@ -7,10 +7,12 @@
     display: flex;
     margin-top: 15px;
     align-items: flex-start;
+    overflow-x: overlay;
 
     .champion-list {
       display: flex;
       flex-direction: column;
+      min-width: 450px;
       width: 480px;
 
       .champions {
@@ -85,6 +87,7 @@
       flex-direction: column;
       flex: 1;
       margin-left: 15px;
+      min-width: 450px;
 
       .summoner {
         display: flex;

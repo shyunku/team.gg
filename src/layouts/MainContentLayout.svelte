@@ -22,7 +22,7 @@
     height: 100%;
   }
 
-  @media (max-width: 1300px) {
+  @media (max-width: 1240px) {
     .main-content-wrapper {
       width: 100% !important;
       padding: 0 20px;

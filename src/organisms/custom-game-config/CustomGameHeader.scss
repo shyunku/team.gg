@@ -7,6 +7,16 @@
   padding: 20px 0;
   color: rgb(195, 190, 169);
 
+  @media screen and (max-width: 570px) {
+    .header .title {
+      font-size: 25px !important;
+    }
+
+    .header .last-update-time {
+      font-size: 11px !important;
+    }
+  }
+
   .header {
     display: flex;
     flex-direction: column;

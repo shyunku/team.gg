@@ -1,0 +1,146 @@
+@import "../styles/variables.scss";
+
+@media screen and (max-width: 720px) {
+  .app-icon-wrapper {
+    display: none !important;
+  }
+
+  .app-menu {
+    margin-left: 0 !important;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .app-header {
+    height: 50px !important;
+  }
+
+  .app-menu-item,
+  .user-menu-item {
+    font-size: 16px !important;
+    padding: 0 12px !important;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .app-header {
+    height: 45px !important;
+  }
+
+  .app-menu-item,
+  .user-menu-item {
+    font-size: 16px !important;
+    padding: 0 12px !important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .app-header {
+    height: 40px !important;
+  }
+
+  .app-menu-item,
+  .user-menu-item {
+    font-size: 14px !important;
+    padding: 0 10px !important;
+  }
+}
+
+@media screen and (max-width: 440px) {
+  .app-header {
+    overflow-x: overlay;
+  }
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  // background-color: rgb(118, 25, 180);
+  color: white;
+  height: 60px;
+  // padding: 0 12px;
+  border-bottom: 1px solid $main-border-color;
+
+  .app-icon-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  .app-icon {
+    display: flex;
+    align-items: center;
+    width: 120px;
+    height: 32px;
+    cursor: pointer;
+  }
+
+  .menu-item {
+  }
+
+  .app-menu {
+    display: flex;
+    margin-left: 30px;
+    align-items: center;
+    height: 100%;
+    font-weight: bold;
+    flex: 1;
+
+    .app-menu-item {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: bold;
+      height: 100%;
+      color: $main-fg-color;
+      font-size: 21px;
+      padding: 0 18px;
+      background: linear-gradient(180deg, transparent 50%, transparent 100%);
+      transition: 0.2s linear;
+      white-space: nowrap;
+
+      &:hover {
+        background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);
+      }
+
+      &.selected {
+        background: linear-gradient(180deg, transparent 60%, $highlight-color 100%);
+      }
+
+      &:not(.selected):not(:hover) {
+        opacity: 0.6;
+      }
+
+      &:not(:last-child) {
+        // margin-right: 40px;
+      }
+    }
+  }
+
+  .user-menu {
+    display: flex;
+    margin-left: 30px;
+
+    .user-menu-item {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: bold;
+      height: 100%;
+      color: $main-fg-color;
+      font-size: 21px;
+      padding: 0 18px;
+      background: linear-gradient(180deg, transparent 50%, transparent 100%);
+      transition: 0.2s linear;
+      white-space: nowrap;
+
+      &:hover {
+        background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);
+      }
+
+      &.selected {
+        background: linear-gradient(180deg, transparent 60%, $highlight-color 100%);
+      }
+    }
+  }
+}
