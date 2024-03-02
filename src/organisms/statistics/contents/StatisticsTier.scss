@@ -203,6 +203,14 @@
           align-items: center;
           margin-left: 15px;
           flex: 1;
+          cursor: pointer;
+
+          &:hover {
+            .game-name,
+            .tag-line {
+              color: rgb(234, 210, 144);
+            }
+          }
 
           .tag-line {
             margin-left: 5px;

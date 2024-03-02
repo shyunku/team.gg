@@ -40,6 +40,10 @@
     }
   };
 
+  const goToPlayerPage = (gameName, tagLine) => {
+    window.location.href = `#/player/${gameName}/${tagLine}`;
+  };
+
   $: {
     if (selectedChampionId == null) {
       selectedChampionId = Object.values(refinedData)?.sort((a, b) => a.championName.localeCompare(b.championName))?.[0]
@@ -96,7 +100,7 @@
             <div class="profile-img img">
               <SafeImg src={profileIconUrl(r?.profileIconId)} />
             </div>
-            <div class="name-tag">
+            <div class="name-tag" on:click={(e) => goToPlayerPage(r.gameName, r.tagLine)}>
               <div class="game-name">{r.gameName}</div>
               <div class="tag-line">#{r.tagLine}</div>
             </div>

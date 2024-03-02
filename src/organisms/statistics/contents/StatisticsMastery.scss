@@ -1,3 +1,5 @@
+@import "../../../styles/variables.scss";
+
 .statistics-mastery {
   display: flex;
   flex-direction: column;
@@ -19,6 +21,8 @@
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: 800px;
+        overflow-y: overlay;
 
         .champion {
           display: flex;
@@ -41,6 +45,10 @@
             // font-weight: bold;
             color: rgb(211, 189, 156);
             border-left: none;
+            position: sticky;
+            top: 0;
+            background-color: $sub-bg-color;
+            z-index: 1;
           }
 
           &:not(.header) {
@@ -119,12 +127,25 @@
           display: flex;
           align-items: center;
           margin-left: 15px;
-          flex: 1;
           color: rgb(188, 181, 168);
+          cursor: pointer;
+
+          &:hover {
+            .game-name,
+            .tag-line {
+              color: rgb(234, 210, 144);
+            }
+          }
 
           .tag-line {
             margin-left: 5px;
           }
+        }
+
+        .league-points {
+          display: flex;
+          justify-content: flex-end;
+          flex: 1;
         }
       }
     }

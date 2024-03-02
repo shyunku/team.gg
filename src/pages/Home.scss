@@ -55,8 +55,9 @@
 .summoner-searcher {
   display: flex;
   width: 650px;
+  height: 50px;
   align-items: center;
-  background-color: rgb(112, 96, 60);
+  background-color: rgb(76, 64, 35);
   padding: 8px 12px;
   box-sizing: border-box;
   border-radius: 3px;
@@ -64,6 +65,11 @@
   .searcher-input {
     flex: 1;
     margin-left: 12px;
+  }
+
+  select,
+  button {
+    padding: 0 5px;
   }
 
   select,
@@ -83,6 +89,29 @@
   flex-direction: column;
   margin-top: 50px;
   width: 650px;
+
+  & > .body {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0 !important;
+  }
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    opacity: 0.5;
+    min-height: 80px;
+
+    .placeholder {
+      &:not(:last-child) {
+        margin-bottom: 5px;
+      }
+    }
+  }
 
   .favorite-summoners {
     display: flex;

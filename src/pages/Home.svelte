@@ -22,7 +22,7 @@
 
   const renewFavorites = () => {
     try {
-      favoriteSummoners = JSON.parse(localStorage.getItem("favorite_summoners") ?? "[]");
+      favoriteSummoners = JSON.parse(localStorage.getItem("favorite_summoners") ?? "[]")?.slice(0, 8) ?? [];
       console.log(favoriteSummoners);
     } catch (err) {
       console.error(err);
@@ -54,27 +54,35 @@
       <button id="search_btn" on:click={(e) => onPlayerSearch(summonerName, summonerTag)}>검색</button>
     </div>
     <div class="favorites card">
-      <div class="header">즐겨찾기 (최대 5개)</div>
-      <div class="favorite-summoners">
-        {#each favoriteSummoners as p}
-          <div class="summoner" on:mouseup={(e) => onPlayerSearch(p?.gameName, p?.tagLine)}>
-            <div class="summoner-icon img">
-              <SafeImg src={profileIconUrl(p?.profileIconId)} />
+      <div class="header">즐겨찾기 (최대 8개)</div>
+      <div class="body">
+        <div class="favorite-summoners">
+          {#each favoriteSummoners as p}
+            <div class="summoner" on:click={(e) => onPlayerSearch(p?.gameName, p?.tagLine)}>
+              <div class="summoner-icon img">
+                <SafeImg src={profileIconUrl(p?.profileIconId)} />
+              </div>
+              <div class="summoner-name">{p?.gameName ?? "-"}</div>
+              <div class="summoner-tag">#{p?.tagLine ?? "??"}</div>
+              <div
+                class="favorite-icon"
+                on:click={(e) => {
+                  e.stopPropagation();
+                  toggleSummonerFavorite(p?.puuid);
+                  renewFavorites();
+                }}
+              >
+                <IoIosStar />
+              </div>
             </div>
-            <div class="summoner-name">{p?.gameName ?? "-"}</div>
-            <div class="summoner-tag">#{p?.tagLine ?? "??"}</div>
-            <div
-              class="favorite-icon"
-              on:click={(e) => {
-                e.stopPropagation();
-                toggleSummonerFavorite(p?.puuid);
-                renewFavorites();
-              }}
-            >
-              <IoIosStar />
-            </div>
+          {/each}
+        </div>
+        {#if favoriteSummoners.length === 0}
+          <div class="empty">
+            <div class="placeholder">즐겨찾기에 추가된 소환사가 없습니다.</div>
+            <div class="placeholder">소환사 검색 후 즐겨찾기 등록을 해보세요.</div>
           </div>
-        {/each}
+        {/if}
       </div>
     </div>
   </div>
