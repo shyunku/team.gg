@@ -14,6 +14,7 @@ const routes = {
   "/custom-game": CustomGame,
   "/custom-game/:id": CustomGameConfig,
   "/player/:summonerName/:summonerTag/:menu?": Player,
+  "/player/:puuid": Player,
   "/statistics/:menu?": Statistics,
   "/community": NotImplemented,
   "/login": Login,

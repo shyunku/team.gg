@@ -22,6 +22,7 @@ const PersistStore = (name, defaultValue) => {
   });
   // set store.initialize
   store.initialize = () => {
+    console.log(`store ${name} initialized`);
     store.set(defaultValue);
   };
   return store;

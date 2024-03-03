@@ -3,22 +3,29 @@
   import MainContentLayout from "../../../layouts/MainContentLayout.svelte";
   import {
     championIconUrl,
+    getMatchesReq,
     itemIconUrl,
     perkStyleIconUrl,
     profileIconUrl,
     summonerSpellIconUrl,
   } from "../../../thunks/GeneralThunk";
-  import { MultiKill, QueueType, TeamLaneType, TeamPositionType } from "../../../types/General";
+  import { MultiKill, QueueType, QueueTypeKey, TeamLaneType, TeamPositionType } from "../../../types/General";
   import { formatDecimalBy3 } from "../../../utils/Common";
   import { toDuration, toRelativeTime } from "../../../utils/Datetime";
   import IoIosArrowDown from "svelte-icons/io/IoIosArrowDown.svelte";
   import JsxUtil from "../../../utils/JsxUtil";
   import "./PlayerContentTotal.scss";
   import { push } from "svelte-spa-router";
-  import { formatRankKr, formatTierKr } from "../../../utils/Util";
+  import { formatRankKr, formatTierKr, moveToPlayerPage } from "../../../utils/Util";
   import { toasts } from "svelte-toasts";
   import DoughnutChart from "../../../molecules/DoughnutChart.svelte";
   import LinePosition from "../../../molecules/LinePosition.svelte";
+
+  const MatchMenu = [
+    { key: "ALL", label: "전체" },
+    { key: "SOLO_RANK", label: "솔로랭크" },
+    { key: "FLEX_RANK", label: "자유랭크" },
+  ];
 
   export let sr = {};
   export let fr = {};
@@ -29,6 +36,8 @@
 
   export let loadMoreBefore = () => {};
   export let loadingMoreMatches = false;
+
+  let selectedQueueId = 0;
 
   let srTierRank = "언랭";
   let srWinRate = 0;
@@ -177,6 +186,7 @@
       duoList.push(duo);
     }
     duoList.sort((a, b) => b.gameCount - a.gameCount);
+    duoList = duoList.slice(0, 10);
   }
 
   $: if (sortedMatches?.length > 0) {
@@ -246,8 +256,29 @@
     toasts.add({ title: "기능 미구현", description: "이 기능은 아직 구현되지 않았어요... ㅠㅅㅠ", type: "warning" });
   };
 
-  const goToPlayerPage = (summonerName, tagLine) => {
-    push(`#/player/${summonerName}/${tagLine}`);
+  const getMatches = async (queueId) => {
+    let toast;
+    try {
+      toast = toasts.add({
+        title: "불러오는 중...",
+        description: "전적을 불러오는 중입니다...",
+        type: "info",
+        duration: 0,
+      });
+      const result = await getMatchesReq(puuid, queueId);
+      console.log("matches", result);
+
+      matches = result;
+    } catch (err) {
+      console.log(err);
+      toasts.add({
+        title: "전적 불러오기 실패",
+        description: "전적을 불러오는 중 오류가 발생했습니다.",
+        type: "error",
+      });
+    } finally {
+      toast?.remove();
+    }
   };
 </script>
 
@@ -301,7 +332,7 @@
         </div>
       </div>
       <div class="recent-players card">
-        <div class="header">최근 함께한 소환사</div>
+        <div class="header">최근 함께한 소환사 (상위 {duoList?.length ?? 0}명)</div>
         <div class="body">
           <div class="list-header row">
             <div class="player-name">소환사</div>
@@ -316,7 +347,7 @@
               <div class="player-icon img">
                 <SafeImg src={profileIconUrl(duo?.profileIcon)} />
               </div>
-              <div class="player-name" on:click={(e) => goToPlayerPage(duo?.gameName, duo?.gameTag ?? "KR1")}>
+              <div class="player-name" on:click={(e) => moveToPlayerPage(duo?.gameName, duo?.gameTag ?? "KR1")}>
                 <div class="game-name">{duo?.gameName}</div>
                 <div class="game-tag">#{duo?.gameTag ?? "KR1"}</div>
               </div>
@@ -334,9 +365,21 @@
       <div class="match-summary card">
         <div class="header">
           <div class="menu">
-            <div class="menu-item selected">전체</div>
-            <div class="menu-item not-ready">솔로랭크</div>
-            <div class="menu-item not-ready">자유랭크</div>
+            {#each MatchMenu as menu}
+              {@const queueId = QueueTypeKey[menu.key] ?? null}
+              <div
+                class={"menu-item" + JsxUtil.classByEqual(selectedQueueId, queueId, "selected")}
+                on:click={(e) => {
+                  const needUpdate = selectedQueueId !== queueId;
+                  selectedQueueId = queueId;
+                  if (needUpdate) {
+                    getMatches(queueId);
+                  }
+                }}
+              >
+                {menu.label}
+              </div>
+            {/each}
           </div>
         </div>
         <div class="body">
@@ -596,7 +639,7 @@
         <div
           class="more-matches card"
           on:mousedown={(e) => {
-            loadMoreBefore(oldestMatchStartTimestamp);
+            loadMoreBefore(selectedQueueId, oldestMatchStartTimestamp);
           }}
         >
           {loadingMoreMatches ? "불러오는 중..." : "10개 더보기"}

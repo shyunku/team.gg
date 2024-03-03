@@ -17,7 +17,6 @@
     championIconUrl,
     deleteCustomGameCandidateReq,
     findMostBalancedCustomGameReq,
-    getSummonerInfo,
     profileIconUrl,
     renewCustomGameTeamRankReq,
     setCustomGameCandidateCustomTierRankReq,

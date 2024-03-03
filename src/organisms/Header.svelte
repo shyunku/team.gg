@@ -17,6 +17,8 @@
   let isCommunityPage = false;
   let isAuthorized = false;
 
+  // console.log(authStore.);
+
   const goToHome = () => {
     window.location.href = "/";
   };
@@ -49,7 +51,6 @@
 
   const checkIsAuthorized = async () => {
     try {
-      authStore.initialize();
       const resp = await testTokenReq();
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -58,6 +59,7 @@
         switch (code) {
           case 401:
             toasts.add({ title: "인증 정보", description: "인증 정보가 만료되었습니다.", type: "warning" });
+            authStore.initialize();
             return;
         }
       }
@@ -66,12 +68,13 @@
     }
   };
 
-  authStore.subscribe((value) => {
-    isAuthorized = value?.authorized;
-
-    if (isAuthorized) {
-      checkIsAuthorized();
-    }
+  onMount(() => {
+    authStore.subscribe((value) => {
+      isAuthorized = value?.authorized;
+      if (isAuthorized) {
+        checkIsAuthorized();
+      }
+    });
   });
 
   $: {

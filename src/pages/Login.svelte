@@ -32,6 +32,7 @@
           userId,
           authorized: true,
         });
+        console.log(localStorage.getItem("auth"));
         window.location.href = "/";
       } catch (err) {
         if (err instanceof AxiosError) {

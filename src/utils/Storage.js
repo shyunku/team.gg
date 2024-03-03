@@ -42,3 +42,30 @@ export const toggleSummonerFavorite = (puuid, info = null) => {
     throw err;
   }
 };
+
+export const updateSummonerInfo = (puuid, info) => {
+  // load from local storage
+  try {
+    let summoners = JSON.parse(localStorage.getItem("favorite_summoners") ?? "[]");
+    let isExist = false;
+
+    if (puuid == null) {
+      return;
+    }
+
+    for (let i = 0; i < summoners.length; i++) {
+      if (summoners[i].puuid === puuid) {
+        summoners[i] = info;
+        isExist = true;
+        break;
+      }
+    }
+
+    if (!isExist) {
+      summoners.push(info);
+    }
+    localStorage.setItem("favorite_summoners", JSON.stringify(summoners));
+  } catch (err) {
+    throw err;
+  }
+};

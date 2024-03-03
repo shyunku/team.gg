@@ -69,10 +69,15 @@ export const testTokenReq = async () => {
   return response.data;
 };
 
-export const getSummonerInfo = async (gameName = null, tagLine = null) => {
+export const getSummonerInfoReq = async (gameName = null, tagLine = null) => {
   const encodedGameName = encodeURIComponent(gameName);
   const encodedTagLine = encodeURIComponent(tagLine);
   const response = await instance.get(`/summoner?gameName=${encodedGameName}&tagLine=${encodedTagLine}`);
+  return response.data;
+};
+
+export const getSummonerInfoByPuuidReq = async (puuid) => {
+  const response = await instance.get(`/summoner-by-puuid?puuid=${puuid}`);
   return response.data;
 };
 
@@ -81,16 +86,22 @@ export const quickSearchSummonerReq = async (keyword) => {
   return response.data;
 };
 
-export const renewSummonerInfo = async (puuid) => {
+export const renewSummonerInfoReq = async (puuid) => {
   const response = await instance.post(`/renewSummoner`, {
     puuid: puuid,
   });
   return response.data;
 };
 
-export const loadMoreMatches = async (puuid, before) => {
+export const getMatchesReq = async (puuid, queueId) => {
+  const response = await instance.get(`/matches?puuid=${puuid}&queueId=${queueId}`);
+  return response.data;
+};
+
+export const loadMoreMatches = async (puuid, queueId, before) => {
   const response = await instance.post(`/loadMatches`, {
     puuid: puuid,
+    queueId: queueId,
     before: before,
   });
   return response.data;

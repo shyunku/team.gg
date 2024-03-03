@@ -11,6 +11,7 @@
   import { toggleSummonerFavorite } from "../utils/Storage";
   import PlayerSearcher from "../organisms/player/PlayerSearcher.svelte";
   import NameTagSearchInput from "../molecules/NameTagSearchInput.svelte";
+  import { moveToPlayerPageByPuuid } from "../utils/Util";
 
   let summonerName = "";
   let summonerTag = null;
@@ -58,7 +59,7 @@
       <div class="body">
         <div class="favorite-summoners">
           {#each favoriteSummoners as p}
-            <div class="summoner" on:click={(e) => onPlayerSearch(p?.gameName, p?.tagLine)}>
+            <div class="summoner" on:click={(e) => moveToPlayerPageByPuuid(p?.puuid)}>
               <div class="summoner-icon img">
                 <SafeImg src={profileIconUrl(p?.profileIconId)} />
               </div>

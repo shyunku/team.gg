@@ -74,7 +74,6 @@
     if (brightness !== null) {
       style = { ...style, filter: `brightness(${brightness})` };
     }
-    console.log(style);
   }
 </script>
 

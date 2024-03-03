@@ -1,3 +1,11 @@
+export const moveToPlayerPage = (summonerName, summonerTag) => {
+  window.location.href = `#/player/${summonerName}/${summonerTag}`;
+};
+
+export const moveToPlayerPageByPuuid = (puuid) => {
+  window.location.href = `#/player/${puuid}`;
+};
+
 export const colorByRate = (rate) => {
   if (rate < 0.5) {
     return "rgb(255, 100, 100)";

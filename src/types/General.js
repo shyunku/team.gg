@@ -18,7 +18,32 @@ export const QueueType = {
   440: "자랭",
   450: "칼바람",
   490: "빠른 대전",
-  1900: "U.R.F.",
+  700: "격전",
+  720: "칼바람 격전",
+  900: "U.R.F.", // 올랜덤 URF
+  1010: "U.R.F.", // 겨울 테마 URF
+  1020: "단일모드",
+  1300: "돌격 넥서스",
+  1700: "아레나",
+  1900: "U.R.F.", // 픽 URF
+};
+
+export const QueueTypeKey = {
+  ALL: 0,
+  DRAFT: 400,
+  SOLO_RANK: 420,
+  NORMAL: 430,
+  FLEX_RANK: 440,
+  HOWLING_ABYSS: 450,
+  BLIND_PICK: 490,
+  CLASH: 700,
+  HOWLING_ABYSS_CLASH: 720,
+  ALL_RANDOM_URF: 900,
+  SNOW_URF: 1010,
+  ONE_FOR_ALL: 1020,
+  NEXUS_BLITZ: 1300,
+  ARENA: 1700,
+  PICK_URF: 1900,
 };
 
 export const TeamLaneType = {
