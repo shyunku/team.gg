@@ -10,9 +10,6 @@
     summonerSpellIconUrl,
   } from "../../../thunks/GeneralThunk";
   import { MultiKill, QueueType, QueueTypeKey, TeamLaneType, TeamPositionType } from "../../../types/General";
-  import { formatDecimalBy3 } from "../../../utils/Common";
-  import { toDuration, toRelativeTime } from "../../../utils/Datetime";
-  import IoIosArrowDown from "svelte-icons/io/IoIosArrowDown.svelte";
   import JsxUtil from "../../../utils/JsxUtil";
   import "./PlayerContentTotal.scss";
   import { push } from "svelte-spa-router";
@@ -20,6 +17,7 @@
   import { toasts } from "svelte-toasts";
   import DoughnutChart from "../../../molecules/DoughnutChart.svelte";
   import LinePosition from "../../../molecules/LinePosition.svelte";
+  import PlayerMatchItem from "./PlayerMatchItem.svelte";
 
   const MatchMenu = [
     { key: "ALL", label: "전체" },
@@ -68,10 +66,22 @@
     sortedMatches = (matches ?? []).sort((a, b) => b.gameCreation - a.gameCreation);
     matchWins = sortedMatches.filter((match) => match.myStat.win).length;
     matchLosses = sortedMatches.filter((match) => !match.myStat.win).length;
-    matchAvgKills = sortedMatches.reduce((acc, match) => acc + match.myStat.kills, 0) / sortedMatches.length;
-    matchAvgDeaths = sortedMatches.reduce((acc, match) => acc + match.myStat.deaths, 0) / sortedMatches.length;
-    matchAvgAssists = sortedMatches.reduce((acc, match) => acc + match.myStat.assists, 0) / sortedMatches.length;
-    matchKda = matchAvgDeaths === 0 ? "Perfect" : ((matchAvgKills + matchAvgAssists) / matchAvgDeaths).toFixed(3);
+    matchAvgKills =
+      sortedMatches.length === 0
+        ? null
+        : sortedMatches.reduce((acc, match) => acc + match.myStat.kills, 0) / sortedMatches.length;
+    matchAvgDeaths =
+      sortedMatches.length === 0
+        ? null
+        : sortedMatches.reduce((acc, match) => acc + match.myStat.deaths, 0) / sortedMatches.length;
+    matchAvgAssists =
+      sortedMatches.length === 0
+        ? null
+        : sortedMatches.reduce((acc, match) => acc + match.myStat.assists, 0) / sortedMatches.length;
+    matchKda =
+      matchAvgDeaths === 0
+        ? "Perfect"
+        : (((matchAvgKills ?? 0) + (matchAvgAssists ?? 0)) / (matchAvgDeaths ?? 1)).toFixed(3);
     matchKillAssistRate =
       sortedMatches.reduce((acc, match) => acc + getKillAssistRate(match), 0) / sortedMatches.length;
     matchAvgDealt =
@@ -193,11 +203,6 @@
     console.log(sortedMatches?.[0]);
   }
 
-  const onPlayerSearch = (name, tag) => {
-    if (name === "") return;
-    push(`/player/${name}/${tag ?? "KR1"}`);
-  };
-
   const getKillAssistRate = (match) => {
     const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid);
     let killSum = 0;
@@ -214,20 +219,6 @@
     return (match?.myStat?.kills + match?.myStat?.assists) / killSum;
   };
 
-  const getMultiKillCode = (match) => {
-    if (match?.myStat?.pentaKills > 0) {
-      return "penta";
-    } else if (match?.myStat?.quadraKills > 0) {
-      return "quadra";
-    } else if (match?.myStat?.tripleKills > 0) {
-      return "triple";
-    } else if (match?.myStat?.doubleKills > 0) {
-      return "double";
-    } else {
-      return null;
-    }
-  };
-
   const getDamageDealtPercentageInTeam = (match) => {
     const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid);
     let dealtSum = 0;
@@ -242,18 +233,6 @@
     }
     if (dealtSum === 0) return 1;
     return (match?.myStat?.totalDamageDealtToChampions ?? 0) / dealtSum;
-  };
-
-  const getDamageDealtRanking = (match) => {
-    const participants = (match?.team1 ?? []).concat(match?.team2 ?? []);
-    participants.sort((a, b) => (b?.totalDealtToChampions ?? 0) - (a?.totalDealtToChampions ?? 0));
-    const myIndex = participants.findIndex((participant) => participant?.puuid === match?.myStat?.puuid);
-    return myIndex + 1;
-  };
-
-  const expandMatchDetail = () => {
-    // TODO :: implement match detail expansion
-    toasts.add({ title: "기능 미구현", description: "이 기능은 아직 구현되지 않았어요... ㅠㅅㅠ", type: "warning" });
   };
 
   const getMatches = async (queueId) => {
@@ -385,22 +364,25 @@
         <div class="body">
           <!-- TODO :: implement summary of recent histories -->
           <div class="win-rate-section">
-            <DoughnutChart rates={[matchWins, matchLosses]} colors={["#3CCA70", "#FF5252"]}>
+            <DoughnutChart
+              rates={matchWins + matchLosses === 0 ? [1, 0] : [matchWins, matchLosses]}
+              colors={["#3CCA70", "#FF5252"]}
+            >
               <div class="label">
                 <div class="win-count">{matchWins}W {matchLosses}L</div>
                 <div class="win-rate">
-                  {((100 * matchWins) / (matchWins + matchLosses)).toFixed(0)}%
+                  {((100 * matchWins) / (matchWins + matchLosses || 1)).toFixed(0)}%
                 </div>
               </div>
             </DoughnutChart>
           </div>
           <div class="kda-section">
             <div class="kda">
-              <div class="kda-segment kill">{matchAvgKills.toFixed(1)}</div>
+              <div class="kda-segment kill">{(matchAvgKills ?? 0).toFixed(1)}</div>
               <div class="kda-split">/</div>
-              <div class="kda-segment death">{matchAvgDeaths.toFixed(1)}</div>
+              <div class="kda-segment death">{(matchAvgDeaths ?? 0).toFixed(1)}</div>
               <div class="kda-split">/</div>
-              <div class="kda-segment assist">{matchAvgAssists.toFixed(1)}</div>
+              <div class="kda-segment assist">{(matchAvgAssists ?? 0).toFixed(1)}</div>
             </div>
             <div class="kda-rate">평점 {matchKda}</div>
             <div class="kill-assist-dealt-rate">
@@ -453,188 +435,7 @@
       </div>
       <div class="match-history">
         {#each sortedMatches as match}
-          {@const kills = match?.myStat?.kills}
-          {@const deaths = match?.myStat?.deaths}
-          {@const assists = match?.myStat?.assists}
-          {@const kda = deaths === 0 ? "Perfect" : `${((kills + assists) / deaths).toFixed(2)}`}
-          {@const multiKillCode = getMultiKillCode(match)}
-          {@const multiKillLabel = MultiKill[multiKillCode]}
-          {@const csPerMinute = (match?.myStat?.totalMinionsKilled ?? 0) / (match?.gameDuration / 60)}
-          {@const teamPosition =
-            match?.myStat?.teamPosition && match?.myStat?.teamPosition !== "" ? match?.myStat?.teamPosition : null}
-          {@const dealtPercentageInTeam = getDamageDealtPercentageInTeam(match)}
-          {@const dealtRanking = getDamageDealtRanking(match)}
-          {@const earlySurrender = match?.myStat?.gameEndedInEarlySurrender ?? false}
-          {@const isTeam1 = match?.team1?.some((teammate) => teammate?.puuid === match?.myStat?.puuid)}
-          <div class={"match " + (earlySurrender ? "early-surrender" : match?.myStat?.win ? "win" : "lose")}>
-            <div class="color-flag"></div>
-            <div class="header">
-              <div class="match-type">
-                {QueueType[match?.queueId] ?? "게임 모드"}
-              </div>
-              <div class="match-win">
-                {earlySurrender ? "다시하기" : match?.myStat?.win ? "승리" : "패배"}
-              </div>
-              <div class="match-date">
-                {toRelativeTime(match?.gameEndTimestamp)}
-              </div>
-              <div class="match-duration">
-                {toDuration(match?.gameDuration * 1000)}
-              </div>
-            </div>
-            <div class="body">
-              <div class="champion-item-section">
-                <div class="champion-section">
-                  <div class="champion-icon img">
-                    <SafeImg src={championIconUrl(match?.myStat?.championId)} />
-                  </div>
-                  <div class="spell-section">
-                    <div class="spell-icon img">
-                      <SafeImg src={summonerSpellIconUrl(match?.myStat?.summoner1Id)} />
-                    </div>
-                    <div class="spell-icon sub img">
-                      <SafeImg src={summonerSpellIconUrl(match?.myStat?.summoner2Id)} />
-                    </div>
-                  </div>
-                  <div class="rune-section">
-                    <div class="rune-icon img">
-                      <SafeImg src={perkStyleIconUrl(match?.myStat?.primaryPerkStyle)} />
-                    </div>
-                    <div class="rune-icon sub img">
-                      <SafeImg src={perkStyleIconUrl(match?.myStat?.subPerkStyle)} />
-                    </div>
-                  </div>
-                  <div class="kda-section">
-                    <div class="kda">
-                      <div class="kda-segment kill">{match?.myStat?.kills}</div>
-                      <div class="kda-split">/</div>
-                      <div class="kda-segment death">
-                        {match?.myStat?.deaths}
-                      </div>
-                      <div class="kda-split">/</div>
-                      <div class="kda-segment assist">
-                        {match?.myStat?.assists}
-                      </div>
-                    </div>
-                    <div class="kda-rate">평점 {kda}</div>
-                  </div>
-                </div>
-                <div class="item-section">
-                  {#each Array(7) as item, i}
-                    {@const itemId = match?.myStat?.[`item${i}`]}
-                    <div class="item img">
-                      <SafeImg src={itemId ? itemIconUrl(match?.myStat?.[`item${i}`]) : null} />
-                    </div>
-                  {/each}
-                </div>
-              </div>
-              <div class="ingame-stat-section">
-                <div class="ingame-stat-detail">
-                  <div class="subsection">
-                    <div class="kill-assists-rate">
-                      킬 관여 {(getKillAssistRate(match) * 100).toFixed(0)}%
-                    </div>
-                    <div class="minion-kills">
-                      CS {match?.myStat?.totalMinionsKilled ?? 0} ({csPerMinute.toFixed(1)})
-                    </div>
-                    <div class="gold">
-                      {formatDecimalBy3(match?.myStat?.goldEarned)} 골드
-                    </div>
-                  </div>
-                  <div class="split"></div>
-                  <div class="subsection">
-                    <div class="dealt-rate">
-                      딜량 {(dealtPercentageInTeam * 100).toFixed(0)}%
-                    </div>
-                    <div class="cc-time">
-                      CC {toDuration((match?.myStat?.totalCCDealt ?? 0) * 1000)}
-                    </div>
-                    <!-- <div class="vision">시야점수 25</div> -->
-                    <div class="lane">
-                      {#if TeamLaneType?.[teamPosition] != null}
-                        <LinePosition position={teamPosition} opacity={1} />
-                        <div class="position">
-                          {TeamLaneType[teamPosition]}
-                        </div>
-                      {/if}
-                    </div>
-                    <!-- <div class="wards">와드 3</div> -->
-                  </div>
-                </div>
-                <div class="representative-decorations">
-                  {#if multiKillLabel != null}
-                    <div class={"deco" + JsxUtil.class(multiKillCode)}>
-                      {multiKillLabel}
-                    </div>
-                  {/if}
-                  <div class="deco">딜량 {dealtRanking}등</div>
-                </div>
-              </div>
-              <div class="ingame-summoners-section">
-                <div class={"team team-1" + JsxUtil.classByCondition(isTeam1, "my-team")}>
-                  {#each match?.team1 ?? [] as teammate}
-                    {@const name =
-                      teammate?.riotIdName != null && teammate?.riotIdName.length > 0
-                        ? teammate?.riotIdName
-                        : teammate?.summonerName ?? "-"}
-                    <div class={"teammate" + JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}>
-                      <div class="teammate-icon img">
-                        <SafeImg src={championIconUrl(teammate?.championId)} />
-                      </div>
-                      <div
-                        class="teammate-nametag"
-                        on:mousedown={(e) => {
-                          onPlayerSearch(teammate?.riotIdName, teammate?.riotIdTagLine);
-                        }}
-                      >
-                        <div class="teammate-name">
-                          {name}
-                        </div>
-                        {#if teammate?.riotIdTagLine}
-                          <div class="teammate-tag">
-                            #{teammate?.riotIdTagLine}
-                          </div>
-                        {/if}
-                      </div>
-                    </div>
-                  {/each}
-                </div>
-                <div class={"team team-2" + JsxUtil.classByCondition(!isTeam1, "my-team")}>
-                  {#each match?.team2 ?? [] as teammate}
-                    {@const name =
-                      teammate?.riotIdName != null && teammate?.riotIdName.length > 0
-                        ? teammate?.riotIdName
-                        : teammate?.summonerName ?? "-"}
-                    <div class={"teammate" + JsxUtil.classByEqual(teammate?.puuid, puuid, "me")}>
-                      <div class="teammate-icon img">
-                        <SafeImg src={championIconUrl(teammate?.championId)} />
-                      </div>
-                      <div
-                        class="teammate-nametag"
-                        on:mousedown={(e) => {
-                          onPlayerSearch(teammate?.riotIdName, teammate?.riotIdTagLine);
-                        }}
-                      >
-                        <div class="teammate-name">
-                          {name}
-                        </div>
-                        {#if teammate?.riotIdTagLine}
-                          <div class="teammate-tag">
-                            #{teammate?.riotIdTagLine}
-                          </div>
-                        {/if}
-                      </div>
-                    </div>
-                  {/each}
-                </div>
-              </div>
-            </div>
-            <div class="expand-btn" on:click={expandMatchDetail}>
-              <div class="expand-icon">
-                <IoIosArrowDown />
-              </div>
-            </div>
-          </div>
+          <PlayerMatchItem {match} {puuid} {getDamageDealtPercentageInTeam} {getKillAssistRate} />
         {/each}
         <div
           class="more-matches card"

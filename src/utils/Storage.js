@@ -61,9 +61,6 @@ export const updateSummonerInfo = (puuid, info) => {
       }
     }
 
-    if (!isExist) {
-      summoners.push(info);
-    }
     localStorage.setItem("favorite_summoners", JSON.stringify(summoners));
   } catch (err) {
     throw err;

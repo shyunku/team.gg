@@ -25,10 +25,10 @@
 
   let mouseOnResults = false;
 
-  export let onEnter = () => {};
+  export let onEnter = null;
 
   let onEnterHandler = (...args) => {
-    onEnter(...args);
+    onEnter?.(...args);
     focused = false;
     inputValue = "";
     content = "";
@@ -44,6 +44,8 @@
     } else if (content.includes("#")) {
       tagPadding = "";
     }
+
+    focused = true;
 
     summonerName = (content.split("#")?.[0] ?? "").trim();
     summonerTag = content.split("#")?.[1]?.trim() ?? null;
@@ -72,12 +74,12 @@
     if (e.key === "Enter") {
       if (resultIndex !== -1) {
         const selected = results[resultIndex];
-        onEnterHandler(selected?.gameName, selected?.tagLine);
+        goToPlayerPage(selected?.gameName, selected?.tagLine);
       } else {
+        console.log(3);
         onEnterHandler(summonerName, summonerTag ?? defaultTag);
       }
-    }
-    if (e.key === "ArrowDown") {
+    } else if (e.key === "ArrowDown") {
       resultIndex = Math.min(resultIndex + 1, results.length - 1);
     } else if (e.key === "ArrowUp") {
       resultIndex = Math.max(resultIndex - 1, -1);

@@ -50,7 +50,7 @@
         </select>
       </div>
       <div class="searcher-input">
-        <NameTagSearchInput bind:summonerName bind:summonerTag onEnter={onPlayerSearch} />
+        <NameTagSearchInput bind:summonerName bind:summonerTag />
       </div>
       <button id="search_btn" on:click={(e) => onPlayerSearch(summonerName, summonerTag)}>검색</button>
     </div>

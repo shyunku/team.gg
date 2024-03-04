@@ -54,13 +54,18 @@
       const resp = await testTokenReq();
     } catch (err) {
       if (err instanceof AxiosError) {
-        const code = err?.response?.status;
+        if (err?.response != null) {
+          const code = err?.response?.status;
 
-        switch (code) {
-          case 401:
-            toasts.add({ title: "인증 정보", description: "인증 정보가 만료되었습니다.", type: "warning" });
-            authStore.initialize();
-            return;
+          switch (code) {
+            case 401:
+              toasts.add({ title: "인증 정보", description: "인증 정보가 만료되었습니다.", type: "warning" });
+              authStore.initialize();
+              return;
+          }
+        } else {
+          toasts.add({ title: "인증 오류", description: "서버가 점검 중입니다.", type: "error" });
+          return;
         }
       }
 
