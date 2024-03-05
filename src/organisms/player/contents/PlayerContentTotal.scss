@@ -323,14 +323,26 @@
           }
         }
 
-        .kda-rate {
+        .performance {
+          display: flex;
+          align-items: center;
           margin-top: 12px;
-          font-size: 13px;
-          // font-weight: bold;
-          background-color: rgba(189, 147, 79, 0.5);
-          color: rgb(219, 207, 186);
-          padding: 5px 7px;
-          border-radius: 3px;
+
+          & > * {
+            font-size: 13px;
+            // font-weight: bold;
+            padding: 5px 7px;
+            border-radius: 3px;
+          }
+
+          .kda-rate {
+            color: rgb(219, 207, 186);
+            background-color: rgba(189, 147, 79, 0.5);
+          }
+
+          .gg-grade {
+            margin-left: 5px;
+          }
         }
 
         .kill-assist-dealt-rate {

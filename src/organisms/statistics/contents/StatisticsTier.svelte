@@ -150,7 +150,7 @@
         {#each rankers ?? [] as r}
           {@const [tier, rank] = selectedGroup.split("-")}
           <div class="summoner">
-            <div class="summoner-rank">{r.ranks + 1}위</div>
+            <div class="summoner-rank">{r.ranks}위</div>
             <div class="profile-img img">
               <SafeImg src={profileIconUrl(r?.profileIconId)} />
             </div>

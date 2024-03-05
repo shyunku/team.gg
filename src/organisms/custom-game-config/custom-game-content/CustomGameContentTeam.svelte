@@ -209,6 +209,7 @@
             </div>
           {:else}
             <div class="empty-placeholder">배정된 소환사가 없습니다.</div>
+            <div class={"representative-tier-rank null"}></div>
           {/if}
         </ContextDiv>
       {/each}

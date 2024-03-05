@@ -162,7 +162,7 @@
     <div class="description">최근에 Riot ID나 태그를 변경했을 수 있습니다. 다시 확인해주세요.</div>
   </div>
 {:else}
-  <PlayerHeader summary={summonerInfo?.summary} {onTryRenew} {renewing} {loading} />
+  <PlayerHeader summary={summonerInfo?.summary} extra={summonerInfo?.extra} {onTryRenew} {renewing} {loading} />
   <PlayerStatMenu bind:menu {summonerName} {summonerTag} />
   {#if menu === PlayerInfoMenu.total}
     {#if summonerInfo?.summary?.puuid != null}

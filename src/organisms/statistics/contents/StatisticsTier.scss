@@ -179,7 +179,7 @@
         padding: 8px 12px;
         box-sizing: border-box;
         font-size: 13px;
-        color: rgb(195, 189, 178);
+        color: rgb(165, 156, 140);
 
         &:not(:last-child) {
           border-bottom: 1px solid #ffffff21;
@@ -189,6 +189,7 @@
           width: 35px;
           text-align: center;
           font-weight: bold;
+          color: rgb(122, 116, 107);
         }
 
         .profile-img {

@@ -7,7 +7,7 @@
   import IoIosArrowDown from "svelte-icons/io/IoIosArrowDown.svelte";
   import IoIosArrowUp from "svelte-icons/io/IoIosArrowUp.svelte";
   import JsxUtil from "../../../utils/JsxUtil";
-  import { calculateGGscore, getGGscoreGrade, moveToPlayerPage } from "../../../utils/Util";
+  import { getGGscoreGrade, moveToPlayerPage } from "../../../utils/Util";
   import LinePosition from "../../../molecules/LinePosition.svelte";
   import { toasts } from "svelte-toasts";
   import "./PlayerMatchItem.scss";
@@ -41,7 +41,6 @@
   let earlySurrender = false;
   let isTeam1 = false;
   let matchResult = MatchResultType.UNKNOWN;
-  let myGGscore = 0;
   $: if (match) {
     kills = match?.myStat?.kills;
     deaths = match?.myStat?.deaths;
@@ -61,11 +60,6 @@
       : match?.myStat?.win
         ? MatchResultType.WIN
         : MatchResultType.LOSE;
-    let teammates = [...match?.team1, ...match?.team2];
-    let myStatDetail = teammates.find((teammate) => teammate?.puuid === puuid);
-    if (myStatDetail) {
-      myGGscore = calculateGGscore(myStatDetail, match?.gameDuration);
-    }
   }
 
   let expanded = false;
@@ -86,7 +80,7 @@
 
   const getDamageDealtRanking = (match) => {
     const participants = (match?.team1 ?? []).concat(match?.team2 ?? []);
-    participants.sort((a, b) => (b?.totalDealtToChampions ?? 0) - (a?.totalDealtToChampions ?? 0));
+    participants.sort((a, b) => (b?.totalDamageDealtToChampions ?? 0) - (a?.totalDamageDealtToChampions ?? 0));
     const myIndex = participants.findIndex((participant) => participant?.puuid === match?.myStat?.puuid);
     return myIndex + 1;
   };
@@ -183,7 +177,7 @@
               딜량 {(dealtPercentageInTeam * 100).toFixed(0)}%
             </div>
             <div class="cc-time">
-              CC {toDuration((match?.myStat?.totalCCDealt ?? 0) * 1000)}
+              CC {toDuration((match?.myStat?.totalTimeCCDealt ?? 0) * 1000)}
             </div>
             <!-- <div class="vision">시야점수 25</div> -->
             <div class="lane">
@@ -198,8 +192,8 @@
           </div>
         </div>
         <div class="representative-decorations">
-          <div class={"deco gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(myGGscore)}`)}>
-            {myGGscore.toFixed(0)}
+          <div class={"deco gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(match?.myStat?.ggScore ?? 0)}`)}>
+            {match?.myStat?.ggScore?.toFixed(0) ?? 0}
           </div>
           <div class="deco">딜량 {dealtRanking}등</div>
           {#if multiKillLabel != null}

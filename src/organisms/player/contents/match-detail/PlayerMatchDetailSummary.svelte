@@ -1,6 +1,5 @@
 <script>
   import SafeImg from "../../../../atoms/SafeImg.svelte";
-  import { calculateGGscore } from "../../../../utils/Util";
   import "./PlayerMatchDetailSummary.scss";
   import PlayerMatchDetailSummaryTeammate from "./summary/PlayerMatchDetailSummaryTeammate.svelte";
 
@@ -9,18 +8,27 @@
 
   let team1 = [];
   let team2 = [];
-  let totalGGscores;
   let team1MaxDealt = 0;
   let team1MaxHealToTeammates = 0;
   let team2MaxDealt = 0;
   let team2MaxHealToTeammates = 0;
   $: {
-    team1 = (match.team1 ?? []).map((e) => ({ ...e, ggScore: calculateGGscore(e, match.gameDuration) }));
-    team2 = (match.team2 ?? []).map((e) => ({ ...e, ggScore: calculateGGscore(e, match.gameDuration) }));
-    totalGGscores = [...team1, ...team2].map((e) => e.ggScore);
+    team1 = match.team1 ?? [];
+    team2 = match.team2 ?? [];
+    let team1GGScores = team1.map((e) => e.ggScore);
+    let team2GGScores = team2.map((e) => e.ggScore);
+    let totalGGscores = [...team1GGScores, ...team2GGScores];
 
-    team1 = team1.map((e) => ({ ...e, ggRank: totalGGscores.filter((score) => score > e.ggScore).length + 1 }));
-    team2 = team2.map((e) => ({ ...e, ggRank: totalGGscores.filter((score) => score > e.ggScore).length + 1 }));
+    team1 = team1.map((e) => ({
+      ...e,
+      ggRank: totalGGscores.filter((score) => score > e.ggScore).length + 1,
+      teamGGRank: team1GGScores.filter((score) => score > e.ggScore).length + 1,
+    }));
+    team2 = team2.map((e) => ({
+      ...e,
+      ggRank: totalGGscores.filter((score) => score > e.ggScore).length + 1,
+      teamGGRank: team2GGScores.filter((score) => score > e.ggScore).length + 1,
+    }));
 
     team1MaxDealt = team1.reduce((acc, cur) => Math.max(acc, cur.totalDamageDealtToChampions ?? 0), 0);
     team1MaxHealToTeammates = team1.reduce((acc, cur) => acc + (cur.totalHeal ?? 0), 0);

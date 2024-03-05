@@ -13,7 +13,7 @@
   import JsxUtil from "../../../utils/JsxUtil";
   import "./PlayerContentTotal.scss";
   import { push } from "svelte-spa-router";
-  import { formatRankKr, formatTierKr, moveToPlayerPage } from "../../../utils/Util";
+  import { formatRankKr, formatTierKr, getGGscoreGrade, moveToPlayerPage } from "../../../utils/Util";
   import { toasts } from "svelte-toasts";
   import DoughnutChart from "../../../molecules/DoughnutChart.svelte";
   import LinePosition from "../../../molecules/LinePosition.svelte";
@@ -60,6 +60,7 @@
   let matchKda = 0;
   let matchKillAssistRate = 0;
   let matchAvgDealt = 0;
+  let matchAvgGGScore = 0;
   let recentChampions = [];
   let positionMap = {};
   $: {
@@ -86,6 +87,7 @@
       sortedMatches.reduce((acc, match) => acc + getKillAssistRate(match), 0) / sortedMatches.length;
     matchAvgDealt =
       sortedMatches.reduce((acc, match) => acc + getDamageDealtPercentageInTeam(match), 0) / sortedMatches.length;
+    matchAvgGGScore = sortedMatches.reduce((acc, match) => acc + match.myStat.ggScore, 0) / sortedMatches.length;
 
     let recentChampionMap = {};
     sortedMatches.forEach((match) => {
@@ -224,11 +226,11 @@
     let dealtSum = 0;
     if (isTeam1) {
       match?.team1?.forEach((teammate) => {
-        dealtSum += teammate?.totalDealtToChampions ?? 0;
+        dealtSum += teammate?.totalDamageDealtToChampions ?? 0;
       });
     } else {
       match?.team2?.forEach((teammate) => {
-        dealtSum += teammate?.totalDealtToChampions ?? 0;
+        dealtSum += teammate?.totalDamageDealtToChampions ?? 0;
       });
     }
     if (dealtSum === 0) return 1;
@@ -384,7 +386,12 @@
               <div class="kda-split">/</div>
               <div class="kda-segment assist">{(matchAvgAssists ?? 0).toFixed(1)}</div>
             </div>
-            <div class="kda-rate">평점 {matchKda}</div>
+            <div class="performance">
+              <div class="kda-rate">평점 {matchKda}</div>
+              <div class={"gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(matchAvgGGScore)}`)}>
+                Score {matchAvgGGScore?.toFixed(0) ?? 0}
+              </div>
+            </div>
             <div class="kill-assist-dealt-rate">
               <div class="kill-assist">평균 킬 관여 {(100 * matchKillAssistRate).toFixed(0)}%</div>
               <div class="split">/</div>
@@ -434,7 +441,7 @@
         </div>
       </div>
       <div class="match-history">
-        {#each sortedMatches as match}
+        {#each sortedMatches as match (match?.matchId)}
           <PlayerMatchItem {match} {puuid} {getDamageDealtPercentageInTeam} {getKillAssistRate} />
         {/each}
         <div

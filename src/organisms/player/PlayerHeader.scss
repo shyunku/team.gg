@@ -63,70 +63,158 @@
 
     .player-profile-info {
       display: flex;
-      flex-direction: column;
+      // flex-direction: column;
       justify-content: flex-start;
-      padding: 5px 0;
+      // padding: 5px 0;
       margin-left: 20px;
       flex: 1;
 
-      .player-name {
+      .profile-header {
         display: flex;
-        font-size: 28px;
-        font-weight: bold;
-        align-items: flex-end;
+        flex-direction: column;
+        width: 300px;
 
-        .tag {
-          margin-left: 6px;
-          color: rgba(255, 255, 255, 0.25);
-          // font-weight: normal;
-          font-size: 22px;
-          margin-top: -5px;
+        .player-name {
+          display: flex;
+          font-size: 28px;
+          font-weight: bold;
+          align-items: flex-end;
+
+          .tag {
+            margin-left: 6px;
+            color: rgba(255, 255, 255, 0.25);
+            // font-weight: normal;
+            font-size: 22px;
+            margin-top: -5px;
+          }
+
+          .favorite-icon {
+            display: flex;
+            align-items: center;
+            height: 15px;
+            min-height: 15px;
+            min-width: 15px;
+            border-radius: 3px;
+            align-self: center;
+            margin-left: 10px;
+            padding: 5px 5px;
+            background-color: rgba(255, 255, 255, 0.083);
+            cursor: pointer;
+
+            // &:hover {
+            //   background-color: rgb(91, 81, 63);
+            // }
+
+            &.enabled {
+              background-color: rgb(91, 81, 63);
+              color: rgb(255, 199, 31);
+            }
+          }
         }
 
-        .favorite-icon {
-          display: flex;
-          align-items: center;
-          height: 15px;
-          min-height: 15px;
-          min-width: 15px;
-          border-radius: 3px;
-          align-self: center;
-          margin-left: 10px;
-          padding: 5px 5px;
-          background-color: rgba(255, 255, 255, 0.083);
+        .last-renewed-time {
+          font-size: 12px;
+          color: rgb(137, 129, 110);
+          margin-top: 8px;
+          flex: 1;
+        }
+
+        #renew_btn {
+          font-size: 14px;
+          margin-top: 10px;
+          padding: 10px 0;
+          background-color: rgb(162, 128, 49);
+          color: rgb(255, 255, 255);
+          border: none;
+          width: 140px;
           cursor: pointer;
 
-          // &:hover {
-          //   background-color: rgb(91, 81, 63);
-          // }
-
-          &.enabled {
-            background-color: rgb(91, 81, 63);
-            color: rgb(255, 199, 31);
+          &:disabled {
+            background-color: rgb(59, 51, 32);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
           }
         }
       }
 
-      .last-renewed-time {
-        font-size: 12px;
-        color: rgb(215, 201, 165);
-        margin-top: 8px;
-      }
+      .player-detail {
+        display: flex;
+        flex-direction: column;
+        margin-left: 15px;
+        padding-left: 15px;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        flex: 1;
 
-      #renew_btn {
-        font-size: 14px;
-        margin-top: 10px;
-        padding: 10px 0;
-        background-color: rgb(162, 128, 49);
-        color: rgb(255, 255, 255);
-        border: none;
-        width: 140px;
-        cursor: pointer;
+        .last-tiers {
+          display: flex;
+          align-items: center;
 
-        &:disabled {
-          background-color: rgb(59, 51, 32);
-          color: rgba(255, 255, 255, 0.5);
-          cursor: not-allowed;
+          .prev-tier {
+            display: flex;
+            align-items: center;
+            background-color: rgb(75, 65, 54);
+            font-size: 12px;
+            padding: 4px 6px;
+            border-radius: 3px;
+
+            &:not(:last-child) {
+              margin-right: 5px;
+            }
+
+            .label {
+              color: rgb(233, 208, 159);
+              font-weight: bold;
+            }
+
+            .tier {
+              margin-left: 5px;
+              color: rgb(158, 138, 107);
+            }
+          }
+        }
+
+        .ranking,
+        .performance {
+          display: flex;
+          align-items: center;
+          margin-top: 10px;
+          font-size: 12px;
+
+          .header {
+            display: flex;
+            align-items: center;
+            width: 200px;
+
+            .label {
+              color: rgb(126, 121, 112);
+            }
+
+            .value {
+              color: rgb(223, 166, 69);
+              margin-left: 5px;
+            }
+          }
+
+          .bar {
+            display: flex;
+            height: 100%;
+            background-color: rgb(49, 49, 49);
+            margin-left: 10px;
+            border-radius: 2px;
+            overflow: hidden;
+            width: 140px;
+
+            .filler {
+              height: 100%;
+              background-color: rgb(158, 121, 57);
+              // background: linear-gradient(to right, rgb(129, 96, 40), rgb(200, 160, 92));
+              border-radius: 2px;
+            }
+          }
+        }
+
+        .performance .filler {
+          filter: brightness(1.2);
         }
       }
     }

@@ -59,6 +59,19 @@
   <div class={"gg-score"}>
     <div class={"gg-score-box gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(teammate?.ggScore ?? 0)}`)}>
       <div class="score">{teammate?.ggScore?.toFixed(0) ?? 0}</div>
+      <div
+        class={"ranking" + JsxUtil.classByEqual(teammate?.teamGGRank ?? 0, 1, teammate?.win == true ? "mvp" : "ace")}
+      >
+        {#if (teammate?.teamGGRank ?? 0) == 1}
+          {#if teammate?.win == true}
+            MVP
+          {:else}
+            ACE
+          {/if}
+        {:else}
+          {teammate?.ggRank ?? 0}등
+        {/if}
+      </div>
     </div>
     <!-- <div class="rank">({teammate?.ggRank ?? "-"}위)</div> -->
   </div>

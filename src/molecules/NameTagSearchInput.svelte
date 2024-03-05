@@ -55,28 +55,33 @@
 
   const quickSearchSummoner = async () => {
     let keyword = summonerName + (summonerTag != null && summonerTag.length > 0 ? "#" + summonerTag : "");
+    let originalResultsJson = JSON.stringify(results);
+    let newResultsJson = null;
     try {
       if (keyword.length === 0) {
         results = [];
       } else {
         const resp = await quickSearchSummonerReq(keyword);
         results = resp;
+        newResultsJson = JSON.stringify(results);
       }
     } catch (err) {
       console.error(err);
       results = [];
     } finally {
-      resultIndex = -1;
+      if (originalResultsJson !== newResultsJson) {
+        resultIndex = -1;
+      }
     }
   };
 
   const onInputKeyDown = (e) => {
+    // console.log(e.target.value, e);
     if (e.key === "Enter") {
       if (resultIndex !== -1) {
         const selected = results[resultIndex];
         goToPlayerPage(selected?.gameName, selected?.tagLine);
       } else {
-        console.log(3);
         onEnterHandler(summonerName, summonerTag ?? defaultTag);
       }
     } else if (e.key === "ArrowDown") {

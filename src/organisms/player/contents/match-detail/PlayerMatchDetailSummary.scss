@@ -148,20 +148,35 @@
           width: 35px;
           padding: 5px 0;
           border-radius: 3px;
-          color: rgb(197, 197, 197);
+          color: rgb(215, 215, 215);
+          position: relative;
 
           .score {
             // color: rgb(255, 220, 154);
             font-size: 13px;
             font-weight: bold;
           }
-        }
 
-        .rank {
-          width: 35px;
-          text-align: center;
-          margin-left: 3px;
-          // color: rgba(255, 255, 255, 0.35);
+          .ranking {
+            font-size: 9px;
+            color: rgb(179, 179, 179);
+            background-color: rgb(53, 53, 53);
+            padding: 2px 3px;
+            position: absolute;
+            bottom: calc(100% - 10px);
+            left: calc(100% - 7px);
+            border-radius: 2px;
+
+            &.mvp {
+              background-color: rgb(164, 129, 42);
+              color: white;
+            }
+
+            &.ace {
+              background-color: rgb(94, 64, 171);
+              color: white;
+            }
+          }
         }
       }
 

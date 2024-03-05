@@ -502,7 +502,7 @@ $color-flag-width: 6px;
           .teammate-nametag {
             display: flex;
             margin-left: 6px;
-            font-size: 13px;
+            font-size: 12px;
             flex: 1;
             width: 85px;
             overflow: hidden;
@@ -511,6 +511,9 @@ $color-flag-width: 6px;
             margin-bottom: -3px;
             cursor: pointer;
             align-items: center;
+            padding-bottom: 2px;
+            height: 100%;
+            box-sizing: border-box;
 
             &:hover {
               color: $main-fg-color;
@@ -522,7 +525,7 @@ $color-flag-width: 6px;
 
             .teammate-tag {
               margin-left: 5px;
-              font-size: 11px;
+              // font-size: 11px;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;

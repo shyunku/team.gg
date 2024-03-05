@@ -141,6 +141,7 @@
           font-weight: bold;
           overflow: hidden;
           white-space: nowrap;
+          padding: 2px 0;
 
           .game-name {
             white-space: nowrap;
@@ -154,7 +155,7 @@
 
         .prev-name {
           font-size: 12px;
-          margin-top: 5px;
+          margin-top: 3px;
           color: rgb(151, 144, 128);
         }
       }
