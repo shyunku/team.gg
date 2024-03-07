@@ -12,12 +12,13 @@
   import { MultiKill, QueueType, QueueTypeKey, TeamLaneType, TeamPositionType } from "../../../types/General";
   import JsxUtil from "../../../utils/JsxUtil";
   import "./PlayerContentTotal.scss";
-  import { push } from "svelte-spa-router";
+  import Router, { push } from "svelte-spa-router";
   import { formatRankKr, formatTierKr, getGGscoreGrade, moveToPlayerPage } from "../../../utils/Util";
   import { toasts } from "svelte-toasts";
   import DoughnutChart from "../../../molecules/DoughnutChart.svelte";
   import LinePosition from "../../../molecules/LinePosition.svelte";
   import PlayerMatchItem from "./PlayerMatchItem.svelte";
+  import { onMount } from "svelte";
 
   const MatchMenu = [
     { key: "ALL", label: "전체" },

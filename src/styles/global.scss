@@ -28,9 +28,12 @@
 
 html,
 body {
+  // display: flex;
+  flex-direction: column;
   background: $main-bg-color;
   color: white;
   width: 100%;
+  // height: 100%;
   overflow-y: overlay;
 
   // font-family: "rix", sans-serif;
@@ -129,15 +132,15 @@ div {
   color: rgb(220, 220, 220);
 
   &.grade-F {
-    background-color: rgb(42, 42, 42) !important; // F
+    background-color: rgb(78, 78, 78) !important; // F
   }
 
   &.grade-E {
-    background-color: rgb(70, 49, 36) !important; // E
+    background-color: rgb(87, 61, 45) !important; // E
   }
 
   &.grade-D {
-    background-color: rgb(122, 109, 44) !important; // D
+    background-color: rgb(129, 115, 47) !important; // D
   }
 
   &.grade-C {

@@ -114,9 +114,19 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       }
 
-      &:hover,
-      &.selected {
+      &:hover {
         background-color: rgba(90, 81, 58, 0.6);
+      }
+      &.selected {
+        background-color: rgba(120, 95, 31, 0.8);
+
+        .name {
+          color: white !important;
+        }
+
+        .prev-name {
+          color: rgb(160, 154, 135) !important;
+        }
       }
 
       .profile-img {

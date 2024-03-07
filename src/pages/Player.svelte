@@ -154,53 +154,55 @@
   <title>{summonerName} #{summonerTag} 전적검색</title>
 </svelte:head>
 
-<PlayerSearcher bind:summonerName />
-{#if summonerNotFound}
-  <!-- TODO :: design this -->
-  <div class="not-found">
-    <div class="title">'{summonerName} #{summonerTag}'는 존재하지 않는 소환사입니다.</div>
-    <div class="description">최근에 Riot ID나 태그를 변경했을 수 있습니다. 다시 확인해주세요.</div>
-  </div>
-{:else}
-  <PlayerHeader summary={summonerInfo?.summary} extra={summonerInfo?.extra} {onTryRenew} {renewing} {loading} />
-  <PlayerStatMenu bind:menu {summonerName} {summonerTag} />
-  {#if menu === PlayerInfoMenu.total}
-    {#if summonerInfo?.summary?.puuid != null}
-      <PlayerContentTotal
-        bind:summonerName
-        sr={summonerInfo?.soloRank}
-        fr={summonerInfo?.flexRank}
-        bind:matches
-        puuid={summonerInfo?.summary?.puuid}
-        {loadMoreBefore}
-        {loadingMoreMatches}
-      />
+{#key summonerName + summonerTag}
+  <PlayerSearcher bind:summonerName />
+  {#if summonerNotFound}
+    <!-- TODO :: design this -->
+    <div class="not-found">
+      <div class="title">'{summonerName} #{summonerTag}'는 존재하지 않는 소환사입니다.</div>
+      <div class="description">최근에 Riot ID나 태그를 변경했을 수 있습니다. 다시 확인해주세요.</div>
+    </div>
+  {:else}
+    <PlayerHeader summary={summonerInfo?.summary} extra={summonerInfo?.extra} {onTryRenew} {renewing} {loading} />
+    <PlayerStatMenu bind:menu {summonerName} {summonerTag} />
+    {#if menu === PlayerInfoMenu.total}
+      {#if summonerInfo?.summary?.puuid != null}
+        <PlayerContentTotal
+          bind:summonerName
+          sr={summonerInfo?.soloRank}
+          fr={summonerInfo?.flexRank}
+          bind:matches
+          puuid={summonerInfo?.summary?.puuid}
+          {loadMoreBefore}
+          {loadingMoreMatches}
+        />
+      {/if}
+    {:else if menu === PlayerInfoMenu.ingame}
+      <PlayerContentIngame puuid={summonerInfo?.summary?.puuid} />
+    {:else if menu === PlayerInfoMenu.mastery}
+      <PlayerContentMastery masteries={summonerInfo?.mastery} />
     {/if}
-  {:else if menu === PlayerInfoMenu.ingame}
-    <PlayerContentIngame puuid={summonerInfo?.summary?.puuid} />
-  {:else if menu === PlayerInfoMenu.mastery}
-    <PlayerContentMastery masteries={summonerInfo?.mastery} />
   {/if}
-{/if}
 
-<style lang="scss">
-  .not-found {
-    display: flex;
-    flex-direction: column;
+  <style lang="scss">
+    .not-found {
+      display: flex;
+      flex-direction: column;
 
-    margin-top: 50px;
-    text-align: center;
-    font-size: 16px;
-    background-color: rgb(63, 57, 46);
-    padding: 30px 50px;
-    width: 500px;
-    border-radius: 3px;
-    color: rgb(237, 221, 190);
+      margin-top: 50px;
+      text-align: center;
+      font-size: 16px;
+      background-color: rgb(63, 57, 46);
+      padding: 30px 50px;
+      width: 500px;
+      border-radius: 3px;
+      color: rgb(237, 221, 190);
 
-    .description {
-      margin-top: 10px;
-      font-size: 13px;
-      color: rgb(169, 155, 128);
+      .description {
+        margin-top: 10px;
+        font-size: 13px;
+        color: rgb(169, 155, 128);
+      }
     }
-  }
-</style>
+  </style>
+{/key}

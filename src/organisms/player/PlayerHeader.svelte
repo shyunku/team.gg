@@ -11,7 +11,8 @@
   import "./PlayerHeader.scss";
   import SafeImg from "../../atoms/SafeImg.svelte";
   import JsxUtil from "../../utils/JsxUtil";
-  import { getGGscoreGrade } from "../../utils/Util";
+  import { getGGscoreGrade, getMMRscoreGrade, getRankingRateGrade } from "../../utils/Util";
+  import TierRank from "../../molecules/TierRank.svelte";
 
   export let summary = {};
   export let extra = {};
@@ -23,16 +24,24 @@
   let favorites = [];
   let isFavorite = false;
   let ranking = {};
+  let rankingRate = 1;
+  let predictedMMR = null;
+  let predictedRank = null;
 
   let lastUpdatedRelativeTime = "-";
   let canRenew = false;
   let lastUpdatedAtMillis = null;
   let renewableLeftTime = null;
 
-  const renewAvailableTime = 1000 * 60 * 1;
+  const renewAvailableTime = 1000 * 60 * 2;
 
   $: {
     ranking = extra?.ranking;
+    predictedMMR = extra?.predictedMMR;
+    predictedRank = extra?.predictedRank;
+    if (ranking?.ranking != null) {
+      rankingRate = ((ranking?.ranking ?? 1) - 1) / (ranking?.total ?? 1);
+    }
     try {
       favorites = JSON.parse(localStorage.getItem("favorite_summoners") ?? "[]");
       isFavorite = favorites.some((f) => f.puuid === summary?.puuid);
@@ -44,6 +53,7 @@
   const onFavoriteClick = () => {
     // load from local storage
     try {
+      console.log(summary?.puuid);
       isFavorite = toggleSummonerFavorite(summary?.puuid, summary);
     } catch (err) {
       console.error(err);
@@ -122,15 +132,12 @@
             <div class="header">
               <div class="label">소환사 랭킹</div>
               <div class="value">
-                {formatDecimalBy3(ranking?.ranking ?? 0)}위 (상위 {(
-                  (((ranking?.ranking ?? 1) - 1) * 100) /
-                  (ranking?.total ?? 1)
-                ).toFixed(3)}%)
+                {formatDecimalBy3(ranking?.ranking ?? 0)}위 (상위 {rankingRate.toFixed(3)}%)
               </div>
             </div>
             <div class="bar">
               <div
-                class="filler"
+                class={"filler gg-grade" + JsxUtil.class(`grade-${getRankingRateGrade(rankingRate)}`)}
                 style={`width: ${100 - (((ranking?.ranking ?? 1) - 1) * 100) / (ranking?.total ?? 1)}%`}
               ></div>
             </div>
@@ -144,6 +151,26 @@
               <div
                 class={"filler gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(extra?.recentAvgGGScore ?? 0)}`)}
                 style={`width: ${extra?.recentAvgGGScore ?? 0}%`}
+              ></div>
+            </div>
+          </div>
+          <div class="mmr">
+            <div class="header">
+              <div class="label">예상 MMR</div>
+              <div class="value">
+                {#if predictedMMR != null}
+                  <div class="mmr-value">{predictedMMR?.toFixed(0)}</div>
+                  <div class="arrow">→</div>
+                  <TierRank tier={predictedRank?.tier} rank={predictedRank?.rank} compact />
+                {:else}
+                  -
+                {/if}
+              </div>
+            </div>
+            <div class="bar">
+              <div
+                class={"filler tier-rank-component" + JsxUtil.class(`${predictedRank?.tier?.toLowerCase()}`)}
+                style={`width: ${predictedMMR != null ? (predictedMMR / 3000) * 100 : 0}%`}
               ></div>
             </div>
           </div>

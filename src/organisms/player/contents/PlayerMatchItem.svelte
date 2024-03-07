@@ -12,6 +12,7 @@
   import { toasts } from "svelte-toasts";
   import "./PlayerMatchItem.scss";
   import PlayerMatchDetailSummary from "./match-detail/PlayerMatchDetailSummary.svelte";
+  import TierRank from "../../../molecules/TierRank.svelte";
 
   export let match;
 
@@ -41,7 +42,18 @@
   let earlySurrender = false;
   let isTeam1 = false;
   let matchResult = MatchResultType.UNKNOWN;
+  let matchGGRank = 0;
+  let teamGGRank = 0;
   $: if (match) {
+    let team1 = match.team1 ?? [];
+    let team2 = match.team2 ?? [];
+    let team1GGScores = team1.map((e) => e.ggScore);
+    let team2GGScores = team2.map((e) => e.ggScore);
+    let totalGGscores = [...team1GGScores, ...team2GGScores];
+
+    teamGGRank = totalGGscores.filter((score) => score > match.myStat.ggScore).length + 1;
+    matchGGRank = totalGGscores.filter((score) => score > match.myStat.ggScore).length + 1;
+
     kills = match?.myStat?.kills;
     deaths = match?.myStat?.deaths;
     assists = match?.myStat?.assists;
@@ -165,20 +177,25 @@
               킬 관여 {(getKillAssistRate(match) * 100).toFixed(0)}%
             </div>
             <div class="minion-kills">
-              CS {match?.myStat?.totalMinionsKilled ?? 0} ({csPerMinute.toFixed(1)})
+              CS {match?.myStat?.totalMinionsKilled ?? 0} ({csPerMinute.toFixed(1)}/m)
             </div>
-            <div class="gold">
+            <div class="gold-earned">
               {formatDecimalBy3(match?.myStat?.goldEarned)} 골드
             </div>
           </div>
           <div class="split"></div>
           <div class="subsection">
             <div class="dealt-rate">
-              딜량 {(dealtPercentageInTeam * 100).toFixed(0)}%
+              <div class="value">딜량 {(dealtPercentageInTeam * 100).toFixed(0)}%</div>
+              <div class="ranking">{dealtRanking}등</div>
             </div>
-            <div class="cc-time">
+            <div class="match-avg-tier-rank">
+              <div class="label">평균</div>
+              <TierRank tier={match?.matchAvgTierRank?.tier} rank={match?.matchAvgTierRank?.rank} compact />
+            </div>
+            <!-- <div class="cc-time">
               CC {toDuration((match?.myStat?.totalTimeCCDealt ?? 0) * 1000)}
-            </div>
+            </div> -->
             <!-- <div class="vision">시야점수 25</div> -->
             <div class="lane">
               {#if TeamLaneType?.[teamPosition] != null}
@@ -195,7 +212,12 @@
           <div class={"deco gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(match?.myStat?.ggScore ?? 0)}`)}>
             {match?.myStat?.ggScore?.toFixed(0) ?? 0}
           </div>
-          <div class="deco">딜량 {dealtRanking}등</div>
+          {#if teamGGRank == 1}
+            <div class={"deco" + JsxUtil.class(match?.myStat?.win ? "mvp" : "ace")}>
+              {match?.myStat?.win ? "MVP" : "ACE"}
+            </div>
+          {/if}
+          <!-- <div class="deco">딜량 {dealtRanking}등</div> -->
           {#if multiKillLabel != null}
             <div class={"deco" + JsxUtil.class(multiKillCode)}>
               {multiKillLabel}

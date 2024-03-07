@@ -273,9 +273,11 @@ export const summonerSpellIconUrl = (spellId) => {
 };
 
 export const itemIconUrl = (itemId) => {
+  if (itemId == 0) return null;
   return `${ServerHost}/icon/item?id=${itemId}`;
 };
 
 export const perkStyleIconUrl = (perkStyleId) => {
+  if (perkStyleId == 0) return null;
   return `${ServerHost}/icon/perkStyle?id=${perkStyleId}`;
 };

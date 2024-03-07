@@ -1,5 +1,6 @@
 <script>
   import SafeImg from "../../../../../atoms/SafeImg.svelte";
+  import TierRank from "../../../../../molecules/TierRank.svelte";
   import {
     championIconUrl,
     itemIconUrl,
@@ -10,6 +11,7 @@
   import { toDuration } from "../../../../../utils/Datetime";
   import JsxUtil from "../../../../../utils/JsxUtil";
   import { getGGscoreGrade, moveToPlayerPage, moveToPlayerPageByPuuid } from "../../../../../utils/Util";
+  import "./PlayerMatchDetailSummaryTeammate.scss";
 
   export let teammate;
   export let teamMaxDealt;
@@ -24,7 +26,7 @@
   }
 </script>
 
-<div class={"teammate row" + JsxUtil.classByEqual(puuid, teammate?.puuid, "me")}>
+<div class={"teammate-detail row" + JsxUtil.classByEqual(puuid, teammate?.puuid, "me")}>
   <div class="champion-icon img">
     <SafeImg src={championIconUrl(teammate?.championId)} />
     <div class="champion-level">{teammate?.championLevel}</div>
@@ -54,7 +56,13 @@
         <div class="tag-line">#{teammate?.riotIdTagLine}</div>
       {/if}
     </div>
-    <div class="tier">{teammate?.summonerLevel} 레벨</div>
+    <div class="tier-rank">
+      {#if teammate?.summonerRank != null}
+        <TierRank tier={teammate?.summonerRank?.tier} rank={teammate?.summonerRank?.rank} compact />
+      {:else}
+        {teammate?.summonerLevel} 레벨
+      {/if}
+    </div>
   </div>
   <div class={"gg-score"}>
     <div class={"gg-score-box gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(teammate?.ggScore ?? 0)}`)}>

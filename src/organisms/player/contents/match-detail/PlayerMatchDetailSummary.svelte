@@ -43,7 +43,7 @@
 
 <div class="summary">
   <div class="team team-1">
-    <div class="header row">
+    <div class="teammate-detail header">
       <div class="team-name">팀 1 (블루팀)</div>
       <div class="gg-score">GG Score</div>
       <div class="kda-section">KDA</div>
@@ -66,7 +66,7 @@
     </div>
   </div>
   <div class="team team-2">
-    <div class="header row">
+    <div class="teammate-detail header">
       <div class="team-name">팀 2 (레드팀)</div>
       <div class="gg-score">GG Score</div>
       <div class="kda-section">KDA</div>

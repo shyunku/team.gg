@@ -35,6 +35,7 @@ export const formatMasteryPoints = (points) => {
 };
 
 export const formatTierKr = (tier) => {
+  if (tier == null) return "???";
   const lTier = tier.toUpperCase();
   switch (lTier) {
     case "IRON":
@@ -107,6 +108,26 @@ export const formatStd = (num) => {
   return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+export const getRankingRateGrade = (rate) => {
+  if (rate < 0.001) {
+    return "SSS";
+  } else if (rate < 0.01) {
+    return "S";
+  } else if (rate < 0.05) {
+    return "A";
+  } else if (rate < 0.1) {
+    return "B";
+  } else if (rate < 0.2) {
+    return "C";
+  } else if (rate < 0.4) {
+    return "D";
+  } else if (rate < 0.7) {
+    return "E";
+  } else {
+    return "F";
+  }
+};
+
 export const getGGscoreGrade = (score) => {
   if (score < 10) {
     return "F";
@@ -121,6 +142,26 @@ export const getGGscoreGrade = (score) => {
   } else if (score < 80) {
     return "A";
   } else if (score < 100) {
+    return "S";
+  } else {
+    return "SSS";
+  }
+};
+
+export const getMMRscoreGrade = (mmr) => {
+  if (mmr < 800) {
+    return "F";
+  } else if (mmr < 1100) {
+    return "E";
+  } else if (mmr < 1400) {
+    return "D";
+  } else if (mmr < 1700) {
+    return "C";
+  } else if (mmr < 2000) {
+    return "B";
+  } else if (mmr < 2300) {
+    return "A";
+  } else if (mmr < 2600) {
     return "S";
   } else {
     return "SSS";
