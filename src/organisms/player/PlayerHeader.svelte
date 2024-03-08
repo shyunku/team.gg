@@ -132,25 +132,13 @@
             <div class="header">
               <div class="label">소환사 랭킹</div>
               <div class="value">
-                {formatDecimalBy3(ranking?.ranking ?? 0)}위 (상위 {rankingRate.toFixed(3)}%)
+                {formatDecimalBy3(ranking?.ranking ?? 0)}위 (상위 {(rankingRate * 100).toFixed(3)}%)
               </div>
             </div>
             <div class="bar">
               <div
                 class={"filler gg-grade" + JsxUtil.class(`grade-${getRankingRateGrade(rankingRate)}`)}
-                style={`width: ${100 - (((ranking?.ranking ?? 1) - 1) * 100) / (ranking?.total ?? 1)}%`}
-              ></div>
-            </div>
-          </div>
-          <div class="performance">
-            <div class="header">
-              <div class="label">최근 솔랭 평균 GG Score</div>
-              <div class="value">{(extra?.recentAvgGGScore ?? 0).toFixed(3)}</div>
-            </div>
-            <div class="bar">
-              <div
-                class={"filler gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(extra?.recentAvgGGScore ?? 0)}`)}
-                style={`width: ${extra?.recentAvgGGScore ?? 0}%`}
+                style={`width: ${100 * (1 - rankingRate)}%`}
               ></div>
             </div>
           </div>
@@ -171,6 +159,18 @@
               <div
                 class={"filler tier-rank-component" + JsxUtil.class(`${predictedRank?.tier?.toLowerCase()}`)}
                 style={`width: ${predictedMMR != null ? (predictedMMR / 3000) * 100 : 0}%`}
+              ></div>
+            </div>
+          </div>
+          <div class="performance">
+            <div class="header">
+              <div class="label">최근 솔랭 평균 GG Score</div>
+              <div class="value">{(extra?.recentAvgGGScore ?? 0).toFixed(3)}</div>
+            </div>
+            <div class="bar">
+              <div
+                class={"filler gg-grade" + JsxUtil.class(`grade-${getGGscoreGrade(extra?.recentAvgGGScore ?? 0)}`)}
+                style={`width: ${extra?.recentAvgGGScore ?? 0}%`}
               ></div>
             </div>
           </div>
