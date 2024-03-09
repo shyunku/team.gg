@@ -3,21 +3,11 @@ import packageJson from "../../../package.json" assert { type: "json" };
 import path from "path";
 import { getAppTrayImagePath } from "../modules/filesystem.js";
 
-const __dirname = path.resolve();
-
 /**
  * @param s {WindowService}
  */
 export default function (s) {
-  s.mainWindow = s.createMainWindow({
-    webPreferences: {
-      preload: path.join(__dirname, "../", "modules", "preload.js"),
-    },
-  });
-  s.mainWindow.once("ready-to-show", () => {
-    s.mainWindow.show();
-    s.mainWindow.focus();
-  });
+  s.initialize();
 
   const isDebugMode = process.env.NODE_ENV !== "production";
 
@@ -43,6 +33,5 @@ export default function (s) {
   //   ])
   // );
 
-  s.setWindowStateChangeListener(s.mainWindow);
   // s.mainWindow.webContents.session.clearCache(() => {});
 }

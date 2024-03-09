@@ -1,7 +1,0 @@
-[2024-02-25 07:58:45.103] [error] 24/02/25 07:58:45.101 ERROR  main(241).&(132) App threw an error during load
-[2024-02-25 07:58:45.124] [error] 24/02/25 07:58:45.123 ERROR  main(241).&(133) TypeError: Util.getSystemArchCategory is not a function
-    at file:///D:/desktop/Core/Projects/team.gg/team-gg/public/electron/core/main.js:38:25
-    at ModuleJob.run (node:internal/modules/esm/module_job:217:25)
-    at async ModuleLoader.import (node:internal/modules/esm/loader:316:24)
-    at async loadApplicationPackage (file:///D:/desktop/Core/Projects/team.gg/team-gg/node_modules/electron/dist/resources/default_app.asar/main.js:129:9)
-    at async file:///D:/desktop/Core/Projects/team.gg/team-gg/node_modules/electron/dist/resources/default_app.asar/main.js:241:9

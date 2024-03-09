@@ -7,6 +7,8 @@ import url from "url";
 import path from "path";
 import lodash from "lodash";
 
+const __dirname = path.resolve();
+
 const urlPrefix =
   process.env.ELECTRON_START_URL ||
   url.format({
@@ -32,7 +34,11 @@ class WindowService {
   }
 
   initialize() {
-    this.mainWindow = this.createMainWindow();
+    this.mainWindow = this.createMainWindow({
+      webPreferences: {
+        preload: path.join(__dirname, "public", "electron", "modules", "preload.cjs"),
+      },
+    });
     this.mainWindow.once("ready-to-show", () => {
       this.mainWindow.show();
       this.mainWindow.focus();

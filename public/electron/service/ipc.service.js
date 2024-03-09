@@ -43,47 +43,6 @@ class IpcService extends IpcRouter {
     this.executorService = group.executorService;
   }
 
-  /**
-   * @returns {Promise<DatabaseContext>}
-   */
-  async getUserDatabaseContext() {
-    const userId = this.userService.getCurrent();
-    if (userId == null) throw new Error("User ID is null");
-    return await this.databaseService.getUserDatabaseContext(userId);
-  }
-
-  async getUserLastLocalBlockNumber() {
-    const userId = this.userService.getCurrent();
-    if (userId == null) throw new Error("User ID is null");
-    const syncerContext = await this.syncerService.getUserSyncerContext(userId);
-    return await syncerContext.getLocalLastBlockNumber();
-  }
-
-  async getUserLastRemoteBlockNumber() {
-    const userId = this.userService.getCurrent();
-    if (userId == null) throw new Error("User ID is null");
-    const syncerContext = await this.syncerService.getUserSyncerContext(userId);
-    return await syncerContext.getRemoteLastBlockNumber();
-  }
-
-  /**
-   * @returns {Promise<WebsocketContext>}
-   */
-  async getUserWebsocketContext() {
-    const userId = this.userService.getCurrent();
-    if (userId == null) throw new Error("User ID is null");
-    return await this.websocketService.getUserWebsocketContext(userId);
-  }
-
-  /**
-   * @returns {Promise<SyncerContext>}
-   */
-  async getUserSyncerContext() {
-    const userId = this.userService.getCurrent();
-    if (userId == null) throw new Error("User ID is null");
-    return await this.syncerService.getUserSyncerContext(userId);
-  }
-
   register(topic, callback, ...arg) {
     const originalCallback = callback;
     callback = async (event, reqId, ...arg) => {

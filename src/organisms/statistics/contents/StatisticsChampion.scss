@@ -12,9 +12,9 @@
       display: flex;
       align-items: center;
       width: 100%;
-      padding: 8px 12px;
+      padding: 7px 11px;
       font-size: 13px;
-      border-bottom: 1px solid #ffffff28;
+
       box-sizing: border-box;
       color: rgb(214, 198, 171);
 
@@ -38,9 +38,19 @@
         }
       }
 
+      &:not(.header):not(:last-child) {
+        border-bottom: 1px solid #ffffff23;
+      }
+
       .champion-img {
-        width: 40px;
+        width: 30px;
         height: 30px;
+        overflow: hidden;
+        border-radius: 3px;
+
+        img {
+          transform: scale(1.2);
+        }
       }
 
       .champion-name {
@@ -73,6 +83,8 @@
           width: $bar-width;
           background-color: rgb(16, 15, 13);
           height: 8px;
+          // border-radius: 1px;
+          overflow: hidden;
 
           .bar {
             height: 100%;

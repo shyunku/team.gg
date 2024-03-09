@@ -94,12 +94,19 @@
 <style lang="scss">
   @import "../styles/variables.scss";
 
+  @media screen and (max-width: 460px) {
+    .signup-form {
+      width: 100% !important;
+      margin: 0 20px;
+    }
+  }
+
   .signup-content-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     color: $main-fg-color;
-    padding-top: 50px;
+    padding-top: 100px;
     width: 100%;
 
     .signup-form {
@@ -107,6 +114,7 @@
       flex-direction: column;
       width: 400px;
       padding: 30px;
+      box-sizing: border-box;
 
       .title {
         font-size: 24px;

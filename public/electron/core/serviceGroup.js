@@ -5,9 +5,11 @@ import IpcService from "../service/ipc.service.js";
 // import WebsocketService from "../service/websocket.service.js";
 // import DatabaseService from "../service/database.service.js";
 // import UpdaterService from "../service/updater.service.js";
+import PlatformService from "../service/platform.service.js";
 
 import WindowConfigure from "../configures/window.config.js";
 import IpcConfigure from "../configures/ipc.config.js";
+import PlatformConfigure from "../configures/platform.config.js";
 
 class ServiceGroup {
   constructor() {
@@ -18,6 +20,7 @@ class ServiceGroup {
     // this.websocketService = new WebsocketService();
     // this.databaseService = new DatabaseService();
     // this.updaterService = new UpdaterService();
+    this.platformService = new PlatformService();
   }
 
   injectReferences() {
@@ -28,11 +31,13 @@ class ServiceGroup {
     // this.websocketService.inject(this);
     // this.databaseService.inject(this);
     // this.updaterService.inject(this);
+    this.platformService.inject(this);
   }
 
   configureAndRun() {
     WindowConfigure(this.windowService);
     IpcConfigure(this.ipcService);
+    PlatformConfigure(this.platformService);
   }
 }
 

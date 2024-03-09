@@ -1,0 +1,50 @@
+.top-bar {
+  display: flex;
+  width: 100%;
+  height: 24px;
+  justify-content: flex-end;
+  background-color: rgb(29, 29, 29);
+  position: relative;
+  z-index: 100;
+
+  .drag-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    -webkit-app-region: drag;
+  }
+
+  .window-control-section {
+    display: flex;
+    overflow: hidden;
+    justify-content: flex-end;
+    height: 100%;
+    z-index: 101;
+    -webkit-app-region: no-drag;
+
+    .window-control-button {
+      display: flex;
+      width: 30px;
+      justify-content: center;
+      opacity: 0.5;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &.maximize,
+      &.restore {
+        transform: rotate(180deg) scale(0.5);
+        filter: brightness(1.5);
+      }
+
+      &.close {
+        // background-color: rgb(178, 74, 74);
+      }
+    }
+  }
+}

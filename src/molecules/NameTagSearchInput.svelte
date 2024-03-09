@@ -2,6 +2,7 @@
   import { onMount, tick } from "svelte";
   import JsxUtil from "../utils/JsxUtil";
   import SafeImg from "../atoms/SafeImg.svelte";
+  import { v4 } from "uuid";
   import "./NameTagSearchInput.scss";
   import { profileIconUrl, quickSearchSummonerReq } from "../thunks/GeneralThunk";
 
@@ -19,6 +20,7 @@
   let inputValue = "";
   let focused = false;
   let results = [];
+  let reqId = null;
 
   let inputElement;
   let resultIndex = -1;
@@ -50,10 +52,11 @@
     summonerName = (content.split("#")?.[0] ?? "").trim();
     summonerTag = content.split("#")?.[1]?.trim() ?? null;
 
-    quickSearchSummoner();
+    reqId = v4();
+    quickSearchSummoner(reqId);
   };
 
-  const quickSearchSummoner = async () => {
+  const quickSearchSummoner = async (requestId) => {
     let keyword = summonerName + (summonerTag != null && summonerTag.length > 0 ? "#" + summonerTag : "");
     let originalResultsJson = JSON.stringify(results);
     let newResultsJson = null;
@@ -62,6 +65,7 @@
         results = [];
       } else {
         const resp = await quickSearchSummonerReq(keyword);
+        if (reqId !== requestId) return;
         results = resp;
         newResultsJson = JSON.stringify(results);
       }

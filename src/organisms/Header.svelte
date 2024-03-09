@@ -7,13 +7,14 @@
   import { testTokenReq, logout, ServerHostBase } from "../thunks/GeneralThunk";
   import { AxiosError } from "axios";
   import { onDestroy, onMount } from "svelte";
-  import SocketIoClient from "socket.io-client";
   import "./Header.scss";
+  import IpcSender from "../utils/IpcSender";
 
   let socket = null;
   let isMainPage = false;
   let isCustomGamePage = false;
   let isStatisticsPage = false;
+  let isIngamePage = false;
   let isCommunityPage = false;
   let isAuthorized = false;
 
@@ -33,6 +34,10 @@
 
   const goToCommunity = () => {
     window.location.href = "#/community";
+  };
+
+  const goToIngame = () => {
+    window.location.href = "#/ingame";
   };
 
   const goToLogin = () => {
@@ -86,6 +91,7 @@
     isCustomGamePage = $location.includes("/custom-game");
     isStatisticsPage = $location.includes("/statistics");
     isCommunityPage = $location.includes("/community");
+    isIngamePage = $location.includes("/ingame");
     isMainPage = !isCustomGamePage && !isStatisticsPage && !isCommunityPage;
   }
 </script>
@@ -108,7 +114,13 @@
       <div class={"menu-item app-menu-item" + (isCustomGamePage ? " selected" : "")} on:click={goToCustomGame}>
         내전 팀 구성
       </div>
+      {#if IpcSender.isCurrentElectron}
+        <div class={"menu-item app-menu-item ingame" + (isIngamePage ? " selected" : "")} on:click={goToIngame}>
+          인게임
+        </div>
+      {/if}
     </div>
+    <div class="fat" />
     <div class="user-menu">
       {#if isAuthorized}
         <div class="menu-item user-menu-item" on:click={tryLogout}>로그아웃</div>

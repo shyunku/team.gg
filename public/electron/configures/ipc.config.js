@@ -46,7 +46,7 @@ export default function (s) {
 
   s.register("system/isMaximizable", (event, reqId, param) => {
     let currentWindow = BrowserWindow.fromId(param);
-    if (currentWindow) s.sender("isMaximizable", reqId, true, currentWindow.isMaximizable());
+    if (currentWindow) s.sender("system/isMaximizable", reqId, true, !currentWindow.isMaximized());
   });
 
   s.register("system/modal", (event, reqId, ...arg) => {
