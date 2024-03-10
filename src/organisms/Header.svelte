@@ -9,13 +9,17 @@
   import { onDestroy, onMount } from "svelte";
   import "./Header.scss";
   import IpcSender from "../utils/IpcSender";
+  import JsxUtil from "../utils/JsxUtil";
 
-  let socket = null;
-  let isMainPage = false;
-  let isCustomGamePage = false;
-  let isStatisticsPage = false;
-  let isIngamePage = false;
-  let isCommunityPage = false;
+  const HeaderMenus = {
+    main: { key: "", label: "전적" },
+    statistics: { key: "statistics", label: "통계" },
+    community: { key: "community", label: "커뮤니티" },
+    customGame: { key: "custom-game", label: "내전 팀 구성" },
+    ingame: { key: "ingame", label: "인게임", hide: !IpcSender.isCurrentElectron, subclass: "ingame" },
+  };
+
+  let currentPage = HeaderMenus.main;
   let isAuthorized = false;
 
   // console.log(authStore.);
@@ -69,7 +73,7 @@
               return;
           }
         } else {
-          toasts.add({ title: "인증 오류", description: "서버가 점검 중입니다.", type: "error" });
+          toasts.add({ title: "인증 오류", description: "서버가 점검 중입니다.", type: "error", duration: 5000 });
           return;
         }
       }
@@ -88,11 +92,12 @@
   });
 
   $: {
-    isCustomGamePage = $location.includes("/custom-game");
-    isStatisticsPage = $location.includes("/statistics");
-    isCommunityPage = $location.includes("/community");
-    isIngamePage = $location.includes("/ingame");
-    isMainPage = !isCustomGamePage && !isStatisticsPage && !isCommunityPage;
+    let pageKey =
+      Object.keys(HeaderMenus).find((key) => HeaderMenus[key].key !== "" && $location.includes(HeaderMenus[key].key)) ??
+      "main";
+    currentPage = HeaderMenus[pageKey];
+
+    // console.log(currentPage);
   }
 </script>
 
@@ -104,21 +109,21 @@
       </div>
     </div>
     <div class="app-menu">
-      <div class={"menu-item app-menu-item" + (isMainPage ? " selected" : "")} on:click={goToHome}>전적</div>
-      <div class={"menu-item app-menu-item" + (isStatisticsPage ? " selected" : "")} on:click={goToStatistics}>
-        통계
-      </div>
-      <div class={"menu-item app-menu-item" + (isCommunityPage ? " selected" : "")} on:click={goToCommunity}>
-        커뮤니티
-      </div>
-      <div class={"menu-item app-menu-item" + (isCustomGamePage ? " selected" : "")} on:click={goToCustomGame}>
-        내전 팀 구성
-      </div>
-      {#if IpcSender.isCurrentElectron}
-        <div class={"menu-item app-menu-item ingame" + (isIngamePage ? " selected" : "")} on:click={goToIngame}>
-          인게임
-        </div>
-      {/if}
+      {#each Object.keys(HeaderMenus) as key}
+        {@const menu = HeaderMenus[key]}
+        {#if menu.hide !== true}
+          <div
+            class={"menu-item app-menu-item" +
+              JsxUtil.classByEqual(currentPage.key, menu.key, "selected") +
+              (menu.subclass != null ? JsxUtil.class(menu.subclass) : "")}
+            on:click={() => {
+              push(`/${menu.key}`);
+            }}
+          >
+            {menu.label}
+          </div>
+        {/if}
+      {/each}
     </div>
     <div class="fat" />
     <div class="user-menu">

@@ -105,7 +105,15 @@
       white-space: nowrap;
 
       &.ingame {
-        color: rgb(94, 193, 130);
+        color: rgb(115, 193, 144);
+
+        &:hover {
+          background: linear-gradient(180deg, transparent 60%, rgba(94, 193, 130, 0.393) 100%) !important;
+        }
+
+        &.selected {
+          background: linear-gradient(180deg, transparent 60%, rgba(135, 255, 179, 0.393) 100%) !important;
+        }
       }
 
       &:hover {

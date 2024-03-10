@@ -95,110 +95,18 @@ const IpcSender = {
     },
   },
   req: {
-    system: {
-      setAsHomeWindow: (callback) => {
-        sender("system/setAsHomeWindow", callback);
+    platform: {
+      getRiotClientStatus: (callback) => {
+        sender("platform/riot_client_status", callback);
       },
-      setAsLoginWindow: (callback) => {
-        sender("system/setAsLoginWindow", callback);
+      getCurrentSummonerInfo: (callback) => {
+        sender("platform/current_summoner_info", callback);
       },
-      getLastTxUpdateTime: (callback) => {
-        sender("system/lastTxUpdateTime", callback);
+      getCurrentGameFlowSession: (callback) => {
+        sender("platform/current_game_flow_session", callback);
       },
-      getLastBlockNumber: (callback) => {
-        sender("system/localLastBlockNumber", callback);
-      },
-      getRemoteLastBlockNumber: (callback) => {
-        sender("system/remoteLastBlockNumber", callback);
-      },
-      isDatabaseClear: (callback) => {
-        sender("system/isDatabaseClear", callback);
-      },
-      isLegacyMigrationAvailable: (callback) => {
-        sender("system/isLegacyMigrationAvailable", callback);
-      },
-      migrateLegacyDatabase: (version, callback) => {
-        sender("system/migrateLegacyDatabase", callback, version);
-      },
-      truncateLegacyDatabase: (version, callback) => {
-        sender("system/truncateLegacyDatabase", callback, version);
-      },
-      migrateCheckDoneSignal: (callback) => {
-        sender("system/migrateCheckDoneSignal", callback);
-      },
-      mismatchTxAcceptTheirs: (start, end, callback) => {
-        sender("system/mismatchTxAcceptTheirs", callback, start, end);
-      },
-      mismatchTxAcceptMine: (start, end, callback) => {
-        sender("system/mismatchTxAcceptMine", callback, start, end);
-      },
-      initializeState: (callback) => {
-        sender("system/initializeState", callback);
-      },
-      clearStatePermanently: (callback) => {
-        sender("system/clearStatePermanently", callback);
-      },
-      stateListenReady: (ready, callback) => {
-        sender("system/stateListenReady", callback, ready);
-      },
-    },
-    auth: {
-      sendGoogleOauthResult: (result, callback) => {
-        sender("auth/sendGoogleOauthResult", callback, result);
-      },
-      registerAuthInfoSync: async (userId, accessToken, refreshToken) => {
-        return new Promise((resolve, reject) => {
-          sender(
-            "auth/registerAuthInfoSync",
-            ({ success, data }) => {
-              if (success) resolve(data);
-              else reject(data);
-            },
-            userId,
-            accessToken,
-            refreshToken
-          );
-        });
-      },
-      deleteAuthInfoSync: async (userId) => {
-        return new Promise((resolve, reject) => {
-          sender(
-            "auth/deleteAuthInfo",
-            ({ success, data }) => {
-              console.log("came");
-              if (success) resolve(data);
-              else reject(data);
-            },
-            userId
-          );
-        });
-      },
-      loadAuthInfoSync: async (userId) => {
-        return new Promise((resolve, reject) => {
-          sender(
-            "auth/loadAuthInfoSync",
-            ({ success, data }) => {
-              if (success) resolve(data);
-              else reject(data);
-            },
-            userId
-          );
-        });
-      },
-      isDatabaseReady: (userId, callback) => {
-        sender("auth/isDatabaseReady", callback, userId);
-      },
-      initializeDatabase: (userId, callback) => {
-        sender("auth/initializeDatabase", callback, userId);
-      },
-      signUpWithGoogleAuth: (signupRequest, callback) => {
-        sender("auth/signUpWithGoogleAuth", callback, signupRequest);
-      },
-      signUp: (signupRequest, callback) => {
-        sender("auth/signUp", callback, signupRequest);
-      },
-      login: (loginRequest, callback) => {
-        sender("auth/login", callback, loginRequest);
+      getCurrentChampSelectSession: (callback) => {
+        sender("platform/current_champ_select_session", callback);
       },
     },
     socket: {
@@ -207,87 +115,6 @@ const IpcSender = {
       },
       tryDisconnect: (callback) => {
         sender("socket/disconnect", callback);
-      },
-    },
-    task: {
-      getTaskList: (callback) => {
-        sender("task/getAllTaskList", callback);
-      },
-      getSubtaskList: (callback) => {
-        sender("task/getAllSubtaskList", callback);
-      },
-      addTask: (task, callback) => {
-        sender("task/addTask", callback, task);
-      },
-      deleteTask: (taskId, callback) => {
-        sender("task/deleteTask", callback, taskId);
-      },
-      updateTaskOrder: (taskId, targetTaskId, afterTarget, callback) => {
-        sender("task/updateTaskOrder", callback, taskId, targetTaskId, afterTarget);
-      },
-      updateTaskTitle: (taskId, title, callback) => {
-        sender("task/updateTaskTitle", callback, taskId, title);
-      },
-      updateTaskDueDate: (taskId, dueDate, callback) => {
-        sender("task/updateTaskDueDate", callback, taskId, dueDate);
-      },
-      updateTaskMemo: (taskId, memo, callback) => {
-        sender("task/updateTaskMemo", callback, taskId, memo);
-      },
-      updateTaskDone: (taskId, done, doneAt, callback) => {
-        sender("task/updateTaskDone", callback, taskId, done, doneAt);
-      },
-      addTaskCategory: (taskId, categoryId, callback) => {
-        sender("task/addTaskCategory", callback, taskId, categoryId);
-      },
-      deleteTaskCategory: (taskId, categoryId, callback) => {
-        sender("task/deleteTaskCategory", callback, taskId, categoryId);
-      },
-      updateTaskRepeatPeriod: (taskId, repeatPeriod, callback) => {
-        sender("task/updateTaskRepeatPeriod", callback, taskId, repeatPeriod);
-      },
-      createSubtask: (subtask, taskId, callback) => {
-        sender("task/createSubtask", callback, subtask, taskId);
-      },
-      deleteSubtask: (taskId, subtaskId, callback) => {
-        sender("task/deleteSubtask", callback, taskId, subtaskId);
-      },
-      updateSubtaskTitle: (taskId, subtaskId, title, callback) => {
-        sender("task/updateSubtaskTitle", callback, taskId, subtaskId, title);
-      },
-      updateSubtaskDueDate: (taskId, subtaskId, dueDate, callback) => {
-        sender("task/updateSubtaskDueDate", callback, taskId, subtaskId, dueDate);
-      },
-      updateSubtaskDone: (taskId, subtaskId, done, doneAt, callback) => {
-        sender("task/updateSubtaskDone", callback, taskId, subtaskId, done, doneAt);
-      },
-    },
-    category: {
-      getCategoryList: (callback) => {
-        sender("category/getCategoryList", callback);
-      },
-      createCategory: (category, callback) => {
-        sender("category/createCategory", callback, category);
-      },
-      deleteCategory: (categoryId, callback) => {
-        sender("category/deleteCategory", callback, categoryId);
-      },
-      checkCategoryPassword: (hashedPassword, callback) => {
-        sender("category/checkCategoryPassword", callback, hashedPassword);
-      },
-      updateCategoryTitle: (categoryId, title, callback) => {
-        sender("category/updateCategoryTitle", callback, categoryId, title);
-      },
-      getCategoryTasks: (categoryId, callback) => {
-        sender("category/getCategoryTasks", callback, categoryId);
-      },
-      updateCategoryColor: (categoryId, color, callback) => {
-        sender("category/updateCategoryColor", callback, categoryId, color);
-      },
-    },
-    tasks_categories: {
-      getTasksCategoriesList: (callback) => {
-        sender("tasks_categories/getTasksCategoriesList", callback);
       },
     },
   },

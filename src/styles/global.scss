@@ -181,3 +181,30 @@ div {
 .fat {
   flex: 1;
 }
+
+.toast-container {
+  // min-width: 360px;
+  // width: auto !important;
+
+  .st-toast {
+    // min-width: 280px;
+    // width: auto !important;
+    // box-sizing: border-box;
+
+    .st-toast-details {
+      flex: 1;
+      overflow: hidden;
+
+      .st-toast-description {
+        font-size: 0.75rem !important;
+        color: rgb(195, 195, 195);
+        white-space: normal;
+        margin-top: 5px !important;
+      }
+    }
+  }
+
+  li {
+    justify-content: flex-end !important;
+  }
+}

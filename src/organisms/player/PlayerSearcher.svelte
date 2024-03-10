@@ -1,6 +1,6 @@
 <script>
   import { push } from "svelte-spa-router";
-  import MainContentWrapper from "../../layouts/MainContentLayout.svelte";
+  import MainContentLayout from "../../layouts/MainContentLayout.svelte";
   import NameTagSearchInput from "../../molecules/NameTagSearchInput.svelte";
 
   let summonerName = "";
@@ -12,7 +12,7 @@
 </script>
 
 <div class="player-searcher">
-  <MainContentWrapper>
+  <MainContentLayout>
     <div class="searcher">
       <div class="searcher-region">
         <select id="region_selector">
@@ -26,7 +26,7 @@
       </div>
       <button id="search_btn" on:click={onPlayerSearch}>검색</button>
     </div>
-  </MainContentWrapper>
+  </MainContentLayout>
 </div>
 
 <style lang="scss">

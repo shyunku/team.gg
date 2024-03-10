@@ -1,0 +1,191 @@
+@import "../styles/variables.scss";
+
+.in-game-header {
+  width: 100%;
+  background-color: $sub-bg-color;
+  border-bottom: 1px solid $sub-border-color;
+  color: rgb(195, 190, 169);
+  padding: 20px 0;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .description {
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgb(129, 126, 113);
+      white-space: pre-line;
+    }
+  }
+}
+
+.in-game-status {
+  width: 100%;
+  background-color: $sub-bg-color;
+  border-bottom: 1px solid $sub-border-color;
+  color: rgb(195, 190, 169);
+  padding: 8px 0;
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .status-section {
+      display: flex;
+      align-items: center;
+
+      &.connecting {
+        .status {
+          background-color: rgb(161, 115, 54);
+          color: white;
+        }
+        .status-text {
+          color: rgb(200, 170, 119);
+        }
+      }
+
+      &.offline {
+        .status {
+          background-color: rgb(52, 52, 52);
+          color: rgb(168, 168, 168);
+        }
+        .status-text {
+          color: rgb(158, 158, 158);
+        }
+      }
+
+      &.online {
+        .status {
+          background-color: rgb(54, 161, 93);
+          color: white;
+        }
+        .status-text {
+          color: rgb(119, 200, 155);
+        }
+      }
+
+      &.error {
+        .status {
+          background-color: rgb(168, 67, 67);
+          color: white;
+        }
+        .status-text {
+          color: rgb(200, 119, 119);
+        }
+      }
+
+      .status {
+        font-size: 11px;
+        padding: 3px 5px;
+        color: rgb(202, 202, 202);
+        border-radius: 2px;
+        background-color: rgb(52, 52, 52);
+      }
+
+      .status-text {
+        font-size: 13px;
+        margin-left: 8px;
+        color: gray;
+      }
+    }
+
+    .profile-section {
+      display: flex;
+      align-items: center;
+
+      .profile-image {
+        width: 18px;
+        height: 18px;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .name {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+
+        .game-name {
+          margin-left: 5px;
+        }
+
+        .tag-line {
+          margin-left: 3px;
+          color: rgb(147, 147, 147);
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
+
+.in-game-content {
+  width: 100%;
+  color: rgb(193, 176, 129);
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 15px;
+    width: 100%;
+
+    $selected-color: rgb(86, 77, 51);
+
+    .stages {
+      display: flex;
+      align-items: center;
+
+      font-size: 13px;
+
+      .stage {
+        display: flex;
+        align-items: center;
+        opacity: 0.5;
+        border-bottom: 3px solid transparent;
+        padding: 8px 12px;
+        transition: 0.2s ease;
+
+        &:not(:first-child) {
+          margin-left: 8px;
+        }
+
+        &.current {
+          opacity: 1;
+          background-color: $selected-color;
+          color: white;
+          // color: black;
+          // font-weight: bold;
+          // border-bottom: 3px solid rgb(193, 176, 129);
+          // background: radial-gradient(ellipse at 50% 100%, rgba(193, 176, 129, 0.5) 0%, transparent 80%);
+        }
+      }
+    }
+
+    .game-mode-section {
+      display: flex;
+      align-items: center;
+      // margin-top: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: $selected-color;
+      color: rgb(213, 198, 169);
+      padding: 12px 15px;
+
+      .game-description {
+        margin-left: 5px;
+      }
+
+      .debug {
+        margin-left: 5px;
+      }
+    }
+  }
+}

@@ -1,9 +1,13 @@
+import { push } from "svelte-spa-router";
+
 export const moveToPlayerPage = (summonerName, summonerTag) => {
-  window.location.href = `#/player/${summonerName}/${summonerTag}`;
+  push(`/player/${summonerName}/${summonerTag}`);
+  // window.location.href = `#/player/${summonerName}/${summonerTag}`;
 };
 
 export const moveToPlayerPageByPuuid = (puuid) => {
-  window.location.href = `#/player/${puuid}`;
+  push(`/player/${puuid}`);
+  // window.location.href = `#/player/${puuid}`;
 };
 
 export const colorByRate = (rate) => {
@@ -166,4 +170,9 @@ export const getMMRscoreGrade = (mmr) => {
   } else {
     return "SSS";
   }
+};
+
+export const sanitizeString = (str, _default = null) => {
+  if (str == null) return _default;
+  return str.length > 0 ? str : _default;
 };

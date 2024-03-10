@@ -4,6 +4,7 @@ import CustomGameConfig from "../pages/CustomGameConfig.svelte";
 import Player from "../pages/Player.svelte";
 import Statistics from "../pages/Statistics.svelte";
 import Community from "../pages/Community.svelte";
+import InGame from "../pages/InGame.svelte";
 import NotImplemented from "../pages/NotImplemented.svelte";
 import Login from "../pages/Login.svelte";
 import Signup from "../pages/Signup.svelte";
@@ -17,6 +18,7 @@ const routes = {
   "/player/:puuid": Player,
   "/statistics/:menu?": Statistics,
   "/community": NotImplemented,
+  "/ingame": InGame,
   "/login": Login,
   "/signup": Signup,
   "*": NotFound,

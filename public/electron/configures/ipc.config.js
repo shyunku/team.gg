@@ -1,4 +1,5 @@
 import { app, BrowserWindow, powerMonitor } from "electron";
+import IpcService from "../service/ipc.service.js";
 import IpcRouter from "../modules/ipcRouter.js";
 import { getServerFinalEndpoint } from "../modules/util.js";
 
@@ -80,6 +81,37 @@ export default function (s) {
   });
 
   /* ---------------------------------------- Custom ---------------------------------------- */
+  s.register("platform/riot_client_status", (event, reqId) => {
+    const status = s.platformService.getRiotClientStatus();
+    s.sender("platform/riot_client_status", reqId, true, status);
+  });
+
+  s.register("platform/current_summoner_info", async (event, reqId) => {
+    try {
+      const data = await s.platformService.getCurrentSummonerInfo();
+      s.sender("platform/current_summoner_info", reqId, true, data);
+    } catch (err) {
+      s.sender("platform/current_summoner_info", reqId, false, err.message);
+    }
+  });
+
+  s.register("platform/current_game_flow_session", async (event, reqId) => {
+    try {
+      const data = await s.platformService.getCurrentGameFlowSession();
+      s.sender("platform/current_game_flow_session", reqId, true, data);
+    } catch (err) {
+      s.sender("platform/current_game_flow_session", reqId, false, err.message);
+    }
+  });
+
+  s.register("platform/current_champ_select_session", async (event, reqId) => {
+    try {
+      const data = await s.platformService.getCurrentChampSelectSession();
+      s.sender("platform/current_champ_select_session", reqId, true, data);
+    } catch (err) {
+      s.sender("platform/current_champ_select_session", reqId, false, err.message);
+    }
+  });
 
   /* ---------------------------------------- Test ---------------------------------------- */
   s.register("test_signal", (event, param) => {});

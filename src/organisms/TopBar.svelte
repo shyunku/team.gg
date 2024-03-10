@@ -6,6 +6,7 @@
   import MdCropDin from "svelte-icons/md/MdCropDin.svelte";
   import IoIosClose from "svelte-icons/io/IoIosClose.svelte";
   import "./TopBar.scss";
+  import SafeImg from "../atoms/SafeImg.svelte";
 
   let maximized = false;
 
@@ -48,6 +49,13 @@
 
 <div class="top-bar">
   <div class="drag-section"></div>
+  <div class="top-header">
+    <div class="icon img">
+      <SafeImg src="/img/common/team_gg_logo.png" />
+    </div>
+    <div class="name">team.gg</div>
+    <div class="version">- {APP_VERSION ?? "0.0.0"}v</div>
+  </div>
   <div class="window-control-section">
     <div class="window-control-button minimize" on:click={onMinimize}><IoIosRemove /></div>
     {#if maximized}

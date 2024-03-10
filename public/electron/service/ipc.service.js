@@ -2,6 +2,7 @@ import { reqIdTag } from "../modules/util.js";
 import { ipcMain } from "electron";
 import IpcRouter from "../modules/IpcRouter.js";
 import Request from "../core/request.js";
+import PlatformService from "./platform.service.js";
 
 const COLOR = console.RGB(78, 119, 138);
 const TAG = console.wrap("IpcMain", COLOR);
@@ -29,6 +30,9 @@ class IpcService extends IpcRouter {
 
     /** @type {ExecutorService} */
     this.executorService = null;
+
+    /** @type {PlatformService} */
+    this.platformService = null;
   }
 
   /**
@@ -41,6 +45,7 @@ class IpcService extends IpcRouter {
     this.syncerService = group.syncerService;
     this.websocketService = group.websocketService;
     this.executorService = group.executorService;
+    this.platformService = group.platformService;
   }
 
   register(topic, callback, ...arg) {
