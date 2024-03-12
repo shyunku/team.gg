@@ -111,3 +111,25 @@ export const ValidTierRanks = Object.freeze({
   GRANDMASTER: [1],
   CHALLENGER: [1],
 });
+
+export const MetaCategories = {
+  Armor: "탱킹",
+  ArmorPenetration: "방관",
+  AttackSpeed: "공속",
+  CriticalStrike: "치명타",
+  AD: "극딜",
+  AP: "극딜",
+  GoldSupply: "골드 수급",
+  Health: "체력",
+  HealthRegen: "체력 재생",
+  LifeSteal: "피흡",
+  MagicPenetration: "마관",
+  Mana: "마나",
+  ManaRegen: "마나 재생",
+  MoveSpeed: "이속",
+  OnHit: "온힛",
+  Slow: "슬로우",
+  SpellBlock: "마방",
+  Stealth: "암살",
+  Tenacity: "CC 저항",
+};

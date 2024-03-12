@@ -56,6 +56,11 @@
       .champion-name {
         flex: 1;
         margin-left: 20px;
+        cursor: pointer;
+
+        &:hover {
+          color: rgb(255, 255, 255);
+        }
       }
 
       .champion-played {

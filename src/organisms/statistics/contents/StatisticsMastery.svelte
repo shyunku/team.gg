@@ -29,7 +29,7 @@
         }),
         {}
       );
-      console.log(masteryGroups, refinedData);
+      // console.log(masteryGroups, refinedData);
     } catch (e) {
       console.error(e);
       toasts.add({

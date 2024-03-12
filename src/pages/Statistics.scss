@@ -1,9 +1,6 @@
 @import "../styles/variables.scss";
 
 .statistics-header {
-  width: 100%;
-  background-color: $sub-bg-color;
-  border-bottom: 1px solid $sub-border-color;
   color: rgb(195, 190, 169);
   padding: 20px 0;
 
@@ -26,9 +23,6 @@
 }
 
 .statistics-menu {
-  width: 100%;
-  background-color: $sub-bg-color;
-  border-bottom: 1px solid $sub-border-color;
   color: rgb(195, 190, 169);
   padding: 5px 0;
 

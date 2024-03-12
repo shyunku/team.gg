@@ -248,6 +248,11 @@ export const getChampionStatisticsReq = async () => {
   return response.data;
 };
 
+export const getChampionDetailStatisticsReq = async (championId) => {
+  const response = await instance.get(`/platform/statistics/champion-detail?championId=${championId}`);
+  return response.data;
+};
+
 export const getTierStatisticsReq = async () => {
   const response = await instance.get(`/platform/statistics/tier`);
   return response.data;

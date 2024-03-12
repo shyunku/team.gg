@@ -3,6 +3,7 @@
   import SortVisualizer from "../../../molecules/SortVisualizer.svelte";
   import { championIconUrl, getChampionStatisticsReq } from "../../../thunks/GeneralThunk";
   import "./StatisticsChampion.scss";
+  import { push } from "svelte-spa-router";
   import moment from "moment";
   import "moment/locale/ko";
   moment.locale("ko");
@@ -45,8 +46,8 @@
       const resp = await getChampionStatisticsReq();
       const { updatedAt, data } = resp;
       lastUpdateTime = updatedAt;
-      rawData = data;
-      console.log(data);
+      rawData = data.sort((a, b) => a.championName.localeCompare(b.championName));
+      // console.log(data);
     } catch (e) {
       console.error(e);
       toasts.add({
@@ -55,6 +56,10 @@
         type: "error",
       });
     }
+  };
+
+  const moveToChampionDetail = (championId) => {
+    push(`/statistics/champion/${championId}`);
   };
 
   $: if (rawData) {
@@ -108,7 +113,9 @@
           <div class="champion-img img">
             <SafeImg src={championIconUrl(c?.championId)} />
           </div>
-          <div class="champion-name">{c?.championName ?? "-"}</div>
+          <div class="champion-name" on:click={(e) => moveToChampionDetail(c?.championId)}>
+            {c?.championName ?? "-"}
+          </div>
           <div class="champion-played">{c?.total ?? 0}판</div>
           <div class="champion-winrate">
             <div class="label">{(c.winRate * 100).toFixed(2)}%</div>

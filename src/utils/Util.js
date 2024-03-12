@@ -172,7 +172,32 @@ export const getMMRscoreGrade = (mmr) => {
   }
 };
 
+export const championWinRateGrade = (rate) => {
+  if (rate < 0.45) {
+    return "F";
+  } else if (rate < 0.47) {
+    return "E";
+  } else if (rate < 0.49) {
+    return "D";
+  } else if (rate < 0.5) {
+    return "C";
+  } else if (rate < 0.52) {
+    return "B";
+  } else if (rate < 0.55) {
+    return "A";
+  } else if (rate < 0.6) {
+    return "S";
+  } else {
+    return "SSS";
+  }
+};
+
 export const sanitizeString = (str, _default = null) => {
   if (str == null) return _default;
   return str.length > 0 ? str : _default;
+};
+
+export const formatRate = (rate, fixed, _default = 0) => {
+  if (rate == null || typeof rate != "number") return _default.toFixed(fixed);
+  return (rate * 100).toFixed(fixed);
 };

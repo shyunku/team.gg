@@ -1,0 +1,128 @@
+.champion-detail-position-menu {
+  .page-menu-item {
+    min-width: 50px !important;
+  }
+}
+
+.champion-meta-content {
+  width: 100%;
+
+  .content {
+    display: flex;
+    width: 100%;
+    margin-top: 40px;
+
+    .meta-list {
+      display: flex;
+      flex-direction: column;
+      width: 420px;
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        padding: 0 0 !important;
+
+        .meta-item {
+          display: flex;
+          align-items: center;
+          font-size: 13px;
+          padding: 8px 12px;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid #ffffff10;
+          }
+
+          .styles {
+            display: flex;
+            position: relative;
+
+            .primary-style-icon {
+              width: 30px;
+              height: 30px;
+              background: black !important;
+              border-radius: 3px;
+              overflow: hidden;
+
+              img {
+                transform: scale(0.9);
+              }
+            }
+
+            .sub-style-icon {
+              width: 15px;
+              height: 15px;
+              background-color: black;
+              border-radius: 50%;
+              overflow: hidden;
+
+              position: absolute;
+              bottom: -2px;
+              right: -2px;
+
+              img {
+                transform: scale(0.9);
+              }
+            }
+          }
+
+          .item-set {
+            display: flex;
+            align-items: center;
+            margin-left: 8px;
+
+            .item-icon {
+              width: 30px;
+              height: 30px;
+              border-radius: 3px;
+              overflow: hidden;
+
+              &:not(:last-child) {
+                margin-right: 5px;
+              }
+            }
+          }
+
+          .meta-name {
+            margin-left: 12px;
+            flex: 1;
+            font-weight: bold;
+            // font-size: 15px;
+          }
+
+          .meta-plays {
+            width: 75px;
+            text-align: center;
+          }
+
+          .win-rate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 0;
+            width: 45px;
+            margin-left: 15px;
+            border-radius: 3px;
+          }
+
+          .rates {
+            display: flex;
+            align-items: center;
+
+            .rate {
+              display: flex;
+              align-items: flex-end;
+            }
+          }
+        }
+      }
+    }
+
+    .meta-detail {
+      display: flex;
+      flex-direction: column;
+      margin-left: 15px;
+      flex: 1;
+      overflow: hidden;
+    }
+  }
+}
