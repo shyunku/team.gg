@@ -1,6 +1,18 @@
 .champion-detail-position-menu {
   .page-menu-item {
-    min-width: 50px !important;
+    display: flex;
+    align-items: center;
+    min-width: 70px !important;
+
+    .position-icon {
+      width: 15px;
+      height: 15px;
+      opacity: 1;
+    }
+
+    .label {
+      margin-left: 3px;
+    }
   }
 }
 
@@ -10,7 +22,8 @@
   .content {
     display: flex;
     width: 100%;
-    margin-top: 40px;
+    margin-top: 30px;
+    align-items: flex-start;
 
     .meta-list {
       display: flex;
@@ -27,6 +40,18 @@
           align-items: center;
           font-size: 13px;
           padding: 8px 12px;
+          border-left: 5px solid rgba(255, 255, 255, 0.1);
+          cursor: pointer;
+
+          &:hover {
+            border-left: 5px solid rgb(160, 138, 88);
+            background-color: rgba(0, 0, 0, 0.2);
+          }
+
+          &.selected {
+            border-left: 5px solid rgb(231, 199, 129);
+            color: rgb(245, 231, 202);
+          }
 
           &:not(:last-child) {
             border-bottom: 1px solid #ffffff10;
@@ -37,9 +62,9 @@
             position: relative;
 
             .primary-style-icon {
-              width: 30px;
-              height: 30px;
-              background: black !important;
+              width: 24px;
+              height: 24px;
+              background: transparent !important;
               border-radius: 3px;
               overflow: hidden;
 
@@ -51,7 +76,7 @@
             .sub-style-icon {
               width: 15px;
               height: 15px;
-              background-color: black;
+              background-color: rgba(0, 0, 0, 0.6);
               border-radius: 50%;
               overflow: hidden;
 
@@ -60,7 +85,7 @@
               right: -2px;
 
               img {
-                transform: scale(0.9);
+                transform: scale(0.8);
               }
             }
           }
@@ -68,7 +93,7 @@
           .item-set {
             display: flex;
             align-items: center;
-            margin-left: 8px;
+            margin-left: 10px;
 
             .item-icon {
               width: 30px;
@@ -83,10 +108,10 @@
           }
 
           .meta-name {
-            margin-left: 12px;
+            margin-left: 15px;
             flex: 1;
             font-weight: bold;
-            // font-size: 15px;
+            font-size: 13px;
           }
 
           .meta-plays {
@@ -123,6 +148,47 @@
       margin-left: 15px;
       flex: 1;
       overflow: hidden;
+
+      .body {
+        display: flex;
+        flex-direction: column;
+
+        .item-set,
+        .spell-set {
+          display: flex;
+          flex-direction: column;
+
+          &:not(:first-child) {
+            margin-top: 25px;
+          }
+
+          .label {
+            font-size: 13px;
+            font-weight: bold;
+          }
+
+          .item-list,
+          .spell-list {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+
+            .item-icon,
+            .spell-icon {
+              width: 40px;
+              height: 40px;
+              border-radius: 3px;
+              overflow: hidden;
+              margin-bottom: 6px;
+
+              &:not(:last-child) {
+                margin-right: 6px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

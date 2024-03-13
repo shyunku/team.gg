@@ -6,6 +6,7 @@
   import { push } from "svelte-spa-router";
   import moment from "moment";
   import "moment/locale/ko";
+  import { toasts } from "svelte-toasts";
   moment.locale("ko");
 
   let rawData = null;
