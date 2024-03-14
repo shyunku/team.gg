@@ -47,7 +47,7 @@
       const resp = await getChampionStatisticsReq();
       const { updatedAt, data } = resp;
       lastUpdateTime = updatedAt;
-      rawData = data.sort((a, b) => a.championName.localeCompare(b.championName));
+      rawData = Object.values(data).sort((a, b) => a.championName.localeCompare(b.championName));
       // console.log(data);
     } catch (e) {
       console.error(e);
@@ -66,10 +66,11 @@
   $: if (rawData) {
     refinedData = rawData
       .map((c) => {
+        let extra = c?.extraStats ?? {};
         return {
           ...c,
           winRate: (c?.win ?? 0) / (c?.total ?? 1),
-          kda: ((c?.avgKills ?? 0) + (c?.avgAssists ?? 0)) / (c?.avgDeaths ?? 1),
+          kda: ((extra?.avgKills ?? 0) + (extra?.avgAssists ?? 0)) / (extra?.avgDeaths ?? 1),
         };
       })
       .sort((a, b) => {
@@ -110,6 +111,7 @@
         {/each}
       </div>
       {#each refinedData as c}
+        {@const extra = c?.extraStats ?? {}}
         <div class="champion-item">
           <div class="champion-img img">
             <SafeImg src={championIconUrl(c?.championId)} />
@@ -140,9 +142,9 @@
             {c.kda.toFixed(2)}
           </div>
           <div class="champion-minions">
-            {(c?.avgMinionsKilled ?? 0).toFixed(0)} CS
+            {(extra?.avgMinionsKilled ?? 0).toFixed(0)} CS
           </div>
-          <div class="champion-gold-earned">{(c?.avgGoldEarned ?? 0).toFixed(0)} 골드</div>
+          <div class="champion-gold-earned">{(extra?.avgGoldEarned ?? 0).toFixed(0)} 골드</div>
         </div>
       {/each}
     </div>

@@ -10,6 +10,7 @@
   import "./CustomGameContent.scss";
   import NameTagSearchInput from "../../molecules/NameTagSearchInput.svelte";
   import LinePosition from "../../molecules/LinePosition.svelte";
+  import sha256 from "sha256";
   import {
     addCustomGameCandidateReq,
     arrangeAllCandidatesReq,
@@ -34,6 +35,7 @@
   import CustomGameContentTeam from "./custom-game-content/CustomGameContentTeam.svelte";
   import ContextDiv from "../../components/ContextDiv.svelte";
   import ContextMenu from "../../components/ContextMenu.svelte";
+  import JsxUtil from "../../utils/JsxUtil";
 
   export let configId;
   export let candidates = [];
@@ -49,6 +51,7 @@
 
   const positions = ["TOP", "JUNGLE", "MID", "ADC", "SUPPORT"];
 
+  let detectedMultiSearchSummoners = {};
   let draggingCandidate = false;
   let draggingParticipant = false;
   let candidateHoverTarget = null;
@@ -67,8 +70,9 @@
     let toast;
     try {
       toast = toasts.add({
+        key: `onCandidateSearch-${name}-${tag}`,
         title: "소환사 정보",
-        description: "소환사 정보를 가져오는 중입니다...",
+        description: `${name}#${tag}의 정보를 가져오는 중입니다...`,
         type: "info",
         duration: 0,
       });
@@ -76,7 +80,7 @@
       candidates = [...candidates, resp];
       toast.update({
         title: "소환사 정보",
-        description: "소환사 정보를 가져왔습니다.",
+        description: `${name}#${tag}의 정보를 가져왔습니다.`,
         type: "success",
         duration: 3000,
       });
@@ -87,23 +91,26 @@
           case 404:
             toasts.add({
               title: "소환사 정보",
-              description: "소환사 정보를 찾을 수 없습니다.",
+              description: `${name}#${tag}의 정보를 찾을 수 없습니다.`,
               type: "warning",
+              duration: 3000,
             });
             return;
           case 409:
             toasts.add({
               title: "소환사 정보",
-              description: "이미 추가된 소환사입니다.",
+              description: `${name}#${tag}는 이미 추가된 소환사입니다.`,
               type: "warning",
+              duration: 3000,
             });
             return;
         }
       }
       toasts.add({
         title: "소환사 정보",
-        description: "소환사 정보를 가져오던 중 오류가 발생했습니다.",
+        description: `${name}#${tag}의 정보를 가져오던 중 오류가 발생했습니다.`,
         type: "error",
+        duration: 5000,
       });
     } finally {
       toast.remove();
@@ -223,6 +230,36 @@
         duration: 3000,
         type: "error",
       });
+    }
+  };
+
+  const onMultiSearchTextChange = (e) => {
+    const payload = e.target.value;
+    const lines = payload.split("\n");
+    const filtered = lines.filter((l) => l.includes("님이 로비에 참가하셨습니다."));
+    detectedMultiSearchSummoners = {};
+    for (let line of filtered) {
+      const match = line.match(/([a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9#\s]+)님이 로비에 참가하셨습니다./i);
+      const matched = match?.[1] ?? null;
+      if (matched == null) continue;
+      const trimmed = matched.trim();
+      if (trimmed.length === 0) continue;
+      const splited = trimmed.split("#");
+      if (splited.length !== 2) continue;
+      const gameName = splited[0]?.trim() ?? "";
+      const tag = splited[1]?.trim() ?? "";
+      if (gameName.length === 0 || tag.length === 0) continue;
+      const key = `${gameName}#${tag}`;
+      const encryptedKey = sha256(key);
+
+      detectedMultiSearchSummoners[encryptedKey] = { gameName, tag };
+    }
+  };
+
+  const applyMultiSearch = () => {
+    for (let key in detectedMultiSearchSummoners) {
+      const { gameName, tag } = detectedMultiSearchSummoners[key];
+      onCandidateSearch(gameName, tag);
     }
   };
 
@@ -499,6 +536,28 @@
                 <div class="text">지정 랭크 초기화</div>
               </div> -->
             </div>
+          </div>
+        </div>
+        <div class="multi-search card">
+          <div class="header">
+            <div class="label">멀티서치</div>
+            <div class="applier-wrapper">
+              <div class="detected">{Object.keys(detectedMultiSearchSummoners).length}명 감지됨</div>
+              <div
+                class={"applier" +
+                  JsxUtil.classByEqual(Object.keys(detectedMultiSearchSummoners).length, 0, "disabled")}
+                on:click={applyMultiSearch}
+              >
+                적용
+              </div>
+            </div>
+          </div>
+          <div class="body">
+            <textarea
+              placeholder="채팅창 복사 후#KR1 님이 로비에 참가하셨습니다.&#13;이곳에 #KR1 님이 로비에 참가하셨습니다.&#13;붙여넣기 #KR1 님이 로비에 참가하셨습니다.&#13;하면 됩니다 #KR1 님이 로비에 참가하셨습니다.&#13;참 쉽죠 #션 쿠 님이 로비에 참가하셨습니다."
+              spellcheck="false"
+              on:input={onMultiSearchTextChange}
+            ></textarea>
           </div>
         </div>
         <div class="candidate-list card">

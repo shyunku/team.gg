@@ -58,7 +58,7 @@
     "svelte-icons": "2.1.0",
     "svelte-range-slider-pips": "2.2.3",
     "svelte-spa-router": "3.3.0",
-    "svelte-toasts": "1.1.2",
+    "svelte-toasts": "github:shyunku/svelte-toasts",
     "uuid": "9.0.1",
     "wait-on": "7.2.0"
   }

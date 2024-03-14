@@ -265,24 +265,27 @@ export const getMasteryStatisticsReq = async () => {
 
 /* ---------------------- links ---------------------- */
 
-export const profileIconUrl = (profileIconId) => {
+export const profileIconUrl = (profileIconId = 0) => {
+  // if (profileIconId == 0) return null;
   return `${ServerHost}/icon/profile?id=${profileIconId}`;
 };
 
-export const championIconUrl = (championId) => {
+export const championIconUrl = (championId = 0) => {
+  if (championId == 0) return null;
   return `${ServerHost}/icon/champion?key=${championId}`;
 };
 
-export const summonerSpellIconUrl = (spellId) => {
+export const summonerSpellIconUrl = (spellId = 0) => {
+  if (spellId == 0) return null;
   return `${ServerHost}/icon/summonerSpell?id=${spellId}`;
 };
 
-export const itemIconUrl = (itemId) => {
+export const itemIconUrl = (itemId = 0) => {
   if (itemId == 0) return null;
   return `${ServerHost}/icon/item?id=${itemId}`;
 };
 
-export const perkStyleIconUrl = (perkStyleId) => {
+export const perkStyleIconUrl = (perkStyleId = 0) => {
   if (perkStyleId == 0) return null;
   return `${ServerHost}/icon/perkStyle?id=${perkStyleId}`;
 };

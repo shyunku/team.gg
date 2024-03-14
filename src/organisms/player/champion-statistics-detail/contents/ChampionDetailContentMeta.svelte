@@ -18,13 +18,23 @@
 
   export let data;
 
+  const PerkStatLabel = {
+    공격: "statOffenseId",
+    방어: "statDefenseId",
+    유연: "statFlexId",
+  };
+
   let selectedLane = null;
   let metaTree = {};
   let meta = null; // selected meta
   let majorMetPicks = [];
   let metaPicks = [];
   let linePickCountTotal = 0;
+  let metaPickTotalCount = 0;
   let selectedMeta = null;
+  let selectedMajorSubPerkMap = {};
+  let selectedMinorSubPerkMap = {};
+  let sortedStatSlots = [];
   $: {
     metaTree = data?.metaTree ?? {};
 
@@ -45,9 +55,14 @@
 
     meta = metaTree[selectedLane];
     majorMetPicks = (meta?.majorMetaPicks ?? []).sort((a, b) => b.count - a.count);
-    let metaPickTotalCount = (meta?.metaPicks ?? []).reduce((acc, e) => acc + e.count, 0);
-    metaPicks = (meta?.metaPicks ?? [])
-      .filter((e) => e.count / metaPickTotalCount > 0.03 && e.itemTree != null && e.itemTree.length >= 4)
+    metaPickTotalCount = (meta?.metaPicks ?? []).reduce((acc, e) => acc + e.count, 0);
+    metaPicks = (meta?.metaPicks ?? []).filter(
+      (e) => e.count / metaPickTotalCount > 0.03 && e.itemTree != null && e.itemTree.length >= 4
+    );
+    if (metaPicks.length < 5) {
+      metaPicks = meta?.metaPicks ?? [];
+    }
+    metaPicks = metaPicks
       .sort((a, b) => b.winRate - a.winRate)
       .slice(0, 15)
       .map((e) => {
@@ -60,6 +75,27 @@
 
     if (selectedMeta == null && metaPicks.length > 0) {
       selectedMeta = metaPicks[0];
+    }
+    selectedMajorSubPerkMap = (selectedMeta?.majorPerkGroup?.subPerks ?? []).reduce((acc, e) => {
+      acc[e] = true;
+      return acc;
+    }, {});
+    selectedMinorSubPerkMap = (selectedMeta?.minorPerkGroup?.subPerks ?? []).reduce((acc, e) => {
+      acc[e] = true;
+      return acc;
+    }, {});
+    let selectedStatSlotMap = (selectedMeta?.statSlots ?? []).reduce((acc, e) => {
+      acc[e.slotLabel] = e;
+      return acc;
+    }, {});
+    sortedStatSlots = [];
+    for (const statLabel in PerkStatLabel) {
+      let statKey = PerkStatLabel[statLabel];
+      let stat = selectedStatSlotMap[statLabel];
+      if (stat != null) {
+        stat.perks = stat.perks.map((perkId) => ({ perkId, highlight: selectedMeta?.perkExtra?.[statKey] == perkId }));
+        sortedStatSlots.push(stat);
+      }
     }
 
     console.log("meta", selectedMeta);
@@ -90,7 +126,7 @@
     <div class="content">
       <div class="meta-list card">
         <div class="header">
-          <div class="title">현재 유행 메타 ({metaPicks.length}개)</div>
+          <div class="title">현재 유행 메타 ({metaPicks.length}개) - 총 ({metaPickTotalCount}게임)</div>
         </div>
         <div class="body">
           {#each metaPicks as e}
@@ -103,10 +139,10 @@
             >
               <div class="styles">
                 <div class="primary-style-icon style img">
-                  <SafeImg src={perkStyleIconUrl(e?.majorPerkStyleId)} />
+                  <SafeImg src={perkStyleIconUrl(e?.majorPerkGroup?.perkStyleId)} />
                 </div>
                 <div class="sub-style-icon style img">
-                  <SafeImg src={perkStyleIconUrl(e?.minorPerkStyleId)} />
+                  <SafeImg src={perkStyleIconUrl(e?.minorPerkGroup?.perkStyleId)} />
                 </div>
               </div>
               <div class="item-set">
@@ -131,9 +167,51 @@
       </div>
       <div class="meta-detail card">
         <div class="header">
-          <div class="title">{data?.championName} - {selectedMeta?.metaName ?? ""} 메타 상세</div>
+          <div class="title">{selectedMeta?.metaName ?? ""} 메타 상세</div>
         </div>
         <div class="body">
+          <div class="perk-style-details">
+            <div class="primary-style-detail section">
+              {#each selectedMeta?.mainSlots ?? [] as mainSlot}
+                <div class="perk-slots">
+                  {#each mainSlot?.perks ?? [] as perkId}
+                    <div
+                      class={"perk-slot img" +
+                        JsxUtil.classByCondition(selectedMajorSubPerkMap[perkId] == true, "highlight")}
+                    >
+                      <SafeImg src={perkStyleIconUrl(perkId)} />
+                    </div>
+                  {/each}
+                </div>
+              {/each}
+            </div>
+            <div class="sub-style-detail section">
+              {#each selectedMeta?.subSlots ?? [] as subSlot}
+                <div class="perk-slots">
+                  {#each subSlot?.perks ?? [] as perkId}
+                    <div
+                      class={"perk-slot img" +
+                        JsxUtil.classByCondition(selectedMinorSubPerkMap[perkId] == true, "highlight")}
+                    >
+                      <SafeImg src={perkStyleIconUrl(perkId)} />
+                    </div>
+                  {/each}
+                </div>
+              {/each}
+            </div>
+            <div class="stat-detail section">
+              {#each sortedStatSlots ?? [] as statSlot}
+                <div class="stat-slots">
+                  {#each statSlot?.perks ?? [] as perk}
+                    {@const { perkId, highlight } = perk}
+                    <div class={"stat-slot img" + JsxUtil.classByCondition(highlight, "highlight")}>
+                      <SafeImg src={perkStyleIconUrl(perkId)} />
+                    </div>
+                  {/each}
+                </div>
+              {/each}
+            </div>
+          </div>
           <div class="spells spell-set">
             <div class="label">소환사 주문</div>
             <div class="item-list">
