@@ -91,10 +91,13 @@
     sortedStatSlots = [];
     for (const statLabel in PerkStatLabel) {
       let statKey = PerkStatLabel[statLabel];
-      let stat = selectedStatSlotMap[statLabel];
+      const stat = selectedStatSlotMap[statLabel];
       if (stat != null) {
-        stat.perks = stat.perks.map((perkId) => ({ perkId, highlight: selectedMeta?.perkExtra?.[statKey] == perkId }));
-        sortedStatSlots.push(stat);
+        const newPerks = stat.perks.map((perkId) => ({
+          perkId,
+          highlight: selectedMeta?.perkExtra?.[statKey] == perkId,
+        }));
+        sortedStatSlots.push(newPerks);
       }
     }
 
@@ -200,9 +203,9 @@
               {/each}
             </div>
             <div class="stat-detail section">
-              {#each sortedStatSlots ?? [] as statSlot}
+              {#each sortedStatSlots ?? [] as statSlots}
                 <div class="stat-slots">
-                  {#each statSlot?.perks ?? [] as perk}
+                  {#each statSlots ?? [] as perk}
                     {@const { perkId, highlight } = perk}
                     <div class={"stat-slot img" + JsxUtil.classByCondition(highlight, "highlight")}>
                       <SafeImg src={perkStyleIconUrl(perkId)} />
@@ -244,7 +247,7 @@
             </div>
           </div>
           <div class="main-items item-set">
-            <div class="label">핵심 아이템</div>
+            <div class="label">핵심 아이템 빌드</div>
             <div class="item-list">
               {#each selectedMeta?.itemTree ?? [] as itemId}
                 <div class="item-icon img">
@@ -254,7 +257,7 @@
             </div>
           </div>
           <div class="sub-items item-set">
-            <div class="label">상황별 아이템</div>
+            <div class="label">상황별 아이템 빌드</div>
             <div class="item-list">
               {#each (selectedMeta?.subItemTree ?? []).slice(0, 8) as itemId}
                 <div class="item-icon img">

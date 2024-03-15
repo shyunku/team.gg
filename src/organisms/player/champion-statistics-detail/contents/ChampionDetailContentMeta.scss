@@ -155,7 +155,8 @@
 
         .perk-style-details {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-end;
+          // align-items: center;
           width: 100%;
           justify-content: center;
           margin-top: 20px;
@@ -170,8 +171,8 @@
 
             &.primary-style-detail {
               .perk-slots:first-child .perk-slot {
-                width: 60px !important;
-                height: 60px !important;
+                width: 48px !important;
+                height: 48px !important;
               }
             }
 
@@ -188,8 +189,8 @@
 
               .perk-slot,
               .stat-slot {
-                width: 45px;
-                height: 45px;
+                width: 32px;
+                height: 32px;
                 border: 1px solid transparent;
                 background: rgba(0, 0, 0, 0.7);
                 border-radius: 50%;
@@ -214,8 +215,8 @@
             }
 
             .stat-slot {
-              width: 30px !important;
-              height: 30px !important;
+              width: 24px !important;
+              height: 24px !important;
             }
           }
         }

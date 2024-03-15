@@ -19,7 +19,7 @@
     justify-content: center;
     flex: 1;
     width: 100%;
-    height: 100%;
+    // height: 100%;
   }
 
   @media (max-width: 1240px) {

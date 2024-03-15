@@ -190,13 +190,21 @@
   };
 
   const renewRanks = async () => {
+    let toast;
     try {
+      toast = toasts.add({
+        title: "랭크 갱신",
+        description: "소환사들의 프로필을 갱신중입니다.",
+        type: "info",
+        duration: 0,
+      });
       await renewCustomGameTeamRankReq(configId);
       try {
         fetchAllData();
       } catch (err) {
         console.error(err);
       }
+
       toasts.add({
         title: "랭크 갱신",
         description: "랭크를 갱신했습니다.",
@@ -209,6 +217,8 @@
         description: "랭크 갱신 도중 오류가 발생했습니다.",
         type: "error",
       });
+    } finally {
+      toast.remove();
     }
   };
 
@@ -460,9 +470,15 @@
       team2[pos] = candidateMap[team2puuid];
     }
 
-    visibleCandidates = candidates.filter((c) => {
-      return !Object.values(team1).includes(c) && !Object.values(team2).includes(c);
-    });
+    visibleCandidates = candidates
+      .filter((c) => {
+        return !Object.values(team1).includes(c) && !Object.values(team2).includes(c);
+      })
+      .sort((a, b) => {
+        let aName = (a?.summary?.gameName ?? "") + "#" + (a?.summary?.tagLine ?? "");
+        let bName = (b?.summary?.gameName ?? "") + "#" + (b?.summary?.tagLine ?? "");
+        return aName.localeCompare(bName);
+      });
     // console.log(candidateMap);
   }
 </script>

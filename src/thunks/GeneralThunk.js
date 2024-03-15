@@ -287,5 +287,6 @@ export const itemIconUrl = (itemId = 0) => {
 
 export const perkStyleIconUrl = (perkStyleId = 0) => {
   if (perkStyleId == 0) return null;
+  perkStyleId = parseInt(perkStyleId);
   return `${ServerHost}/icon/perkStyle?id=${perkStyleId}`;
 };
