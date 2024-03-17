@@ -42,11 +42,24 @@
         border-bottom: 1px solid #ffffff23;
       }
 
+      .champion-position {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+
+        .position-icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
       .champion-img {
         width: 30px;
         height: 30px;
         overflow: hidden;
         border-radius: 3px;
+        // margin-left: 5px;
 
         img {
           transform: scale(1.2);
@@ -61,6 +74,31 @@
         &:hover {
           color: rgb(255, 255, 255);
         }
+      }
+
+      .champion-items {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+
+        .item {
+          width: 28px;
+          height: 28px;
+          border-radius: 3px;
+
+          &:not(:last-child) {
+            margin-right: 5px;
+          }
+        }
+      }
+
+      .champion-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 140px;
+        text-align: center;
       }
 
       .champion-played {

@@ -10,6 +10,7 @@
 
   export const StatisticsMenu = {
     CHAMPION: { key: "champion", label: "챔피언" },
+    META: { key: "meta", label: "메타" },
     TIER: { key: "tier", label: "티어" },
     MASTERY: { key: "mastery", label: "숙련도" },
   };

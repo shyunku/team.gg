@@ -48,7 +48,7 @@
       const { updatedAt, data } = resp;
       lastUpdateTime = updatedAt;
       rawData = Object.values(data).sort((a, b) => a.championName.localeCompare(b.championName));
-      // console.log(data);
+      console.log(data);
     } catch (e) {
       console.error(e);
       toasts.add({
@@ -71,6 +71,8 @@
           ...c,
           winRate: (c?.win ?? 0) / (c?.total ?? 1),
           kda: ((extra?.avgKills ?? 0) + (extra?.avgAssists ?? 0)) / (extra?.avgDeaths ?? 1),
+          avgMinionsKilled: extra?.avgMinionsKilled ?? 0,
+          avgGoldEarned: extra?.avgGoldEarned ?? 0,
         };
       })
       .sort((a, b) => {

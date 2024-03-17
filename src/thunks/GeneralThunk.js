@@ -253,6 +253,11 @@ export const getChampionDetailStatisticsReq = async (championId) => {
   return response.data;
 };
 
+export const getMetaStatisticsReq = async () => {
+  const response = await instance.get(`/platform/statistics/meta`);
+  return response.data;
+};
+
 export const getTierStatisticsReq = async () => {
   const response = await instance.get(`/platform/statistics/tier`);
   return response.data;

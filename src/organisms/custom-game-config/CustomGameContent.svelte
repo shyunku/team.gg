@@ -66,7 +66,7 @@
     return acc;
   }, {});
 
-  const onCandidateSearch = async (name, tag) => {
+  const onCandidateSearch = async (name, tag, withWarn = true) => {
     let toast;
     try {
       toast = toasts.add({
@@ -84,6 +84,7 @@
         type: "success",
         duration: 3000,
       });
+      return resp;
     } catch (err) {
       if (err instanceof AxiosError) {
         const code = err?.response?.status;
@@ -97,13 +98,15 @@
             });
             return;
           case 409:
-            toasts.add({
-              title: "소환사 정보",
-              description: `${name}#${tag}는 이미 추가된 소환사입니다.`,
-              type: "warning",
-              duration: 3000,
-            });
-            return;
+            if (withWarn) {
+              toasts.add({
+                title: "소환사 정보",
+                description: `${name}#${tag}는 이미 추가된 소환사입니다.`,
+                type: "warning",
+                duration: 3000,
+              });
+            }
+            return candidates.find((c) => c.summary.gameName === name && c.summary.tagLine === tag);
         }
       }
       toasts.add({
@@ -266,10 +269,53 @@
     }
   };
 
-  const applyMultiSearch = () => {
-    for (let key in detectedMultiSearchSummoners) {
-      const { gameName, tag } = detectedMultiSearchSummoners[key];
-      onCandidateSearch(gameName, tag);
+  const applyMultiSearch = async () => {
+    try {
+      const promises = [];
+      for (let key in detectedMultiSearchSummoners) {
+        const { gameName, tag } = detectedMultiSearchSummoners[key];
+        promises.push(onCandidateSearch(gameName, tag, false));
+      }
+      let addedSummoners = [];
+      const responses = await Promise.all(promises);
+      for (let resp of responses) {
+        if (resp != null) {
+          addedSummoners.push(resp);
+        }
+      }
+
+      const teamPositions = [...positions].reduce((acc, cur) => {
+        acc.push({ team: 1, position: cur });
+        acc.push({ team: 2, position: cur });
+        return acc;
+      }, []);
+
+      // push to participants
+      await unselectParticipants();
+
+      if (addedSummoners.length > 10) {
+        addedSummoners = addedSummoners.slice(0, 10);
+      }
+      let index = 0;
+      for (let summoner of addedSummoners) {
+        const puuid = summoner?.summary?.puuid;
+        const team = teamPositions[index].team;
+        const position = teamPositions[index].position;
+        await arrangeCustomGameParticipantReq(configId, puuid, team, position);
+        index++;
+      }
+      try {
+        fetchAllData();
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "후보 선택 오류",
+        description: "후보를 선택하던 중 오류가 발생했습니다.",
+        type: "error",
+      });
     }
   };
 
