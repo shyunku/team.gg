@@ -14,10 +14,12 @@
   import { toasts } from "svelte-toasts";
   import LinePosition from "../../../molecules/LinePosition.svelte";
   import { MetaCategories } from "../../../types/General";
+  import { compareVersions } from "compare-versions";
   moment.locale("ko");
 
   let rawData = null;
   let refinedData = [];
+  let dataPatches = [];
   let lastUpdateTime = null;
 
   let reverseSort = false;
@@ -52,8 +54,9 @@
   const getChampionStatistics = async () => {
     try {
       const resp = await getMetaStatisticsReq();
-      const { updatedAt, data } = resp;
+      const { updatedAt, data, patches } = resp;
       lastUpdateTime = updatedAt;
+      dataPatches = patches.sort((a, b) => compareVersions(b, a, ">="));
       rawData = [];
       const totalPickCount = Object.values(data).reduce(
         (acc, cur) => acc + Object.values(cur.metaTree).reduce((acc, cur) => acc + cur.pickCount, 0),
@@ -76,7 +79,6 @@
             let metaPickRate = meta.pickCount / laneData.pickCount;
             if (metaPickRate < 0.2) continue; // 라인 내 25% 미만의 픽률 메타는 제외
             if (meta.count < 100) continue;
-            console.log(meta.count, maxPickCount);
             if (meta.winRate > maxWinRate) {
               maxWinRate = meta.winRate;
               maxWinRateMeta = meta;
@@ -160,7 +162,7 @@
 
 <div class="statistics-champion">
   <div class="content card">
-    <div class="title">챔피언 메타 통계</div>
+    <div class="title">챔피언 메타 통계 ({dataPatches.join(", ")} 패치)</div>
     <div class="description">해당 지표들은 team.gg에서 검색 또는 추적되는 데이터들로 구성되었습니다.</div>
     <div class="updated-at">{moment(lastUpdateTime).format("YYYY년 M월 D일 a h시 mm분에 업데이트됨")}</div>
     <div class="champion-list">

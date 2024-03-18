@@ -7,10 +7,12 @@
   import moment from "moment";
   import "moment/locale/ko";
   import { toasts } from "svelte-toasts";
+  import { compareVersions } from "compare-versions";
   moment.locale("ko");
 
   let rawData = null;
   let refinedData = [];
+  let dataPatches = [];
   let lastUpdateTime = null;
 
   let reverseSort = false;
@@ -45,9 +47,10 @@
   const getChampionStatistics = async () => {
     try {
       const resp = await getChampionStatisticsReq();
-      const { updatedAt, data } = resp;
+      const { updatedAt, data, patches } = resp;
       lastUpdateTime = updatedAt;
       rawData = Object.values(data).sort((a, b) => a.championName.localeCompare(b.championName));
+      dataPatches = patches.sort((a, b) => compareVersions(b, a, ">="));
       console.log(data);
     } catch (e) {
       console.error(e);
@@ -98,7 +101,7 @@
 
 <div class="statistics-champion">
   <div class="content card">
-    <div class="title">챔피언 통계</div>
+    <div class="title">챔피언 통계 ({dataPatches.join(", ")} 패치)</div>
     <div class="description">해당 지표들은 team.gg에서 검색 또는 추적되는 데이터들로 구성되었습니다.</div>
     <div class="updated-at">{moment(lastUpdateTime).format("YYYY년 M월 D일 a h시 mm분에 업데이트됨")}</div>
     <div class="champion-list">
