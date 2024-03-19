@@ -34,6 +34,8 @@
         display: flex;
         flex-direction: column;
         padding: 0 0 !important;
+        max-height: 750px;
+        overflow-y: overlay;
 
         .meta-item {
           display: flex;
@@ -55,6 +57,28 @@
 
           &:not(:last-child) {
             border-bottom: 1px solid #ffffff10;
+          }
+
+          .champion {
+            display: flex;
+            align-items: center;
+            flex: 1;
+
+            .champion-icon {
+              width: 30px;
+              height: 30px;
+              border-radius: 3px;
+              overflow: hidden;
+              margin-right: 10px;
+
+              img {
+                transform: scale(1.1);
+              }
+            }
+
+            .champion-name {
+              // font-weight: bold;
+            }
           }
 
           .styles {
@@ -117,6 +141,7 @@
           .meta-plays {
             width: 75px;
             text-align: center;
+            margin-left: 10px;
           }
 
           .win-rate {

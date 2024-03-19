@@ -8,7 +8,6 @@
   export const ChampionDetailOptions = {
     META: { key: "meta", label: "빌드 및 메타" },
     SKILL: { key: "skill", label: "스킬 설명 (Beta)" },
-    COUNTER: { key: "counter", label: "챔피언 상대 (Beta)" },
   };
 
   export let params = {};

@@ -9,6 +9,4 @@
   <ChampionDetailContentMeta {data} />
 {:else if menuKey === "skill"}
   <!-- create content -->
-{:else if menuKey === "counter"}
-  <!-- create content -->
 {/if}
