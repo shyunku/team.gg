@@ -54,7 +54,7 @@
           selectedMeta = null;
         }}
       >
-        <LinePosition position={lane} />
+        <LinePosition position={lane} size={16} />
         <div class="label">{laneLabel} ({formatRate(pickRate, 0)}%)</div>
       </PageMenuItem>
     {/each}

@@ -8,6 +8,7 @@
   export let reversed = false;
   export let cutout = 38;
   export let color = null;
+  export let fixed = 0;
 
   let fgColor = color ?? colorByRate(reversed ? 1 - rate : rate);
   let data = {
@@ -44,7 +45,7 @@
 
 <div class="chart-wrapper">
   <Doughnut {data} {options} />
-  <div class="text">{text ?? `${(rate * 100).toFixed(0)}%`}</div>
+  <div class="text">{text ?? `${(rate * 100).toFixed(fixed)}%`}</div>
 </div>
 
 <style lang="scss">

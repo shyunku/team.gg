@@ -188,6 +188,23 @@ export const setCustomGameCandidateCustomTierRankReq = async (customGameConfigId
   return response.data;
 };
 
+export const deleteCustomGameParticipantColorCodeReq = async (customGameConfigId) => {
+  const response = await instance.delete(
+    `/platform/custom-game/custom-color-label?customGameConfigId=${customGameConfigId}`
+  );
+  return response.data;
+};
+
+export const setCustomGameParticipantColorCodeReq = async (customGameConfigId, puuid, colorCode) => {
+  const response = await instance.post(`/platform/custom-game/custom-color-label`, {
+    customGameConfigId,
+    puuid,
+    colorCode,
+  });
+
+  return response.data;
+};
+
 export const getCustomGameBalanceReq = async (customGameConfigId) => {
   const response = await instance.get(`/platform/custom-game/balance?id=${customGameConfigId}`);
   return response.data;
@@ -278,6 +295,11 @@ export const profileIconUrl = (profileIconId = 0) => {
 export const championIconUrl = (championId = 0) => {
   if (championId == 0) return null;
   return `${ServerHost}/icon/champion?key=${championId}`;
+};
+
+export const centeredChampionSplashUrl = (championId = 0) => {
+  if (championId == 0) return null;
+  return `${ServerHost}/icon/centered-splash-champion?key=${championId}`;
 };
 
 export const summonerSpellIconUrl = (spellId = 0) => {

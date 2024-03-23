@@ -9,7 +9,7 @@
 <div class="tier-rank-group">
   {#each Object.keys(ValidTierRanks) as tier}
     {@const ranks = ValidTierRanks[tier]}
-    {#each ranks as rawRank}
+    {#each ranks.reverse() as rawRank}
       {@const rank = reverseFormatRankKr(rawRank)}
       <TierRank {tier} {rank} onClick={(e) => onSelect(tier, rank)} />
     {/each}

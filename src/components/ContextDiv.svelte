@@ -46,7 +46,7 @@
     for (let div of contextDivs) {
       if (div.id !== id) {
         // find context menu
-        const menus = div.getElementsByClassName("context-menu");
+        const menus = div.querySelectorAll(".context-menu:not(.context-menu-inner)");
         for (let menu of menus) {
           menu.style.display = "none";
         }
@@ -57,7 +57,7 @@
   const hideMenu = (e) => {
     // check if target is inside the context div
     const target = document.getElementById(id);
-    const menus = target.getElementsByClassName("context-menu");
+    const menus = target.querySelectorAll(".context-menu:not(.context-menu-inner)");
     for (let menu of menus) {
       menu.style.display = "none";
     }
@@ -77,6 +77,11 @@
     window.removeEventListener("click", hideMenu);
     window.removeEventListener("contextmenu", hideMenuOnContextMenu);
   });
+
+  $: {
+    let { class: className } = $$props;
+    class_ = className;
+  }
 </script>
 
 <div

@@ -3,15 +3,28 @@
   import SafeImg from "../../../atoms/SafeImg.svelte";
   import LinePosition from "../../../molecules/LinePosition.svelte";
   import TierRank from "../../../molecules/TierRank.svelte";
-  import { championIconUrl, getTierRankByRatingPointReq, profileIconUrl } from "../../../thunks/GeneralThunk";
-  import { TeamPositionKeyType, TeamPositionType } from "../../../types/General";
+  import {
+    championIconUrl,
+    getTierRankByRatingPointReq,
+    profileIconUrl,
+    setCustomGameParticipantColorCodeReq,
+  } from "../../../thunks/GeneralThunk";
+  import {
+    CustomGameTeammateColorLabelKeys,
+    CustomGameTeammateColorLabels,
+    TeamPositionKeyType,
+    TeamPositionType,
+  } from "../../../types/General";
   import { formatMasteryPoints, formatRankKr, formatTierKr } from "../../../utils/Util";
   import "./CustomGameContentTeam.scss";
   import ContextDiv from "../../../components/ContextDiv.svelte";
   import ContextMenu from "../../../components/ContextMenu.svelte";
   import TierRankGroup from "../../../molecules/TierRankGroup.svelte";
   import JsxUtil from "../../../utils/JsxUtil";
+  import ContextMenuItem from "../../../components/ContextMenuItem.svelte";
+  import ContextMenuInner from "../../../components/ContextMenuInner.svelte";
 
+  export let configId;
   export let positions;
   export let team;
   export let teamIndex = 0;
@@ -22,6 +35,7 @@
   export let onCandidateDragEnter;
   export let onCandidateDragOver;
   export let onCandidateDragLeave;
+  export let onCandidateDelete;
 
   export let onCandidateChangeFavorPosition;
   export let setCustomCandidateCustomTierRank;
@@ -33,6 +47,42 @@
   export let totalRatingPoint = 0;
   let teammateCount = 0;
   let avgTierRank = null;
+
+  const setParticipantColorLabel = async (puuid, color) => {
+    console.log(puuid, color);
+    try {
+      await setCustomGameParticipantColorCodeReq(configId, puuid, color);
+    } catch (err) {
+      console.log(err);
+      const code = err?.response?.status;
+      switch (code) {
+        case 406:
+          toasts.add({
+            title: "컬러 지정 실패",
+            description: "해당 컬러 지정 시 팀을 분리할 수 없는 경우가 발생합니다.",
+            duration: 3000,
+            type: "error",
+          });
+          break;
+        case 409:
+          toasts.add({
+            title: "컬러 지정 실패",
+            description: "6명 이상의 소환사에게 동일한 컬러를 지정할 수 없습니다.",
+            duration: 3000,
+            type: "error",
+          });
+          break;
+        default:
+          toasts.add({
+            title: "컬러 지정 실패",
+            description: "컬러 지정에 실패했습니다.",
+            duration: 3000,
+            type: "error",
+          });
+          break;
+      }
+    }
+  };
 
   const fetchAverageTierRank = async (avgRatingPoint) => {
     try {
@@ -105,6 +155,7 @@
       {#each positions as pos}
         {@const p = team[pos]}
         {@const puuid = p?.summary?.puuid ?? null}
+        {@const gameName = p?.summary?.gameName ?? null}
         {@const dropKey = `team${teamIndex}-${pos}`}
         {@const posFavor = p?.positionFavor}
         {@const participantRanks = [
@@ -122,17 +173,45 @@
         {@const soloRank = p?.soloRank}
         {@const flexRank = p?.flexRank}
         <ContextDiv
-          class="summoner"
+          class={"summoner" + JsxUtil.class(CustomGameTeammateColorLabelKeys[p?.colorCode]?.toLowerCase() ?? "")}
           draggable="true"
           onDragStart={(e) => onParticipantDragStart(e, puuid, pos, teamIndex)}
           onDragEnd={onParticipantDragEnd}
         >
-          <ContextMenu className="summoner-custom-tier-ranks">
-            <TierRankGroup
-              onSelect={(tier, rank) => {
-                setCustomCandidateCustomTierRank(puuid, tier, rank);
-              }}
-            />
+          <ContextMenu className="summoner-menus">
+            <ContextMenuItem class="menu">
+              <div class="label">
+                {gameName} 랭크 지정
+              </div>
+              <ContextMenuInner class="tier-rank-group">
+                <TierRankGroup
+                  onSelect={(tier, rank) => {
+                    setCustomCandidateCustomTierRank(puuid, tier, rank);
+                  }}
+                />
+              </ContextMenuInner>
+            </ContextMenuItem>
+            <ContextMenuItem class="menu">
+              <div class="label">
+                {gameName} 컬러 지정
+              </div>
+              <ContextMenuInner class="color-label-group">
+                <div class="color-label" on:click={(e) => setParticipantColorLabel(puuid, 0)}>
+                  <div class="color-ball"></div>
+                  <div class="label">컬러 제거</div>
+                </div>
+                {#each Object.keys(CustomGameTeammateColorLabels) as color}
+                  <div
+                    class="color-label"
+                    on:click={(e) => setParticipantColorLabel(puuid, CustomGameTeammateColorLabels[color])}
+                  >
+                    <div class="color-ball {color.toLowerCase()}"></div>
+                    <div class="label">{color}</div>
+                  </div>
+                {/each}
+              </ContextMenuInner>
+            </ContextMenuItem>
+            <ContextMenuItem class="menu" on:click={(e) => onCandidateDelete(puuid)}>{gameName} 제거</ContextMenuItem>
           </ContextMenu>
           {#if draggingCandidate || draggingParticipant}
             <div
@@ -148,7 +227,7 @@
             </div>
           {/if}
           <div class="position">
-            <LinePosition position={pos?.toLowerCase()} interactive={false} strength={1} />
+            <LinePosition position={pos?.toLowerCase()} interactive={false} strength={1} size={20} />
           </div>
           {#if p != null}
             <div class="profile-icon img">
@@ -158,7 +237,7 @@
             <div class="name">
               <div class="name-bundle" on:click={(e) => goToPlayerPage(e, p?.summary?.gameName, p?.summary?.tagLine)}>
                 {#if p?.summary?.gameName != null && p?.summary?.tagLine != null}
-                  <div class="game-name">{p?.summary?.gameName}</div>
+                  <div class="game-name">{gameName}</div>
                   <div class="tag">#{p?.summary?.tagLine}</div>
                 {:else}
                   <div class="game-name">-</div>
@@ -185,12 +264,14 @@
             <div class="available-lines">
               {#each Object.keys(TeamPositionKeyType) as key}
                 {@const lowerKey = key?.toLowerCase() ?? "-"}
+                {@const strength = posFavor?.[lowerKey] ?? 0}
                 <div class="line">
                   <LinePosition
                     position={lowerKey}
                     interactive={true}
-                    strength={posFavor?.[lowerKey] ?? 0}
+                    strength={strength ?? 0}
                     showStrength={true}
+                    size={20}
                     onClick={(en) => {
                       onCandidateChangeFavorPosition(p?.summary?.puuid, key, en);
                     }}

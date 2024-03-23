@@ -58,6 +58,7 @@
       $tier-rank-width: 120px;
       padding-right: calc(20px + #{$tier-rank-width});
       position: relative;
+      border-left: 5px solid rgb(53, 53, 53);
 
       &:not(:last-child) {
         // border-bottom: 1px solid rgb(62, 59, 49);
@@ -67,9 +68,93 @@
         background-color: rgba(0, 0, 0, 0.3);
       }
 
-      .summoner-custom-tier-ranks {
-        padding: 5px;
-        height: 500px;
+      &.red {
+        border-left-color: rgb(255, 91, 91);
+      }
+
+      &.blue {
+        border-left-color: rgb(93, 117, 255);
+      }
+
+      &.green {
+        border-left-color: rgb(86, 198, 86);
+      }
+
+      &.yellow {
+        border-left-color: rgb(220, 220, 87);
+      }
+
+      &.purple {
+        border-left-color: rgb(181, 91, 255);
+      }
+
+      .summoner-menus {
+        display: none;
+        flex-direction: column;
+        // height: 500px;
+        font-size: 13px;
+
+        .menu {
+          display: flex;
+          align-items: center;
+          padding: 8px 12px;
+          box-sizing: border-box;
+          min-width: 160px;
+
+          &:hover {
+            background-color: rgba(125, 115, 81, 0.713);
+            color: white;
+          }
+        }
+
+        .tier-rank-group {
+          padding: 5px;
+          height: 350px;
+          overflow-y: overlay;
+        }
+
+        .color-label-group {
+          .color-label {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+
+            .color-ball {
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+
+              &.red {
+                background-color: rgb(255, 91, 91);
+              }
+
+              &.blue {
+                background-color: rgb(93, 117, 255);
+              }
+
+              &.green {
+                background-color: rgb(86, 198, 86);
+              }
+
+              &.yellow {
+                background-color: rgb(220, 220, 87);
+              }
+
+              &.purple {
+                background-color: rgb(181, 91, 255);
+              }
+            }
+
+            .label {
+              margin-left: 8px;
+            }
+
+            &:hover {
+              background-color: rgba(125, 115, 81, 0.713);
+              color: white;
+            }
+          }
+        }
       }
 
       .droppable-zone {

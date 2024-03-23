@@ -108,6 +108,26 @@ export const formatStdKr = (num) => {
   }
 };
 
+export const formatStdEn = (num) => {
+  let divided = 0,
+    fixed = 0;
+  if (num > 1000 * 1000 * 1000) {
+    divided = num / 1000000000;
+    fixed = divided < 10 ? 1 : 0;
+    return `${divided.toFixed(fixed)}B`;
+  } else if (num > 1000 * 1000) {
+    divided = num / 1000000;
+    fixed = divided < 10 ? 1 : 0;
+    return `${divided.toFixed(fixed)}M`;
+  } else if (num > 1000) {
+    divided = num / 1000;
+    fixed = num < 10 ? 1 : 0;
+    return `${divided.toFixed(fixed)}K`;
+  } else {
+    return `${num.toFixed(0)}`;
+  }
+};
+
 export const formatStd = (num) => {
   return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

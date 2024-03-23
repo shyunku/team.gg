@@ -10,6 +10,7 @@
   import { profileIconUrl } from "../thunks/GeneralThunk";
   import { sanitizeString } from "../utils/Util";
   import InGameChampionSelect from "../organisms/in-game/details/InGameChampionSelect.svelte";
+  import InGameLobby from "../organisms/in-game/details/InGameLobby.svelte";
 
   const ClientStatus = {
     0: "CONNECTING",
@@ -52,6 +53,7 @@
   let gameName = null;
   let sessionGameDescription = null;
   let sessionGameDetailedDescription = null;
+  let currentMapId = null;
   $: {
     phase = sanitizeString(currentGameFlowSession?.phase, Phases.NONE);
     isCustomGame = currentGameFlowSession?.gameData?.isCustomGame;
@@ -59,6 +61,7 @@
     gameName = sanitizeString(currentGameFlowSession?.map?.name);
     sessionGameDescription = sanitizeString(currentGameFlowSession?.gameData?.queue?.description);
     sessionGameDetailedDescription = sanitizeString(currentGameFlowSession?.gameData?.queue?.detailedDescription);
+    currentMapId = currentGameFlowSession?.map?.id ?? null;
 
     console.log({
       gameModeName: currentGameFlowSession?.map?.gameModeName,
@@ -169,7 +172,9 @@
           <div class="debug">({phase})</div>
         </div>
         <div class="in-game-details">
-          {#if phase === Phases.CHAMPION_SELECT}
+          {#if phase === Phases.LOBBY}
+            <InGameLobby mapId={currentMapId} />
+          {:else if phase === Phases.CHAMPION_SELECT}
             <InGameChampionSelect />
           {/if}
         </div>

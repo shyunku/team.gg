@@ -1,0 +1,148 @@
+.in-game-lobby {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+
+  .meta-recommendation-section {
+    display: flex;
+    flex-direction: column;
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .position-selector {
+        display: flex;
+        align-items: center;
+        padding: 5px 8px;
+        background-color: rgb(54, 51, 45);
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 14px;
+        width: 120px;
+
+        .line-position {
+          width: 20px;
+          height: 20px;
+        }
+
+        .position-name {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          flex: 1;
+          margin-left: 8px;
+        }
+
+        .dropdown-icon {
+          height: 16px;
+          margin-left: 5px;
+        }
+
+        .dropdown {
+          background-color: rgb(54, 51, 45);
+          border-radius: 3px;
+          overflow: hidden;
+
+          .position {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            font-size: 13px;
+
+            &:not(:last-child) {
+              border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            &:hover {
+              background-color: rgb(93, 81, 52);
+              color: white;
+            }
+
+            .line-position {
+              width: 16px;
+              height: 16px;
+            }
+
+            .position-name {
+              flex: 1;
+            }
+          }
+        }
+      }
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: auto auto;
+      gap: 10px;
+      margin-top: 20px;
+
+      .meta {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        height: 240px;
+        transition: 0.15s ease-in-out;
+
+        &:hover {
+          transform: scale(0.97);
+        }
+
+        .champion-image {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100%;
+          height: 100%;
+
+          img {
+            transform: scale(1.12);
+          }
+        }
+
+        .detail {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+          z-index: 3;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 50%;
+          padding: 10px 0;
+          background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 70%, rgba(0, 0, 0, 0));
+          user-select: none;
+
+          .name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: rgb(216, 201, 170);
+          }
+
+          .play-count {
+            font-size: 13px;
+            margin-bottom: 8px;
+          }
+
+          .win-rate {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}

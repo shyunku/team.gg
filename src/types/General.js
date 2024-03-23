@@ -54,6 +54,14 @@ export const TeamLaneType = {
   UTILITY: "서포터",
 };
 
+export const TeamLanePositionType = {
+  TOP: "TOP",
+  JUNGLE: "JUNGLE",
+  MIDDLE: "MID",
+  BOTTOM: "ADC",
+  UTILITY: "SUPPORT",
+};
+
 export const TeamPositionType = {
   TOP: "탑",
   JUNGLE: "정글",
@@ -79,6 +87,14 @@ export const MapType = {
   30: "아레나",
 };
 
+export const MapKeyType = {
+  SUMMONERS_RIFT: 11,
+  HOWLING_ABYSS: 12,
+  NEXUS_BLITZ: 21,
+  TFT: 22,
+  ARENA: 30,
+};
+
 export const RankQueueType = {
   SOLO_RANK: "RANKED_SOLO_5x5",
   FLEX_RANK: "RANKED_FLEX_SR",
@@ -96,6 +112,22 @@ export const TierType = {
   MASTER: "마스터",
   GRANDMASTER: "그랜드마스터",
   CHALLENGER: "챌린저",
+};
+
+export const CustomGameTeammateColorLabels = {
+  RED: 1,
+  BLUE: 2,
+  GREEN: 3,
+  YELLOW: 4,
+  PURPLE: 5,
+};
+
+export const CustomGameTeammateColorLabelKeys = {
+  1: "RED",
+  2: "BLUE",
+  3: "GREEN",
+  4: "YELLOW",
+  5: "PURPLE",
 };
 
 export const ValidTierRanks = Object.freeze({

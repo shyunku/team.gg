@@ -44,6 +44,8 @@
       data = resp;
       dataIndex++;
 
+      console.log(data);
+
       candidates = data.candidates;
       team1ParticipantsMap = data.team1.reduce((acc, cur) => {
         acc[cur?.position] = cur?.puuid;

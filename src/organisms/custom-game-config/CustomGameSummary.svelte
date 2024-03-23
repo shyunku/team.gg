@@ -4,7 +4,7 @@
   import "chart.js/auto";
   import "./CustomGameSummary.scss";
   import DaughnutChart from "../../molecules/DoughnutRateChart.svelte";
-  import { bgColorByRate } from "../../utils/Util";
+  import { bgColorByRate, formatStdEn } from "../../utils/Util";
   import DoughnutRateChart from "../../molecules/DoughnutRateChart.svelte";
   import RangeSlider from "svelte-range-slider-pips";
   import { onMount } from "svelte";
@@ -58,6 +58,8 @@
 
   let processType = null;
   let processRate = 0;
+  let processCurrent = 0;
+  let processTotal = 0;
 
   const findMostBalancedCombination = async () => {
     try {
@@ -88,6 +90,8 @@
       calculatingOptimization = false;
       processType = null;
       processRate = 0;
+      processCurrent = 0;
+      processTotal = 0;
     }
   };
 
@@ -144,9 +148,11 @@
   $: if (socketConnected != null) {
     const onOptimizeProcess = (data) => {
       try {
-        const { type, progress } = data;
+        const { type, progress, total, current } = data;
         processType = type;
         processRate = progress;
+        processTotal = total;
+        processCurrent = current;
         calculatingOptimization = true;
         // console.log(data);
       } catch (err) {
@@ -191,6 +197,11 @@
               <div class="progress-bar">
                 <DoughnutRateChart rate={0} cutout={40} color={"rgb(209, 160, 68)"} />
               </div>
+            {/if}
+          </div>
+          <div class="current-process">
+            {#if calculatingOptimization && processType != null}
+              {`${formatStdEn(processCurrent)}/${formatStdEn(processTotal)}`}
             {/if}
           </div>
           <button class="find-optimized" disabled={calculatingOptimization} on:click={findMostBalancedCombination}>

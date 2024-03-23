@@ -11,6 +11,7 @@
   export let strength = 0;
   export let interactive = false;
   export let opacity = null;
+  export let size = 15;
   export let brightness = null;
   export let showStrength = false;
   export let onClick = () => {};
@@ -62,12 +63,15 @@
       if (!interactive) sourceByCondition = source.default;
       else {
         if (hovered && interactive) sourceByCondition = source.hovered;
-        else if (strength > 0) sourceByCondition = source.default;
+        else if (strength !== 0) sourceByCondition = source.default;
         else sourceByCondition = source.disabled;
       }
     }
 
-    style = {};
+    style = {
+      width: `${size}px`,
+      height: `${size}px`,
+    };
     if (opacity != null) {
       style = { ...style, opacity };
     }
@@ -78,7 +82,7 @@
 </script>
 
 <div
-  class={"position-icon img" +
+  class={"line-position img" +
     JsxUtil.class(`strength-${strength}`) +
     JsxUtil.classByCondition(interactive, "interactive")}
   style={Object.keys(style)
@@ -90,7 +94,12 @@
   on:mouseleave={(e) => {
     hovered = false;
   }}
-  on:mouseup={(e) => interactive && onClick((strength + 1) % 3)}
+  on:click={(e) => interactive && onClick((strength + 1) % 3)}
+  on:contextmenu={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    interactive && onClick(strength == -1 ? 0 : -1);
+  }}
 >
   <SafeImg src={sourceByCondition} />
   {#if showStrength}
@@ -101,10 +110,8 @@
 <style lang="scss">
   @import "../styles/variables.scss";
 
-  .position-icon {
-    width: 100%;
-    height: 100%;
-    opacity: 0.3;
+  .line-position {
+    // opacity: 0.3;
     background-color: transparent !important;
     position: relative;
 
@@ -122,6 +129,22 @@
       overflow: hidden;
       color: $main-fg-color;
       font-size: 9px;
+    }
+
+    &.strength--1 {
+      // red image
+      opacity: 0.7;
+      filter: sepia(1) hue-rotate(-50deg) brightness(0.8) saturate(6) contrast(1);
+
+      .strength {
+        // background-color: rgba(255, 0, 0, 0.7);
+        // z-index: 3;
+      }
+    }
+
+    &.strength-0 {
+      opacity: 0.3;
+      filter: grayscale(1) brightness(1);
     }
 
     &.strength-1 {

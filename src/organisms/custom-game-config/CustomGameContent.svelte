@@ -6,6 +6,7 @@
   import IoIosSwap from "svelte-icons/io/IoIosSwap.svelte";
   import IoIosShuffle from "svelte-icons/io/IoIosShuffle.svelte";
   import IoIosRepeat from "svelte-icons/io/IoIosRepeat.svelte";
+  import IoIosCode from "svelte-icons/io/IoIosCode.svelte";
   import IoMdClose from "svelte-icons/io/IoMdClose.svelte";
   import "./CustomGameContent.scss";
   import NameTagSearchInput from "../../molecules/NameTagSearchInput.svelte";
@@ -17,6 +18,7 @@
     arrangeCustomGameParticipantReq,
     championIconUrl,
     deleteCustomGameCandidateReq,
+    deleteCustomGameParticipantColorCodeReq,
     findMostBalancedCustomGameReq,
     profileIconUrl,
     renewCustomGameTeamRankReq,
@@ -222,6 +224,19 @@
       });
     } finally {
       toast.remove();
+    }
+  };
+
+  const clearColors = async () => {
+    try {
+      await deleteCustomGameParticipantColorCodeReq(configId);
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "컬러 라벨 초기화 오류",
+        description: "컬러 라벨을 초기화하던 중 오류가 발생했습니다.",
+        type: "error",
+      });
     }
   };
 
@@ -546,9 +561,11 @@
           {onCandidateDragLeave}
           {onCandidateChangeFavorPosition}
           {setCustomCandidateCustomTierRank}
+          {onCandidateDelete}
           {draggingCandidate}
           {draggingParticipant}
           {candidateHoverTarget}
+          {configId}
         />
         <CustomGameContentTeam
           {positions}
@@ -563,9 +580,11 @@
           {onCandidateDragLeave}
           {onCandidateChangeFavorPosition}
           {setCustomCandidateCustomTierRank}
+          {onCandidateDelete}
           {draggingCandidate}
           {draggingParticipant}
           {candidateHoverTarget}
+          {configId}
         />
       </div>
       <div class="sub-panels">
@@ -592,6 +611,10 @@
               <div class="option" on:mouseup={renewRanks}>
                 <div class="icon"><IoIosRepeat /></div>
                 <div class="text">팀원 랭크 갱신</div>
+              </div>
+              <div class="option" on:mouseup={clearColors}>
+                <div class="icon"><IoIosCode /></div>
+                <div class="text">컬러 라벨 전체 삭제</div>
               </div>
               <!-- <div class="option">
                 <div class="icon"><IoMdClose /></div>
@@ -634,14 +657,7 @@
                 />
               </div>
             </div>
-            <div class="candidates">
-              {#if visibleCandidates.length === 0 && !draggingParticipant}
-                {#if candidates.length === 0}
-                  <div class="placeholder">후보를 검색하여 추가할 수 있습니다.</div>
-                {:else}
-                  <div class="placeholder">후보를 여기에 다시 끌어다 놓을 수 있습니다.</div>
-                {/if}
-              {/if}
+            <div class="candidates-wrapper">
               {#if draggingParticipant}
                 <div
                   class="droppable-zone"
@@ -653,37 +669,47 @@
                   <div class="placeholder">여기에 놓기</div>
                 </div>
               {/if}
-              {#each visibleCandidates as c}
-                {@const candidateRanks = [c?.customRank, c?.soloRank, c?.flexRank]}
-                {@const cRank = candidateRanks.reduce((acc, cur) => {
-                  if (cur == null) return acc;
-                  if (acc != null) return acc;
-                  return cur;
-                }, null)}
-                {@const puuid = c?.summary?.puuid ?? null}
-                <ContextDiv
-                  class="candidate"
-                  draggable="true"
-                  onDragStart={(e) => onCandidateDragStart(e, puuid)}
-                  onDragEnd={onCandidateDragEnd}
-                >
-                  <ContextMenu className="candidate-menu">
-                    <div class="menu" on:click={(e) => onCandidateDelete(puuid)}>후보에서 제거</div>
-                  </ContextMenu>
-                  <div class="profile-icon img">
-                    <SafeImg src={profileIconUrl(c?.summary?.profileIconId)} />
-                  </div>
-                  <div class="name">
-                    <div class="game-name">{c?.summary?.gameName}</div>
-                    <div class="tag">#{c?.summary?.tagLine}</div>
-                  </div>
-                  {#if cRank != null}
-                    <TierRank tier={cRank.tier} rank={cRank.rank} compact={true} />
+              <div class="candidates">
+                {#if visibleCandidates.length === 0 && !draggingParticipant}
+                  {#if candidates.length === 0}
+                    <div class="placeholder">후보를 검색하여 추가할 수 있습니다.</div>
                   {:else}
-                    <div class="tier">-</div>
+                    <div class="placeholder">후보를 여기에 다시 끌어다 놓을 수 있습니다.</div>
                   {/if}
-                </ContextDiv>
-              {/each}
+                {/if}
+
+                {#each visibleCandidates as c}
+                  {@const candidateRanks = [c?.customRank, c?.soloRank, c?.flexRank]}
+                  {@const cRank = candidateRanks.reduce((acc, cur) => {
+                    if (cur == null) return acc;
+                    if (acc != null) return acc;
+                    return cur;
+                  }, null)}
+                  {@const puuid = c?.summary?.puuid ?? null}
+                  <ContextDiv
+                    class="candidate"
+                    draggable="true"
+                    onDragStart={(e) => onCandidateDragStart(e, puuid)}
+                    onDragEnd={onCandidateDragEnd}
+                  >
+                    <ContextMenu className="candidate-menu">
+                      <div class="menu" on:click={(e) => onCandidateDelete(puuid)}>후보에서 제거</div>
+                    </ContextMenu>
+                    <div class="profile-icon img">
+                      <SafeImg src={profileIconUrl(c?.summary?.profileIconId)} />
+                    </div>
+                    <div class="name">
+                      <div class="game-name">{c?.summary?.gameName}</div>
+                      <div class="tag">#{c?.summary?.tagLine}</div>
+                    </div>
+                    {#if cRank != null}
+                      <TierRank tier={cRank.tier} rank={cRank.rank} compact={true} />
+                    {:else}
+                      <div class="tier">-</div>
+                    {/if}
+                  </ContextDiv>
+                {/each}
+              </div>
             </div>
           </div>
         </div>
