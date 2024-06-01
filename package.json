@@ -1,7 +1,7 @@
 {
   "name": "team.gg",
   "description": "cross-platform desktop application for team.gg",
-  "version": "0.5.6",
+  "version": "0.5.8",
   "private": true,
   "type": "module",
   "config": {

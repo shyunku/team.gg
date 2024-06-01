@@ -38,6 +38,7 @@
   import ContextDiv from "../../components/ContextDiv.svelte";
   import ContextMenu from "../../components/ContextMenu.svelte";
   import JsxUtil from "../../utils/JsxUtil";
+  import { removeUnicode } from "../../utils/Common";
 
   export let configId;
   export let candidates = [];
@@ -266,7 +267,9 @@
     const lines = payload.split("\n");
     const filtered = lines.filter((l) => l.includes("님이 로비에 참가하셨습니다."));
     detectedMultiSearchSummoners = {};
-    for (let line of filtered) {
+    for (let raw of filtered) {
+      // remove unicode
+      let line = removeUnicode(raw);
       const match = line.match(/([a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9#\s]+)님이 로비에 참가하셨습니다./i);
       const matched = match?.[1] ?? null;
       if (matched == null) continue;
@@ -282,6 +285,7 @@
 
       detectedMultiSearchSummoners[encryptedKey] = { gameName, tag };
     }
+    console.log(detectedMultiSearchSummoners);
   };
 
   const applyMultiSearch = async () => {

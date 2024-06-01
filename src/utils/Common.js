@@ -179,6 +179,12 @@ export function clone(obj) {
   return recurse(obj);
 }
 
+export function removeUnicode(str) {
+  // return str.replace(/[^\x00-\x7F]/g, "");
+  const regex = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9 !@#\$%\^\&*\)\(+=._-]+/g;
+  return str.replace(regex, "");
+}
+
 export const isDevMode = () => {
   return window.env.NODE_ENV !== "production";
 };
