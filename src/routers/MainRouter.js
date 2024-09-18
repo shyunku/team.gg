@@ -9,6 +9,8 @@ import StatisticsChampionDetail from "../pages/StatisticsChampionDetail.svelte";
 import NotImplemented from "../pages/NotImplemented.svelte";
 import Login from "../pages/Login.svelte";
 import Signup from "../pages/Signup.svelte";
+import PrivacyPolicy from "../pages/PrivacyPolicy.svelte";
+import TermsOfService from "../pages/TermsOfService.svelte";
 import NotFound from "../pages/NotFound.svelte";
 
 const routes = {
@@ -23,6 +25,8 @@ const routes = {
   "/ingame": InGame,
   "/login": Login,
   "/signup": Signup,
+  "/privacy-policy": PrivacyPolicy,
+  "/terms-of-service": TermsOfService,
   "*": NotFound,
 };
 

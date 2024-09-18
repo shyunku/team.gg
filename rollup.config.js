@@ -72,6 +72,7 @@ export default {
         if (warning.code === "a11y-click-events-have-key-events") return;
         handler(warning);
       },
+      emitCss: true,
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance

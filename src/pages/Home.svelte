@@ -30,6 +30,14 @@
     }
   };
 
+  const goToPrivacyPolicy = () => {
+    push("/privacy-policy");
+  };
+
+  const goToTermsOfService = () => {
+    push("/terms-of-service");
+  };
+
   $: {
     renewFavorites();
   }
@@ -85,6 +93,17 @@
               <div class="placeholder">소환사 검색 후 즐겨찾기 등록을 해보세요.</div>
             </div>
           {/if}
+        </div>
+      </div>
+      <div class="footer">
+        <div class="line">
+          <span>개발자 shyunku</span><span class="split" />
+          <span>대표자: 조영훈</span><span class="split" />
+          <span>이메일: whdudgns7321@gmail.com</span>
+        </div>
+        <div class="line">
+          <span class="link" on:click={goToPrivacyPolicy}>개인정보처리방침</span><span class="split" />
+          <span class="link" on:click={goToTermsOfService}>이용약관</span>
         </div>
       </div>
     </div>
