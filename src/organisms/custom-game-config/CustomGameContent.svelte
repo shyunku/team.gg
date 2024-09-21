@@ -247,7 +247,9 @@
     if (targetDiv == null) return;
 
     try {
-      const canvas = await html2canvas(targetDiv);
+      const canvas = await html2canvas(targetDiv, {
+        useCORS: true,
+      });
       await new Promise((res, rej) => {
         canvas.toBlob(async (blob) => {
           try {
