@@ -1,7 +1,7 @@
 {
   "name": "team.gg",
   "description": "cross-platform desktop application for team.gg",
-  "version": "0.5.9",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "config": {
@@ -48,6 +48,7 @@
     "dotenv": "16.3.1",
     "electron": "29.0.1",
     "electron-log": "5.1.1",
+    "html2canvas": "1.4.1",
     "league-connect": "6.0.0-rc12",
     "logsh": "1.0.6",
     "moment": "2.30.1",

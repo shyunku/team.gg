@@ -39,6 +39,7 @@
   import ContextMenu from "../../components/ContextMenu.svelte";
   import JsxUtil from "../../utils/JsxUtil";
   import { removeUnicode } from "../../utils/Common";
+  import html2canvas from "html2canvas";
 
   export let configId;
   export let candidates = [];
@@ -236,6 +237,38 @@
       toasts.add({
         title: "컬러 라벨 초기화 오류",
         description: "컬러 라벨을 초기화하던 중 오류가 발생했습니다.",
+        type: "error",
+      });
+    }
+  };
+
+  const captureTeam = async () => {
+    const targetDiv = document.getElementById("teams");
+    if (targetDiv == null) return;
+
+    try {
+      const canvas = await html2canvas(targetDiv);
+      await new Promise((res, rej) => {
+        canvas.toBlob(async (blob) => {
+          try {
+            // Blob 객체를 클립보드에 복사
+            await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+            toasts.add({
+              title: "팀 캡쳐",
+              description: "팀을 캡쳐하여 클립보드에 복사했습니다.",
+              type: "success",
+            });
+            res();
+          } catch (error) {
+            rej(error);
+          }
+        }, "image/png");
+      });
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "팀 캡쳐 오류",
+        description: "팀을 캡쳐하던 중 오류가 발생했습니다.",
         type: "error",
       });
     }
@@ -551,7 +584,7 @@
 <div class="custom-game-content">
   <MainContentLayout>
     <div class="content">
-      <div class="teams">
+      <div id="teams" class="teams">
         <CustomGameContentTeam
           {positions}
           bind:totalRatingPoint={team1TotalRatingPoint}
@@ -619,6 +652,10 @@
               <div class="option" on:mouseup={clearColors}>
                 <div class="icon"><IoIosCode /></div>
                 <div class="text">컬러 라벨 전체 삭제</div>
+              </div>
+              <div class="option" on:mouseup={captureTeam}>
+                <div class="icon"><IoIosCode /></div>
+                <div class="text">팀 캡쳐</div>
               </div>
               <!-- <div class="option">
                 <div class="icon"><IoMdClose /></div>
