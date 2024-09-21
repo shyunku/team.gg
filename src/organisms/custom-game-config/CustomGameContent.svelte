@@ -8,6 +8,7 @@
   import IoIosRepeat from "svelte-icons/io/IoIosRepeat.svelte";
   import IoIosCode from "svelte-icons/io/IoIosCode.svelte";
   import IoMdClose from "svelte-icons/io/IoMdClose.svelte";
+  import IoIosCamera from "svelte-icons/io/IoIosCamera.svelte";
   import "./CustomGameContent.scss";
   import NameTagSearchInput from "../../molecules/NameTagSearchInput.svelte";
   import LinePosition from "../../molecules/LinePosition.svelte";
@@ -656,7 +657,7 @@
                 <div class="text">컬러 라벨 전체 삭제</div>
               </div>
               <div class="option" on:mouseup={captureTeam}>
-                <div class="icon"><IoIosCode /></div>
+                <div class="icon"><IoIosCamera /></div>
                 <div class="text">팀 캡쳐</div>
               </div>
               <!-- <div class="option">
