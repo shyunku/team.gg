@@ -55,7 +55,7 @@
       padding: 8px 15px;
       font-size: 13px;
       position: relative;
-      $tier-rank-width: 120px;
+      $tier-rank-width: 100px;
       padding-right: calc(20px + #{$tier-rank-width});
       position: relative;
       border-left: 5px solid rgb(53, 53, 53);
@@ -195,6 +195,11 @@
         pointer-events: none;
       }
 
+      .name-most-champions {
+        display: flex;
+        align-items: center;
+      }
+
       .name {
         display: flex;
         margin-left: 15px;
@@ -202,9 +207,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        width: 180px;
         // width: 160px;
         padding: 2px 0;
         flex: 1;
+        font-size: 13px;
 
         .name-bundle {
           display: flex;
@@ -337,7 +344,11 @@
 
         $tier-border-rate: 75%;
         $tier-border-angle: 160deg;
-        background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgba(238, 238, 238, 0.2));
+        background: linear-gradient(
+          $tier-blank-angle,
+          transparent $tier-blank-rate,
+          rgba(238, 238, 238, 0.2)
+        );
         padding: 0 12px;
         color: white;
         z-index: 1;
@@ -348,7 +359,11 @@
         border: 1px solid;
         border-top: 0px;
         border-left: 0px;
-        border-image: linear-gradient($tier-blank-angle, $border-image-default $tier-border-rate, #676767 100%);
+        border-image: linear-gradient(
+          $tier-blank-angle,
+          $border-image-default $tier-border-rate,
+          #676767 100%
+        );
         border-image-slice: 1;
 
         box-sizing: border-box;
@@ -369,7 +384,11 @@
         }
 
         &.iron {
-          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(69, 69, 69)) !important;
+          background: linear-gradient(
+            $tier-blank-angle,
+            transparent $tier-blank-rate,
+            rgb(69, 69, 69)
+          ) !important;
           color: rgb(189, 189, 189);
 
           border-image: linear-gradient(
@@ -381,7 +400,11 @@
         }
 
         &.bronze {
-          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(108, 78, 56)) !important;
+          background: linear-gradient(
+            $tier-blank-angle,
+            transparent $tier-blank-rate,
+            rgb(108, 78, 56)
+          ) !important;
           color: rgb(189, 189, 189);
 
           border-image: linear-gradient(
@@ -393,7 +416,11 @@
         }
 
         &.silver {
-          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(97, 97, 97)) !important;
+          background: linear-gradient(
+            $tier-blank-angle,
+            transparent $tier-blank-rate,
+            rgb(97, 97, 97)
+          ) !important;
           color: rgb(221, 221, 221);
 
           border-image: linear-gradient(
@@ -405,7 +432,11 @@
         }
 
         &.gold {
-          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(165, 126, 54)) !important;
+          background: linear-gradient(
+            $tier-blank-angle,
+            transparent $tier-blank-rate,
+            rgb(165, 126, 54)
+          ) !important;
           color: rgb(221, 221, 221);
 
           border-image: linear-gradient(
@@ -417,7 +448,11 @@
         }
 
         &.platinum {
-          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(38, 115, 114)) !important;
+          background: linear-gradient(
+            $tier-blank-angle,
+            transparent $tier-blank-rate,
+            rgb(38, 115, 114)
+          ) !important;
           color: rgb(221, 221, 221);
 
           border-image: linear-gradient(
@@ -429,7 +464,11 @@
         }
 
         &.emerald {
-          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(42, 136, 95)) !important;
+          background: linear-gradient(
+            $tier-blank-angle,
+            transparent $tier-blank-rate,
+            rgb(42, 136, 95)
+          ) !important;
           color: rgb(221, 221, 221);
 
           border-image: linear-gradient(

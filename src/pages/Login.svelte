@@ -26,11 +26,13 @@
       const encryptedPassword = sha256(idInput + passwordInput);
       try {
         const resp = await login(idInput, encryptedPassword);
-        const { uid, userId } = resp;
+        const { uid, userId, accessToken, refreshToken } = resp;
         authStore.set({
           uid,
           userId,
           authorized: true,
+          accessToken,
+          refreshToken,
         });
         console.log(localStorage.getItem("auth"));
         window.location.href = "/";

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { authStore } from "../stores/AuthStore";
+import { authStore, getAuth } from "../stores/AuthStore";
 import { toasts } from "svelte-toasts";
 
 const useHttps = APP_SECURE;
@@ -12,11 +12,16 @@ console.log("ServerHost", ServerHost);
 
 const instance = axios.create({
   baseURL: ServerHost,
-  withCredentials: true,
+  withCredentials: false,
 });
 
 instance.interceptors.request.use(
   (config) => {
+    const { accessToken } = getAuth() ?? {};
+    if (accessToken) {
+      config.headers = config.headers ?? {};
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
     return config;
   },
   (error) => {
@@ -30,14 +35,29 @@ instance.interceptors.response.use(
   (resp) => {
     return resp;
   },
-  (error) => {
+  async (error) => {
     const status = error?.response?.status;
-    switch (status) {
-      case 401:
-        authStore.set("authorized", false);
-        toasts.warning("세션이 만료되었습니다. 다시 로그인해주세요.");
-        window.location.href = "#/login";
-        break;
+    if (status === 401) {
+      try {
+        const refreshToken = authStore.get("refreshToken");
+        if (refreshToken) {
+          const r = await axios.post(`${ServerHost}/auth/refresh`, {
+            refreshToken,
+          });
+          authStore.set("accessToken", r.data.accessToken);
+          authStore.set("refreshToken", r.data.refreshToken);
+          // 실패했던 요청 재시도
+          const cfg = error.config;
+          cfg.headers = cfg.headers ?? {};
+          cfg.headers["Authorization"] = `Bearer ${r.data.accessToken}`;
+          return instance.request(cfg);
+        }
+      } catch (_) {
+        // 리프레시 실패 → 세션 종료
+      }
+      authStore.set("authorized", false);
+      toasts.warning("세션이 만료되었습니다. 다시 로그인해주세요.");
+      window.location.href = "#/login";
     }
     return Promise.reject(error);
   }
@@ -72,7 +92,9 @@ export const testTokenReq = async () => {
 export const getSummonerInfoReq = async (gameName = null, tagLine = null) => {
   const encodedGameName = encodeURIComponent(gameName);
   const encodedTagLine = encodeURIComponent(tagLine);
-  const response = await instance.get(`/summoner?gameName=${encodedGameName}&tagLine=${encodedTagLine}`);
+  const response = await instance.get(
+    `/summoner?gameName=${encodedGameName}&tagLine=${encodedTagLine}`
+  );
   return response.data;
 };
 
@@ -82,7 +104,9 @@ export const getSummonerInfoByPuuidReq = async (puuid) => {
 };
 
 export const quickSearchSummonerReq = async (keyword) => {
-  const response = await instance.get(`/quickSearch?keyword=${encodeURIComponent(keyword ?? "")}`);
+  const response = await instance.get(
+    `/quickSearch?keyword=${encodeURIComponent(keyword ?? "")}`
+  );
   return response.data;
 };
 
@@ -94,7 +118,9 @@ export const renewSummonerInfoReq = async (puuid) => {
 };
 
 export const getMatchesReq = async (puuid, queueId) => {
-  const response = await instance.get(`/matches?puuid=${puuid}&queueId=${queueId}`);
+  const response = await instance.get(
+    `/matches?puuid=${puuid}&queueId=${queueId}`
+  );
   return response.data;
 };
 
@@ -128,7 +154,11 @@ export const getCustomGameConfigurationInfo = async (id) => {
   return response.data;
 };
 
-export const addCustomGameCandidateReq = async (customGameConfigId, name, tagLine) => {
+export const addCustomGameCandidateReq = async (
+  customGameConfigId,
+  name,
+  tagLine
+) => {
   const response = await instance.put(`/platform/custom-game/candidate`, {
     customGameConfigId,
     name,
@@ -138,7 +168,10 @@ export const addCustomGameCandidateReq = async (customGameConfigId, name, tagLin
   return response.data;
 };
 
-export const deleteCustomGameCandidateReq = async (customGameConfigId, puuid) => {
+export const deleteCustomGameCandidateReq = async (
+  customGameConfigId,
+  puuid
+) => {
   const response = await instance.delete(
     `/platform/custom-game/candidate?customGameConfigId=${customGameConfigId}&puuid=${puuid}`
   );
@@ -146,7 +179,12 @@ export const deleteCustomGameCandidateReq = async (customGameConfigId, puuid) =>
   return response.data;
 };
 
-export const arrangeCustomGameParticipantReq = async (customGameConfigId, puuid, team, position) => {
+export const arrangeCustomGameParticipantReq = async (
+  customGameConfigId,
+  puuid,
+  team,
+  position
+) => {
   const response = await instance.post(`/platform/custom-game/arrange`, {
     customGameConfigId,
     puuid,
@@ -157,7 +195,10 @@ export const arrangeCustomGameParticipantReq = async (customGameConfigId, puuid,
   return response.data;
 };
 
-export const unArrangeCustomGameParticipantReq = async (customGameConfigId, puuid) => {
+export const unArrangeCustomGameParticipantReq = async (
+  customGameConfigId,
+  puuid
+) => {
   const response = await instance.post(`/platform/custom-game/unarrange`, {
     customGameConfigId,
     puuid,
@@ -166,7 +207,12 @@ export const unArrangeCustomGameParticipantReq = async (customGameConfigId, puui
   return response.data;
 };
 
-export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId, puuid, position, strength) => {
+export const setCustomGameCandidateFavorPositionReq = async (
+  customGameConfigId,
+  puuid,
+  position,
+  strength
+) => {
   const response = await instance.post(`/platform/custom-game/favor-position`, {
     customGameConfigId,
     puuid,
@@ -177,40 +223,62 @@ export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId,
   return response.data;
 };
 
-export const setCustomGameCandidateCustomTierRankReq = async (customGameConfigId, puuid, tier, rank) => {
-  const response = await instance.post(`/platform/custom-game/custom-tier-rank`, {
-    customGameConfigId,
-    puuid,
-    tier,
-    rank,
-  });
+export const setCustomGameCandidateCustomTierRankReq = async (
+  customGameConfigId,
+  puuid,
+  tier,
+  rank
+) => {
+  const response = await instance.post(
+    `/platform/custom-game/custom-tier-rank`,
+    {
+      customGameConfigId,
+      puuid,
+      tier,
+      rank,
+    }
+  );
 
   return response.data;
 };
 
-export const deleteCustomGameParticipantColorCodeReq = async (customGameConfigId) => {
+export const deleteCustomGameParticipantColorCodeReq = async (
+  customGameConfigId
+) => {
   const response = await instance.delete(
     `/platform/custom-game/custom-color-label?customGameConfigId=${customGameConfigId}`
   );
   return response.data;
 };
 
-export const setCustomGameParticipantColorCodeReq = async (customGameConfigId, puuid, colorCode) => {
-  const response = await instance.post(`/platform/custom-game/custom-color-label`, {
-    customGameConfigId,
-    puuid,
-    colorCode,
-  });
+export const setCustomGameParticipantColorCodeReq = async (
+  customGameConfigId,
+  puuid,
+  colorCode
+) => {
+  const response = await instance.post(
+    `/platform/custom-game/custom-color-label`,
+    {
+      customGameConfigId,
+      puuid,
+      colorCode,
+    }
+  );
 
   return response.data;
 };
 
 export const getCustomGameBalanceReq = async (customGameConfigId) => {
-  const response = await instance.get(`/platform/custom-game/balance?id=${customGameConfigId}`);
+  const response = await instance.get(
+    `/platform/custom-game/balance?id=${customGameConfigId}`
+  );
   return response.data;
 };
 
-export const findMostBalancedCustomGameReq = async (customGameConfigId, data) => {
+export const findMostBalancedCustomGameReq = async (
+  customGameConfigId,
+  data
+) => {
   const response = await instance.post(`/platform/custom-game/optimize`, {
     id: customGameConfigId,
     ...data,
@@ -255,7 +323,9 @@ export const renewCustomGameTeamRankReq = async (customGameConfigId) => {
 };
 
 export const getTierRankByRatingPointReq = async (ratingPoint) => {
-  const response = await instance.get(`/platform/custom-game/tier-rank?ratingPoint=${ratingPoint}`);
+  const response = await instance.get(
+    `/platform/custom-game/tier-rank?ratingPoint=${ratingPoint}`
+  );
   return response.data;
 };
 
@@ -266,7 +336,9 @@ export const getChampionStatisticsReq = async () => {
 };
 
 export const getChampionDetailStatisticsReq = async (championId) => {
-  const response = await instance.get(`/platform/statistics/champion-detail?championId=${championId}`);
+  const response = await instance.get(
+    `/platform/statistics/champion-detail?championId=${championId}`
+  );
   return response.data;
 };
 

@@ -1,5 +1,63 @@
 @import "../../styles/variables.scss";
 
+@media screen and (max-width: 768px) {
+  .custom-game-content .content {
+    flex-direction: column-reverse;
+
+    .sub-panels {
+      width: 100% !important;
+
+      .multi-search {
+        display: none !important;
+      }
+    }
+
+    .teams {
+      width: 100% !important;
+      overflow-x: overlay;
+
+      .summoner {
+        .name-most-champions {
+          flex-direction: column;
+          gap: 5px;
+          align-items: flex-start;
+          margin-left: 10px !important;
+        }
+
+        .name {
+          width: 120px !important;
+          // font-size: 11px !important;
+          margin-left: 0 !important;
+          margin-top: -3px;
+        }
+
+        .most-champions {
+          margin-left: 0 !important;
+        }
+
+        .most-champion {
+          &:nth-child(n + 6) {
+            display: none !important;
+          }
+
+          .champion-icon {
+            width: 20px !important;
+            height: 20px !important;
+          }
+
+          .score {
+            display: none !important;
+          }
+        }
+      }
+
+      .available-lines {
+        margin-left: 15px !important;
+      }
+    }
+  }
+}
+
 .custom-game-content {
   display: flex;
   box-sizing: border-box;
@@ -12,6 +70,7 @@
     overflow-x: overlay;
     padding-bottom: 160px;
     align-items: flex-start;
+    gap: 15px;
 
     .teams {
       display: flex;
@@ -43,7 +102,6 @@
     .sub-panels {
       display: flex;
       flex-direction: column;
-      margin-left: 15px;
       width: 240px;
 
       .card:not(:last-child) {
