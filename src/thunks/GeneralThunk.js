@@ -5,7 +5,7 @@ import { toasts } from "svelte-toasts";
 const useHttps = APP_SECURE;
 const prefix = useHttps ? "https" : "http";
 
-export const ServerHostBase = `${prefix}://${APP_SERVER_HOST}:${APP_SERVER_PORT}`;
+export const ServerHostBase = `${prefix}://${APP_SERVER_HOST}`;
 const ServerHost = `${ServerHostBase}/v1`;
 
 console.log("ServerHost", ServerHost);

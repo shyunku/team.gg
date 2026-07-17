@@ -11,6 +11,7 @@ import Login from "../pages/Login.svelte";
 import Signup from "../pages/Signup.svelte";
 import PrivacyPolicy from "../pages/PrivacyPolicy.svelte";
 import TermsOfService from "../pages/TermsOfService.svelte";
+import OauthComplete from "../pages/OauthComplete.svelte";
 import NotFound from "../pages/NotFound.svelte";
 
 const routes = {
@@ -27,6 +28,7 @@ const routes = {
   "/signup": Signup,
   "/privacy-policy": PrivacyPolicy,
   "/terms-of-service": TermsOfService,
+  "/oauth_complete": OauthComplete,
   "*": NotFound,
 };
 

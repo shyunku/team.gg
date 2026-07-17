@@ -1,11 +1,11 @@
 {
   "name": "team.gg",
   "description": "cross-platform desktop application for team.gg",
-  "version": "0.6.1",
+  "version": "0.7.1",
   "private": true,
   "type": "module",
   "config": {
-    "app_server_endpoint": "https://teamgg.kr:7713",
+    "app_server_endpoint": "https://teamgg.kr",
     "app_server_api_version": "v1",
     "local_app_server_endpoint": "http://localhost:7713"
   },
