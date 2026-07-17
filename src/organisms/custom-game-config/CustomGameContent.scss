@@ -141,7 +141,14 @@
             .icon {
               display: flex;
               align-items: center;
+              justify-content: center;
               width: 22px;
+
+              .copy-icon {
+                display: flex;
+                width: 14px;
+                height: 14px;
+              }
             }
 
             .text {

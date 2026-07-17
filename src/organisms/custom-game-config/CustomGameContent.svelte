@@ -8,7 +8,7 @@
   import IoIosRepeat from "svelte-icons/io/IoIosRepeat.svelte";
   import IoIosCode from "svelte-icons/io/IoIosCode.svelte";
   import IoMdClose from "svelte-icons/io/IoMdClose.svelte";
-  import IoIosCamera from "svelte-icons/io/IoIosCamera.svelte";
+  import IoIosCopy from "svelte-icons/io/IoIosCopy.svelte";
   import "./CustomGameContent.scss";
   import NameTagSearchInput from "../../molecules/NameTagSearchInput.svelte";
   import LinePosition from "../../molecules/LinePosition.svelte";
@@ -40,7 +40,6 @@
   import ContextMenu from "../../components/ContextMenu.svelte";
   import JsxUtil from "../../utils/JsxUtil";
   import { removeUnicode } from "../../utils/Common";
-  import html2canvas from "html2canvas";
 
   export let configId;
   export let candidates = [];
@@ -243,35 +242,36 @@
     }
   };
 
-  const captureTeam = async () => {
-    const targetDiv = document.getElementById("teams");
-    if (targetDiv == null) return;
+  const copyTeamsAsText = async () => {
+    const positionLabels = {
+      TOP: "탑",
+      JUNGLE: "정글",
+      MID: "미드",
+      ADC: "원딜",
+      SUPPORT: "서폿",
+    };
+    const formatTeam = (teamIndex, team) => {
+      const members = positions.map((position) => {
+        const summary = team[position]?.summary;
+        const riotId = summary?.gameName == null ? "-" : `${summary.gameName} #${summary.tagLine ?? "??"}`;
+        return `${positionLabels[position]}: ${riotId}`;
+      });
+      return [`[${teamIndex}팀]`, ...members].join("\n");
+    };
+    const text = [formatTeam(1, team1), formatTeam(2, team2)].join("\n\n");
 
     try {
-      const canvas = await html2canvas(targetDiv, {
-        useCORS: true,
-      });
-      await new Promise((res, rej) => {
-        canvas.toBlob(async (blob) => {
-          try {
-            // Blob 객체를 클립보드에 복사
-            await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-            toasts.add({
-              title: "팀 캡쳐",
-              description: "팀을 캡쳐하여 클립보드에 복사했습니다.",
-              type: "success",
-            });
-            res();
-          } catch (error) {
-            rej(error);
-          }
-        }, "image/png");
+      await navigator.clipboard.writeText(text);
+      toasts.add({
+        title: "텍스트로 복사",
+        description: "팀 구성을 클립보드에 복사했습니다.",
+        type: "success",
       });
     } catch (err) {
       console.error(err);
       toasts.add({
-        title: "팀 캡쳐 오류",
-        description: "팀을 캡쳐하던 중 오류가 발생했습니다.",
+        title: "텍스트 복사 오류",
+        description: "팀 구성을 복사하던 중 오류가 발생했습니다.",
         type: "error",
       });
     }
@@ -656,9 +656,9 @@
                 <div class="icon"><IoIosCode /></div>
                 <div class="text">컬러 라벨 전체 삭제</div>
               </div>
-              <div class="option" on:mouseup={captureTeam}>
-                <div class="icon"><IoIosCamera /></div>
-                <div class="text">팀 캡쳐</div>
+              <div class="option" on:mouseup={copyTeamsAsText}>
+                <div class="icon"><span class="copy-icon"><IoIosCopy /></span></div>
+                <div class="text">텍스트로 복사</div>
               </div>
               <!-- <div class="option">
                 <div class="icon"><IoMdClose /></div>
