@@ -48,6 +48,8 @@
   let teammateCount = 0;
   let avgTierRank = null;
 
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
   const setParticipantColorLabel = async (puuid, color) => {
     console.log(puuid, color);
     try {
@@ -234,32 +236,34 @@
               <SafeImg src={profileIconUrl(p?.summary?.profileIconId)} />
             </div>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="name">
-              <div class="name-bundle" on:click={(e) => goToPlayerPage(e, p?.summary?.gameName, p?.summary?.tagLine)}>
-                {#if p?.summary?.gameName != null && p?.summary?.tagLine != null}
-                  <div class="game-name">{gameName}</div>
-                  <div class="tag">#{p?.summary?.tagLine}</div>
-                {:else}
-                  <div class="game-name">-</div>
-                {/if}
+            <div class="name-most-champions">
+              <div class="name">
+                <div class="name-bundle" on:click={(e) => goToPlayerPage(e, p?.summary?.gameName, p?.summary?.tagLine)}>
+                  {#if p?.summary?.gameName != null && p?.summary?.tagLine != null}
+                    <div class="game-name">{gameName}</div>
+                    <div class="tag">#{p?.summary?.tagLine}</div>
+                  {:else}
+                    <div class="game-name">-</div>
+                  {/if}
+                </div>
               </div>
-            </div>
-            <!-- <div class="tier-ranks">
-              {#if pRank != null}
-                <div class="tier-rank-item">
-                  <TierRank label={pRank.key} tier={pRank.tierRank?.tier} rank={pRank.tierRank?.rank} />
-                </div>
-              {/if}
-            </div> -->
-            <div class="most-champions">
-              {#each masteries as m}
-                <div class="most-champion">
-                  <div class="champion-icon img">
-                    <SafeImg src={championIconUrl(m?.championId)} />
+              <!-- <div class="tier-ranks">
+                {#if pRank != null}
+                  <div class="tier-rank-item">
+                    <TierRank label={pRank.key} tier={pRank.tierRank?.tier} rank={pRank.tierRank?.rank} />
                   </div>
-                  <div class="score">{formatMasteryPoints(m?.championPoints)}</div>
-                </div>
-              {/each}
+                {/if}
+              </div> -->
+              <div class="most-champions">
+                {#each masteries as m}
+                  <div class="most-champion">
+                    <div class="champion-icon img">
+                      <SafeImg src={championIconUrl(m?.championId)} />
+                    </div>
+                    <div class="score">{formatMasteryPoints(m?.championPoints)}</div>
+                  </div>
+                {/each}
+              </div>
             </div>
             <div class="available-lines">
               {#each Object.keys(TeamPositionKeyType) as key}

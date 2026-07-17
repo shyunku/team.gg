@@ -12,7 +12,9 @@ import alias from "@rollup/plugin-alias";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import PackageJson from "./package.json" assert { type: "json" };
+import fs from "fs";
+
+const PackageJson = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
 
 const production = !process.env.ROLLUP_WATCH;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -108,7 +110,7 @@ export default {
       preventAssignment: true,
       APP_SERVER_HOST: JSON.stringify(process.env.APP_SERVER_HOST),
       APP_VERSION: JSON.stringify(PackageJson.version),
-      APP_SECURE: JSON.stringify(isProduction ? true : false),
+      APP_SECURE: false && JSON.stringify(isProduction ? true : false),
     }),
 
     // In dev mode, call `npm run start` once

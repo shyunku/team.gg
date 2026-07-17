@@ -1,3 +1,4 @@
+import { get } from "svelte/store";
 import PersistStore from "../utils/PersistStore";
 
 export const authStore = PersistStore("auth", {
@@ -5,3 +6,5 @@ export const authStore = PersistStore("auth", {
   userId: null,
   authorized: false,
 });
+
+export const getAuth = () => get(authStore);
