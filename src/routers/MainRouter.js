@@ -12,6 +12,7 @@ import Signup from "../pages/Signup.svelte";
 import PrivacyPolicy from "../pages/PrivacyPolicy.svelte";
 import TermsOfService from "../pages/TermsOfService.svelte";
 import OauthComplete from "../pages/OauthComplete.svelte";
+import Account from "../pages/Account.svelte";
 import NotFound from "../pages/NotFound.svelte";
 
 const routes = {
@@ -26,6 +27,7 @@ const routes = {
   "/ingame": InGame,
   "/login": Login,
   "/signup": Signup,
+  "/account": Account,
   "/privacy-policy": PrivacyPolicy,
   "/terms-of-service": TermsOfService,
   "/oauth_complete": OauthComplete,

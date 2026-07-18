@@ -37,15 +37,19 @@ instance.interceptors.response.use(
   },
   async (error) => {
     const status = error?.response?.status;
-    if (status === 401) {
+    if (status === 401 && error?.config?.skipAuthRefresh !== true) {
       try {
-        const refreshToken = authStore.get("refreshToken");
+        const refreshToken = getAuth()?.refreshToken;
         if (refreshToken) {
           const r = await axios.post(`${ServerHost}/auth/refresh`, {
             refreshToken,
           });
-          authStore.set("accessToken", r.data.accessToken);
-          authStore.set("refreshToken", r.data.refreshToken);
+          authStore.set({
+            ...getAuth(),
+            authorized: true,
+            accessToken: r.data.accessToken,
+            refreshToken: r.data.refreshToken,
+          });
           // 실패했던 요청 재시도
           const cfg = error.config;
           cfg.headers = cfg.headers ?? {};
@@ -55,7 +59,7 @@ instance.interceptors.response.use(
       } catch (_) {
         // 리프레시 실패 → 세션 종료
       }
-      authStore.set("authorized", false);
+      authStore.initialize();
       toasts.warning("세션이 만료되었습니다. 다시 로그인해주세요.");
       window.location.href = "#/login";
     }
@@ -67,7 +71,7 @@ export const login = async (id, encryptedPassword) => {
   const response = await instance.post(`/auth/login`, {
     userId: id,
     encryptedPassword: encryptedPassword,
-  });
+  }, { skipAuthRefresh: true });
   return response.data;
 };
 
@@ -75,7 +79,48 @@ export const signup = async (id, encryptedPassword) => {
   const response = await instance.post(`/auth/signup`, {
     userId: id,
     encryptedPassword: encryptedPassword,
+  }, { skipAuthRefresh: true });
+  return response.data;
+};
+
+export const startRsoLogin = async () => {
+  const response = await instance.post(`/auth/rso/start`);
+  return response.data;
+};
+
+export const startRsoLink = async () => {
+  const response = await instance.post(`/auth/rso/link/start`);
+  return response.data;
+};
+
+export const getRsoLoginStatus = async (flowId) => {
+  const response = await instance.get(`/auth/rso/status`, {
+    params: { flowId },
   });
+  return response.data;
+};
+
+export const completeRsoWithExistingAccount = async (setupToken, userId, encryptedPassword) => {
+  const response = await instance.post(`/auth/rso/complete/existing`, {
+    setupToken,
+    userId,
+    encryptedPassword,
+  }, { skipAuthRefresh: true });
+  return response.data;
+};
+
+export const completeRsoWithNewAccount = async (setupToken) => {
+  const response = await instance.post(`/auth/rso/complete/new`, { setupToken });
+  return response.data;
+};
+
+export const getMyAccount = async () => {
+  const response = await instance.get(`/auth/me`);
+  return response.data;
+};
+
+export const unlinkRiotAccount = async () => {
+  const response = await instance.delete(`/auth/me/riot`);
   return response.data;
 };
 
