@@ -110,7 +110,6 @@ export default {
       preventAssignment: true,
       APP_SERVER_HOST: JSON.stringify(process.env.APP_SERVER_HOST),
       APP_VERSION: JSON.stringify(PackageJson.version),
-      APP_SECURE: false && JSON.stringify(isProduction ? true : false),
     }),
 
     // In dev mode, call `npm run start` once

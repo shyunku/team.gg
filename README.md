@@ -1,7 +1,10 @@
 # team.gg
 
-현재 배포된 프로덕션은 아래 링크로 사용해 볼 수 있습니다. \
-https://team-gg.net/
+## 서비스 주소
+
+- https://teamgg.kr/
+- https://www.teamgg.kr/
+- 현재 버전: `0.8.0`
 
 ## Notice
 
