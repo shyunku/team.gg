@@ -20,7 +20,6 @@
     championIconUrl,
     deleteCustomGameCandidateReq,
     deleteCustomGameParticipantColorCodeReq,
-    findMostBalancedCustomGameReq,
     profileIconUrl,
     renewCustomGameTeamRankReq,
     setCustomGameCandidateCustomTierRankReq,

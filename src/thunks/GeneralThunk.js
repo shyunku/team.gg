@@ -275,13 +275,10 @@ export const getCustomGameBalanceReq = async (customGameConfigId) => {
   return response.data;
 };
 
-export const findMostBalancedCustomGameReq = async (
-  customGameConfigId,
-  data
-) => {
+export const findMostBalancedCustomGameReq = async (customGameConfigId, weights) => {
   const response = await instance.post(`/platform/custom-game/optimize`, {
     id: customGameConfigId,
-    ...data,
+    ...weights,
   });
   return response.data;
 };
