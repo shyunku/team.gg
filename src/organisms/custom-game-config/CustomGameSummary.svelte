@@ -6,6 +6,7 @@
   import { socketStore } from "../../stores/SocketStore";
   import { findMostBalancedCustomGameReq } from "../../thunks/GeneralThunk";
   import { toasts } from "svelte-toasts";
+  import { getCustomGameErrorMessage } from "../../utils/ApiError";
   import RangeSlider from "svelte-range-slider-pips";
 
   export let balance;
@@ -16,6 +17,9 @@
   export let configId;
   export let dataIndex;
   export let weights;
+  export let canManage = false;
+  export let isOptimizing = false;
+  export let onOptimizingChanged = () => {};
 
   let rpDifference = 0;
   let rpDifferenceRate = 0;
@@ -24,6 +28,7 @@
   let teamFairness = 0;
   let lineSatisfaction = 0;
   let calculatingOptimization = false;
+  let localCalculating = false;
   let processType = null;
   let processRate = 0;
   let processCurrent = 0;
@@ -56,23 +61,27 @@
   };
 
   const findMostBalancedCombination = async () => {
+    if (!canManage || calculatingOptimization) return;
     try {
-      calculatingOptimization = true;
+      localCalculating = true;
+      onOptimizingChanged(true);
       await findMostBalancedCustomGameReq(configId, {
         tierFairnessWeight: scoreWeights.team / 100,
         lineFairnessWeight: scoreWeights.line / 100,
         lineSatisfactionWeight: scoreWeights.satisfaction / 100,
       });
       await fetchAllData();
+      onOptimizingChanged(false);
     } catch (err) {
       console.error(err);
+      await fetchAllData();
       toasts.add({
         title: "최적의 조합 찾기 오류",
-        description: "최적의 조합을 찾던 중 오류가 발생했습니다.",
+        description: getCustomGameErrorMessage(err, "최적의 조합을 찾던 중 오류가 발생했습니다."),
         type: "error",
       });
     } finally {
-      calculatingOptimization = false;
+      localCalculating = false;
       processType = null;
       processRate = 0;
       processCurrent = 0;
@@ -110,7 +119,7 @@
         processRate = progress;
         processTotal = total;
         processCurrent = current;
-        calculatingOptimization = true;
+        localCalculating = true;
       } catch (err) {
         console.error(err);
       }
@@ -123,8 +132,10 @@
     }
   }
 
-  $: if (dataIndex != null) {
-    calculatingOptimization = false;
+  $: calculatingOptimization = localCalculating || isOptimizing;
+
+  $: if (dataIndex != null && !isOptimizing) {
+    localCalculating = false;
   }
 </script>
 
@@ -159,14 +170,14 @@
               조합 대기 중
             {/if}
           </div>
-          <button class="find-optimized" disabled={calculatingOptimization} on:click={findMostBalancedCombination}>
+          <button class="find-optimized" disabled={!canManage || calculatingOptimization} on:click={findMostBalancedCombination}>
             {calculatingOptimization ? "계산 중" : "최적의 조합 찾기"}
           </button>
         </div>
         <div class="options">
           <div class="options-header">
             <span>밸런스 가중치</span>
-            <button on:click={resetScoreWeights} disabled={calculatingOptimization}>기본값</button>
+            <button on:click={resetScoreWeights} disabled={!canManage || calculatingOptimization}>기본값</button>
           </div>
           <div class="option">
             <div class="label">팀 밸런스</div>
@@ -177,7 +188,7 @@
                 range={"min"}
                 values={[scoreWeights.team]}
                 step={1}
-                disabled={calculatingOptimization}
+                disabled={!canManage || calculatingOptimization}
                 on:change={(event) => updateScoreWeight("team", event.detail.value)}
               />
             </div>
@@ -192,7 +203,7 @@
                 range={"min"}
                 values={[scoreWeights.line]}
                 step={1}
-                disabled={calculatingOptimization}
+                disabled={!canManage || calculatingOptimization}
                 on:change={(event) => updateScoreWeight("line", event.detail.value)}
               />
             </div>
@@ -207,7 +218,7 @@
                 range={"min"}
                 values={[scoreWeights.satisfaction]}
                 step={1}
-                disabled={calculatingOptimization}
+                disabled={!canManage || calculatingOptimization}
                 on:change={(event) => updateScoreWeight("satisfaction", event.detail.value)}
               />
             </div>

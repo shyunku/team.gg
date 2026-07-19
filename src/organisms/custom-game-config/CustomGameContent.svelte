@@ -22,6 +22,8 @@
     deleteCustomGameParticipantColorCodeReq,
     profileIconUrl,
     renewCustomGameTeamRankReq,
+    saveCustomGameDefaultFavorPositionReq,
+    resetCustomGameFavorPositionReq,
     setCustomGameCandidateCustomTierRankReq,
     setCustomGameCandidateFavorPositionReq,
     shuffleCustomGameTeamReq,
@@ -39,6 +41,7 @@
   import ContextMenu from "../../components/ContextMenu.svelte";
   import JsxUtil from "../../utils/JsxUtil";
   import { removeUnicode } from "../../utils/Common";
+  import { getCustomGameErrorMessage } from "../../utils/ApiError";
 
   export let configId;
   export let candidates = [];
@@ -51,6 +54,9 @@
 
   export let team1ParticipantsMap = {};
   export let team2ParticipantsMap = {};
+  export let canManage = false;
+  export let ownedPuuids = [];
+  export let isOptimizing = false;
 
   const positions = ["TOP", "JUNGLE", "MID", "ADC", "SUPPORT"];
 
@@ -69,7 +75,51 @@
     return acc;
   }, {});
 
+  const isOwnedRiotAccount = (puuid) => puuid != null && ownedPuuids.includes(puuid);
+  const canEditPreference = (puuid) => !isOptimizing && (canManage || isOwnedRiotAccount(puuid));
+  const mutationErrorMessage = (err, fallback) => getCustomGameErrorMessage(err, fallback);
+
+  const requireManagePermission = () => {
+    if (isOptimizing) {
+      toasts.add({ title: "내전 구성 잠김", description: "최적의 조합을 계산 중이라 내전 구성을 변경할 수 없습니다.", type: "warning" });
+      return false;
+    }
+    if (!canManage) {
+      toasts.add({ title: "권한 없음", description: "이 내전 구성을 변경할 권한이 없습니다.", type: "warning" });
+      return false;
+    }
+    return true;
+  };
+
+  const saveDefaultFavorPosition = async (puuid) => {
+    if (isOptimizing || !isOwnedRiotAccount(puuid)) return;
+    try {
+      await saveCustomGameDefaultFavorPositionReq(configId, puuid);
+      toasts.add({ title: "기본 선호도", description: "현재 라인 선호도를 기본값으로 저장했습니다.", type: "success" });
+    } catch (err) {
+      toasts.add({ title: "기본 선호도 저장 실패", description: mutationErrorMessage(err, "기본 선호도를 저장하지 못했습니다."), type: "error" });
+    }
+  };
+
+  const resetFavorPositionToDefault = async (puuid) => {
+    if (isOptimizing || !isOwnedRiotAccount(puuid)) return;
+    try {
+      const result = await resetCustomGameFavorPositionReq(configId, puuid);
+      await fetchAllData();
+      toasts.add({
+        title: "기본 선호도",
+        description: result?.usedSavedDefault
+          ? "저장된 기본 라인 선호도로 초기화했습니다."
+          : "저장된 기본값이 없어 0/0/0/0/0으로 초기화했습니다.",
+        type: "success",
+      });
+    } catch (err) {
+      toasts.add({ title: "선호도 초기화 실패", description: mutationErrorMessage(err, "기본 선호도로 초기화하지 못했습니다."), type: "error" });
+    }
+  };
+
   const onCandidateSearch = async (name, tag, withWarn = true) => {
+    if (!requireManagePermission()) return;
     let toast;
     try {
       toast = toasts.add({
@@ -114,7 +164,7 @@
       }
       toasts.add({
         title: "소환사 정보",
-        description: `${name}#${tag}의 정보를 가져오던 중 오류가 발생했습니다.`,
+        description: mutationErrorMessage(err, `${name}#${tag}의 정보를 가져오던 중 오류가 발생했습니다.`),
         type: "error",
         duration: 5000,
       });
@@ -124,6 +174,7 @@
   };
 
   const selectMaxCandidates = async () => {
+    if (!requireManagePermission()) return;
     try {
       await arrangeAllCandidatesReq(configId);
       try {
@@ -135,13 +186,14 @@
       console.error(err);
       toasts.add({
         title: "후보 선택 오류",
-        description: "후보를 선택하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "후보를 선택하던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
   };
 
   const unselectParticipants = async () => {
+    if (!requireManagePermission()) return;
     try {
       await unArrangeAllCandidatesReq(configId);
       try {
@@ -153,13 +205,14 @@
       console.error(err);
       toasts.add({
         title: "후보 선택 오류",
-        description: "후보를 선택하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "후보를 선택하던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
   };
 
   const swapTeam = async () => {
+    if (!requireManagePermission()) return;
     try {
       await swapCustomGameTeamReq(configId);
       try {
@@ -171,13 +224,14 @@
       console.error(err);
       toasts.add({
         title: "팀 교체 오류",
-        description: "팀을 교체하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "팀을 교체하던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
   };
 
   const shuffleTeam = async () => {
+    if (!requireManagePermission()) return;
     try {
       await shuffleCustomGameTeamReq(configId);
       try {
@@ -189,13 +243,14 @@
       console.error(err);
       toasts.add({
         title: "팀 섞기 오류",
-        description: "팀을 섞던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "팀을 섞던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
   };
 
   const renewRanks = async () => {
+    if (!requireManagePermission()) return;
     let toast;
     try {
       toast = toasts.add({
@@ -220,7 +275,7 @@
       console.error(err);
       toasts.add({
         title: "랭크 갱신 오류",
-        description: "랭크 갱신 도중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "랭크 갱신 도중 오류가 발생했습니다."),
         type: "error",
       });
     } finally {
@@ -229,13 +284,14 @@
   };
 
   const clearColors = async () => {
+    if (!requireManagePermission()) return;
     try {
       await deleteCustomGameParticipantColorCodeReq(configId);
     } catch (err) {
       console.error(err);
       toasts.add({
         title: "컬러 라벨 초기화 오류",
-        description: "컬러 라벨을 초기화하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "컬러 라벨을 초기화하던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
@@ -277,6 +333,7 @@
   };
 
   const setCustomCandidateCustomTierRank = async (puuid, tier, rank) => {
+    if (!requireManagePermission()) return;
     try {
       const isUnranked = tier === "UNRANKED";
       console.log(tier, rank, isUnranked);
@@ -290,7 +347,7 @@
       console.log(err);
       toasts.add({
         title: "지정 랭크 변경 오류",
-        description: "랭크 지정에 실패했습니다.",
+        description: mutationErrorMessage(err, "랭크 지정에 실패했습니다."),
         duration: 3000,
         type: "error",
       });
@@ -333,6 +390,7 @@
   };
 
   const applyMultiSearch = async () => {
+    if (!requireManagePermission()) return;
     try {
       const candidatesByRiotId = candidates.reduce((map, candidate) => {
         const gameName = candidate?.summary?.gameName ?? "";
@@ -380,13 +438,17 @@
       console.error(err);
       toasts.add({
         title: "후보 선택 오류",
-        description: "후보를 선택하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "후보를 선택하던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
   };
 
   const onCandidateDragStart = (e, puuid) => {
+    if (!requireManagePermission()) {
+      e.preventDefault();
+      return;
+    }
     e.dataTransfer.setData("puuid", puuid);
     e.dataTransfer.setData("type", "candidate");
     draggingCandidate = true;
@@ -416,6 +478,7 @@
   };
 
   const onCandidateDrop = async (e, team, position) => {
+    if (!requireManagePermission()) return;
     console.log("dropped on", team, position);
 
     draggingParticipant = false;
@@ -479,7 +542,7 @@
     } catch (err) {
       toasts.add({
         title: "소환사 배치 오류",
-        description: "소환사를 배치하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "소환사를 배치하던 중 오류가 발생했습니다."),
         type: "error",
       });
     } finally {
@@ -488,6 +551,10 @@
   };
 
   const onParticipantDragStart = (e, puuid, position, team) => {
+    if (!requireManagePermission()) {
+      e.preventDefault();
+      return;
+    }
     e.dataTransfer.setData("puuid", puuid);
     e.dataTransfer.setData("type", "participant");
     e.dataTransfer.setData("position", position);
@@ -516,6 +583,7 @@
   };
 
   const onParticipantDrop = async (e) => {
+    if (!requireManagePermission()) return;
     const puuid = e.dataTransfer.getData("puuid");
     console.log("unarrange", puuid);
 
@@ -536,10 +604,25 @@
       await updateBalance();
     } catch (err) {
       console.error(err);
+      toasts.add({
+        title: "소환사 배치 해제 오류",
+        description: mutationErrorMessage(err, "소환사를 후보 목록으로 이동하지 못했습니다."),
+        type: "error",
+      });
     }
   };
 
   const onCandidateChangeFavorPosition = async (puuid, position, strength) => {
+    if (!canEditPreference(puuid)) {
+      toasts.add({
+        title: isOptimizing ? "내전 구성 잠김" : "권한 없음",
+        description: isOptimizing
+          ? "최적의 조합을 계산 중이라 포지션 선호도를 변경할 수 없습니다."
+          : "본인 Riot 계정의 포지션 선호도만 변경할 수 있습니다.",
+        type: "warning",
+      });
+      return;
+    }
     try {
       await setCustomGameCandidateFavorPositionReq(configId, puuid, position, strength);
       candidateMap[puuid].positionFavor[position.toLowerCase()] = strength;
@@ -548,13 +631,14 @@
       console.error(err);
       toasts.add({
         title: "포지션 선호도 변경 오류",
-        description: "포지션 선호도를 변경하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "포지션 선호도를 변경하던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
   };
 
   const onCandidateDelete = async (puuid) => {
+    if (!requireManagePermission()) return;
     try {
       console.log(configId, puuid);
       await deleteCustomGameCandidateReq(configId, puuid);
@@ -563,7 +647,7 @@
       console.error(err);
       toasts.add({
         title: "후보 삭제 오류",
-        description: "후보를 삭제하던 중 오류가 발생했습니다.",
+        description: mutationErrorMessage(err, "후보를 삭제하던 중 오류가 발생했습니다."),
         type: "error",
       });
     }
@@ -619,6 +703,11 @@
           {draggingParticipant}
           {candidateHoverTarget}
           {configId}
+          {canManage}
+          {ownedPuuids}
+          {isOptimizing}
+          {saveDefaultFavorPosition}
+          {resetFavorPositionToDefault}
         />
         <CustomGameContentTeam
           {positions}
@@ -638,6 +727,11 @@
           {draggingParticipant}
           {candidateHoverTarget}
           {configId}
+          {canManage}
+          {ownedPuuids}
+          {isOptimizing}
+          {saveDefaultFavorPosition}
+          {resetFavorPositionToDefault}
         />
       </div>
       <div class="sub-panels">
@@ -645,27 +739,27 @@
           <div class="header">유틸리티</div>
           <div class="body">
             <div class="options">
-              <div class="option" on:mouseup={selectMaxCandidates}>
+              <div class:disabled={!canManage || isOptimizing} class="option" on:mouseup={selectMaxCandidates}>
                 <div class="icon"><IoIosArrowRoundBack /></div>
                 <div class="text">최대 10명 뽑기</div>
               </div>
-              <div class="option" on:mouseup={unselectParticipants}>
+              <div class:disabled={!canManage || isOptimizing} class="option" on:mouseup={unselectParticipants}>
                 <div class="icon"><IoIosArrowRoundForward /></div>
                 <div class="text">전부 후보 리스트로 이동</div>
               </div>
-              <div class="option" on:mouseup={swapTeam}>
+              <div class:disabled={!canManage || isOptimizing} class="option" on:mouseup={swapTeam}>
                 <div class="icon"><IoIosSwap /></div>
                 <div class="text">팀 바꾸기</div>
               </div>
-              <div class="option" on:mouseup={shuffleTeam}>
+              <div class:disabled={!canManage || isOptimizing} class="option" on:mouseup={shuffleTeam}>
                 <div class="icon"><IoIosShuffle /></div>
                 <div class="text">팀 섞기</div>
               </div>
-              <div class="option" on:mouseup={renewRanks}>
+              <div class:disabled={!canManage || isOptimizing} class="option" on:mouseup={renewRanks}>
                 <div class="icon"><IoIosRepeat /></div>
                 <div class="text">팀원 랭크 갱신</div>
               </div>
-              <div class="option" on:mouseup={clearColors}>
+              <div class:disabled={!canManage || isOptimizing} class="option" on:mouseup={clearColors}>
                 <div class="icon"><IoIosCode /></div>
                 <div class="text">컬러 라벨 전체 삭제</div>
               </div>
@@ -687,7 +781,8 @@
               <div class="detected">{Object.keys(detectedMultiSearchSummoners).length}명 감지됨</div>
               <div
                 class={"applier" +
-                  JsxUtil.classByEqual(Object.keys(detectedMultiSearchSummoners).length, 0, "disabled")}
+                  JsxUtil.classByEqual(Object.keys(detectedMultiSearchSummoners).length, 0, "disabled") +
+                  JsxUtil.classByCondition(!canManage || isOptimizing, "disabled")}
                 on:click={applyMultiSearch}
               >
                 적용
@@ -696,6 +791,7 @@
           </div>
           <div class="body">
             <textarea
+              disabled={!canManage || isOptimizing}
               placeholder="채팅창 복사 후#KR1 님이 로비에 참가하셨습니다.&#13;이곳에 #KR1 님이 로비에 참가하셨습니다.&#13;붙여넣기 #KR1 님이 로비에 참가하셨습니다.&#13;하면 됩니다 #KR1 님이 로비에 참가하셨습니다.&#13;참 쉽죠 #션 쿠 님이 로비에 참가하셨습니다."
               spellcheck="false"
               on:input={onMultiSearchTextChange}
@@ -706,7 +802,7 @@
           <div class="header">후보</div>
           <div class="body">
             <div class="searcher">
-              <div class="searcher-wrapper">
+              <div class:disabled={!canManage || isOptimizing} class="searcher-wrapper">
                 <NameTagSearchInput
                   onEnter={onCandidateSearch}
                   onResultClick={(name, tag) => onCandidateSearch(name, tag)}
@@ -744,13 +840,25 @@
                   }, null)}
                   {@const puuid = c?.summary?.puuid ?? null}
                   <ContextDiv
-                    class="candidate"
-                    draggable="true"
+                    class={"candidate" + JsxUtil.classByCondition(isOwnedRiotAccount(puuid), "own-account") + JsxUtil.classByCondition(!canManage || isOptimizing, "not-permitted")}
+                    draggable={canManage && !isOptimizing}
                     onDragStart={(e) => onCandidateDragStart(e, puuid)}
                     onDragEnd={onCandidateDragEnd}
                   >
                     <ContextMenu className="candidate-menu">
-                      <div class="menu" on:click={(e) => onCandidateDelete(puuid)}>후보에서 제거</div>
+                      {#if isOwnedRiotAccount(puuid)}
+                        <div
+                          class:disabled={isOptimizing}
+                          class="menu"
+                          on:click={() => saveDefaultFavorPosition(puuid)}
+                        >현재 선호도를 기본값으로 저장</div>
+                        <div
+                          class:disabled={isOptimizing}
+                          class="menu"
+                          on:click={() => resetFavorPositionToDefault(puuid)}
+                        >기본값으로 초기화</div>
+                      {/if}
+                      <div class:disabled={!canManage || isOptimizing} class="menu" on:click={(e) => onCandidateDelete(puuid)}>후보에서 제거</div>
                     </ContextMenu>
                     <div class="profile-icon img">
                       <SafeImg src={profileIconUrl(c?.summary?.profileIconId)} />

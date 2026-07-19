@@ -23,6 +23,7 @@
   import JsxUtil from "../../../utils/JsxUtil";
   import ContextMenuItem from "../../../components/ContextMenuItem.svelte";
   import ContextMenuInner from "../../../components/ContextMenuInner.svelte";
+  import { getCustomGameErrorMessage } from "../../../utils/ApiError";
 
   export let configId;
   export let positions;
@@ -43,14 +44,23 @@
   export let draggingCandidate;
   export let draggingParticipant;
   export let candidateHoverTarget;
+  export let canManage = false;
+  export let ownedPuuids = [];
+  export let isOptimizing = false;
+  export let saveDefaultFavorPosition = () => {};
+  export let resetFavorPositionToDefault = () => {};
 
   export let totalRatingPoint = 0;
   let teammateCount = 0;
   let avgTierRank = null;
 
+  const isOwnedRiotAccount = (puuid) => puuid != null && ownedPuuids.includes(puuid);
+  const canEditPreference = (puuid) => !isOptimizing && (canManage || isOwnedRiotAccount(puuid));
+
   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
   const setParticipantColorLabel = async (puuid, color) => {
+    if (!canManage || isOptimizing) return;
     console.log(puuid, color);
     try {
       await setCustomGameParticipantColorCodeReq(configId, puuid, color);
@@ -77,7 +87,7 @@
         default:
           toasts.add({
             title: "컬러 지정 실패",
-            description: "컬러 지정에 실패했습니다.",
+            description: getCustomGameErrorMessage(err, "컬러 지정에 실패했습니다."),
             duration: 3000,
             type: "error",
           });
@@ -175,46 +185,60 @@
         {@const soloRank = p?.soloRank}
         {@const flexRank = p?.flexRank}
         <ContextDiv
-          class={"summoner" + JsxUtil.class(CustomGameTeammateColorLabelKeys[p?.colorCode]?.toLowerCase() ?? "")}
-          draggable="true"
+          class={"summoner" +
+            JsxUtil.class(CustomGameTeammateColorLabelKeys[p?.colorCode]?.toLowerCase() ?? "") +
+            JsxUtil.classByCondition(isOwnedRiotAccount(puuid), "own-account")}
+          draggable={canManage && !isOptimizing}
           onDragStart={(e) => onParticipantDragStart(e, puuid, pos, teamIndex)}
           onDragEnd={onParticipantDragEnd}
         >
           {#if p != null}
             <ContextMenu className="summoner-menus">
-              <ContextMenuItem class="menu">
+              <ContextMenuItem class={"menu" + JsxUtil.classByCondition(!canManage || isOptimizing, "disabled")}>
                 <div class="label">
                   {gameName} 랭크 지정
                 </div>
-                <ContextMenuInner class="tier-rank-group">
-                  <TierRankGroup
-                    onSelect={(tier, rank) => {
-                      setCustomCandidateCustomTierRank(puuid, tier, rank);
-                    }}
-                  />
-                </ContextMenuInner>
+                {#if canManage && !isOptimizing}
+                  <ContextMenuInner class="tier-rank-group">
+                    <TierRankGroup
+                      onSelect={(tier, rank) => {
+                        setCustomCandidateCustomTierRank(puuid, tier, rank);
+                      }}
+                    />
+                  </ContextMenuInner>
+                {/if}
               </ContextMenuItem>
-              <ContextMenuItem class="menu">
+              <ContextMenuItem class={"menu" + JsxUtil.classByCondition(!canManage || isOptimizing, "disabled")}>
                 <div class="label">
                   {gameName} 컬러 지정
                 </div>
-                <ContextMenuInner class="color-label-group">
-                  <div class="color-label" on:click={(e) => setParticipantColorLabel(puuid, 0)}>
-                    <div class="color-ball"></div>
-                    <div class="label">컬러 제거</div>
-                  </div>
-                  {#each Object.keys(CustomGameTeammateColorLabels) as color}
-                    <div
-                      class="color-label"
-                      on:click={(e) => setParticipantColorLabel(puuid, CustomGameTeammateColorLabels[color])}
-                    >
-                      <div class="color-ball {color.toLowerCase()}"></div>
-                      <div class="label">{color}</div>
+                {#if canManage && !isOptimizing}
+                  <ContextMenuInner class="color-label-group">
+                    <div class="color-label" on:click={(e) => setParticipantColorLabel(puuid, 0)}>
+                      <div class="color-ball"></div>
+                      <div class="label">컬러 제거</div>
                     </div>
-                  {/each}
-                </ContextMenuInner>
+                    {#each Object.keys(CustomGameTeammateColorLabels) as color}
+                      <div
+                        class="color-label"
+                        on:click={(e) => setParticipantColorLabel(puuid, CustomGameTeammateColorLabels[color])}
+                      >
+                        <div class="color-ball {color.toLowerCase()}"></div>
+                        <div class="label">{color}</div>
+                      </div>
+                    {/each}
+                  </ContextMenuInner>
+                {/if}
               </ContextMenuItem>
-              <ContextMenuItem class="menu" on:click={() => onCandidateDelete(puuid)}>{gameName} 제거</ContextMenuItem>
+              {#if isOwnedRiotAccount(puuid)}
+                <ContextMenuItem class={"menu" + JsxUtil.classByCondition(isOptimizing, "disabled")} on:click={() => saveDefaultFavorPosition(puuid)}>
+                  현재 선호도를 기본값으로 저장
+                </ContextMenuItem>
+                <ContextMenuItem class={"menu" + JsxUtil.classByCondition(isOptimizing, "disabled")} on:click={() => resetFavorPositionToDefault(puuid)}>
+                  기본값으로 초기화
+                </ContextMenuItem>
+              {/if}
+              <ContextMenuItem class={"menu" + JsxUtil.classByCondition(!canManage || isOptimizing, "disabled")} on:click={() => onCandidateDelete(puuid)}>{gameName} 제거</ContextMenuItem>
             </ContextMenu>
           {/if}
           {#if draggingCandidate || draggingParticipant}
@@ -231,7 +255,13 @@
             </div>
           {/if}
           <div class="position">
-            <LinePosition position={pos?.toLowerCase()} interactive={false} strength={1} size={20} />
+            <LinePosition
+              position={pos?.toLowerCase()}
+              interactive={false}
+              strength={1}
+              size={20}
+              highlightColor={isOwnedRiotAccount(puuid) ? "rgb(134 255 143)" : null}
+            />
           </div>
           {#if p != null}
             <div class="profile-icon img">
@@ -275,6 +305,7 @@
                   <LinePosition
                     position={lowerKey}
                     interactive={true}
+                    disabled={!canEditPreference(puuid)}
                     strength={strength ?? 0}
                     showStrength={true}
                     size={20}

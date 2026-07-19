@@ -4,7 +4,7 @@
 
 - https://teamgg.kr/
 - https://www.teamgg.kr/
-- 현재 버전: `0.8.1`
+- 현재 버전: `0.8.2`
 
 ## Notice
 

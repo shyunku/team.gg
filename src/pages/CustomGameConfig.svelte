@@ -21,6 +21,9 @@
   let team2ParticipantsMap = {};
 
   let socketConnected = false;
+  let canManage = false;
+  let ownedPuuids = [];
+  let isOptimizing = false;
 
   const updateBalance = async () => {
     try {
@@ -56,6 +59,9 @@
         return acc;
       }, {});
       weights = data.weights;
+      canManage = data.canManage === true;
+      ownedPuuids = data.ownedPuuids ?? [];
+      isOptimizing = data.isOptimizing === true;
       console.log(resp);
     } catch (err) {
       console.error(err);
@@ -87,6 +93,8 @@
   configId={data?.id}
   name={data?.name}
   lastUpdatedAt={data?.lastUpdatedAt}
+  canEdit={canManage}
+  locked={isOptimizing}
   onNameChanged={(name, lastUpdatedAt) => {
     data = { ...data, name, lastUpdatedAt };
   }}
@@ -96,6 +104,12 @@
   configId={data?.id}
   {dataIndex}
   {weights}
+  {canManage}
+  {isOptimizing}
+  onOptimizingChanged={(value) => {
+    isOptimizing = value;
+    if (data) data = { ...data, isOptimizing: value };
+  }}
   {socketConnected}
   {fetchAllData}
   bind:team1TotalRatingPoint
@@ -110,4 +124,7 @@
   {team2ParticipantsMap}
   {updateBalance}
   {fetchAllData}
+  {canManage}
+  {ownedPuuids}
+  {isOptimizing}
 />

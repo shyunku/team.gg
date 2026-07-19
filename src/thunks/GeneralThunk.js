@@ -139,8 +139,15 @@ export const getMyAccount = async () => {
   return response.data;
 };
 
-export const unlinkRiotAccount = async () => {
-  const response = await instance.delete(`/auth/me/riot`);
+export const unlinkRiotAccount = async (puuid = null) => {
+  const response = await instance.delete(`/auth/me/riot`, {
+    params: puuid ? { puuid } : undefined,
+  });
+  return response.data;
+};
+
+export const setPrimaryRiotAccount = async (puuid) => {
+  const response = await instance.put(`/auth/me/riot/primary`, { puuid });
   return response.data;
 };
 
@@ -264,6 +271,22 @@ export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId,
     strength,
   });
 
+  return response.data;
+};
+
+export const saveCustomGameDefaultFavorPositionReq = async (customGameConfigId, puuid) => {
+  const response = await instance.post(`/platform/custom-game/default-favor-position`, {
+    customGameConfigId,
+    puuid,
+  });
+  return response.data;
+};
+
+export const resetCustomGameFavorPositionReq = async (customGameConfigId, puuid) => {
+  const response = await instance.post(`/platform/custom-game/reset-favor-position`, {
+    customGameConfigId,
+    puuid,
+  });
   return response.data;
 };
 

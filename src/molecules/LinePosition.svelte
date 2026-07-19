@@ -15,6 +15,8 @@
   export let brightness = null;
   export let showStrength = false;
   export let onClick = () => {};
+  export let disabled = false;
+  export let highlightColor = null;
 
   let hovered = false;
   let style = {};
@@ -56,17 +58,9 @@
     utility: SupportImage,
   };
 
-  let sourceByCondition;
+  let source;
   $: {
-    const source = sources[position?.toLowerCase()];
-    if (source) {
-      if (!interactive) sourceByCondition = source.default;
-      else {
-        if (hovered && interactive) sourceByCondition = source.hovered;
-        else if (strength !== 0) sourceByCondition = source.default;
-        else sourceByCondition = source.disabled;
-      }
-    }
+    source = sources[position?.toLowerCase()];
 
     style = {
       width: `${size}px`,
@@ -84,7 +78,10 @@
 <div
   class={"line-position img" +
     JsxUtil.class(`strength-${strength}`) +
-    JsxUtil.classByCondition(interactive, "interactive")}
+    JsxUtil.classByCondition(interactive && !disabled, "interactive") +
+    JsxUtil.classByCondition(disabled, "disabled") +
+    JsxUtil.classByCondition(hovered, "hovered") +
+    JsxUtil.classByCondition(highlightColor != null, "highlighted")}
   style={Object.keys(style)
     .map((k) => `${k}: ${style[k]} !important`)
     .join("; ")}
@@ -94,14 +91,25 @@
   on:mouseleave={(e) => {
     hovered = false;
   }}
-  on:click={(e) => interactive && onClick((strength + 1) % 3)}
+  on:click={(e) => interactive && !disabled && onClick((strength + 1) % 3)}
   on:contextmenu={(e) => {
     e.preventDefault();
     e.stopPropagation();
-    interactive && onClick(strength == -1 ? 0 : -1);
+    interactive && !disabled && onClick(strength == -1 ? 0 : -1);
   }}
 >
-  <SafeImg src={sourceByCondition} />
+  {#if highlightColor != null}
+    <span
+      class="highlighted-icon"
+      style={`background-color:${highlightColor};-webkit-mask-image:url(${source?.default});mask-image:url(${source?.default});`}
+    ></span>
+  {:else if source != null}
+    <span class="icon-stack">
+      <span class="state-icon state-default"><SafeImg src={source.default} /></span>
+      <span class="state-icon state-disabled"><SafeImg src={source.disabled} /></span>
+      <span class="state-icon state-hovered"><SafeImg src={source.hovered} /></span>
+    </span>
+  {/if}
   {#if showStrength}
     <div class="strength">{strength}</div>
   {/if}
@@ -159,6 +167,63 @@
 
     &.interactive {
       cursor: pointer;
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+    }
+
+    &.highlighted {
+      opacity: 1;
+      filter: none;
+    }
+
+    .icon-stack {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      .state-icon {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+
+        :global(img) {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .state-default {
+        opacity: 1;
+      }
+    }
+
+    &.interactive.strength-0:not(.hovered) .icon-stack {
+      .state-default { opacity: 0; }
+      .state-disabled { opacity: 1; }
+    }
+
+    &.interactive.hovered .icon-stack {
+      .state-default,
+      .state-disabled { opacity: 0; }
+      .state-hovered { opacity: 1; }
+    }
+
+    .highlighted-icon {
+      display: block;
+      width: 100%;
+      height: 100%;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-size: contain;
+      mask-size: contain;
     }
   }
 </style>

@@ -99,7 +99,12 @@
     }
   };
 
+  const handleAccountUpdated = () => {
+    if (isAuthorized) checkIsAuthorized();
+  };
+
   onMount(() => {
+    window.addEventListener("teamgg:account-updated", handleAccountUpdated);
     unsubscribeAuth = authStore.subscribe((value) => {
       isAuthorized = value?.authorized;
       userId = value?.userId ?? "";
@@ -112,7 +117,10 @@
     });
   });
 
-  onDestroy(() => unsubscribeAuth?.());
+  onDestroy(() => {
+    window.removeEventListener("teamgg:account-updated", handleAccountUpdated);
+    unsubscribeAuth?.();
+  });
 
   $: {
     let pageKey =

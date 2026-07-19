@@ -3,7 +3,8 @@
   import { updateCustomGameConfigurationName } from "../../thunks/GeneralThunk";
   import { toRelativeTime } from "../../utils/Datetime";
   import { toasts } from "svelte-toasts";
-  import { tick } from "svelte";
+  import { getCustomGameErrorMessage } from "../../utils/ApiError";
+  import { onMount, tick } from "svelte";
   import FaPencilAlt from "svelte-icons/fa/FaPencilAlt.svelte";
   import "./CustomGameHeader.scss";
 
@@ -11,12 +12,26 @@
   export let name = "";
   export let lastUpdatedAt = null;
   export let onNameChanged = () => {};
+  export let canEdit = false;
+  export let locked = false;
 
   let editing = false;
   let draftName = "";
   let nameInput;
+  let currentTime = Date.now();
+
+  $: lastUpdateTimeText = (currentTime, toRelativeTime(new Date(lastUpdatedAt ?? 0).getTime()));
+
+  onMount(() => {
+    const timer = setInterval(() => {
+      currentTime = Date.now();
+    }, 1000);
+
+    return () => clearInterval(timer);
+  });
 
   const startEditing = async () => {
+    if (!canEdit || locked) return;
     draftName = name ?? "";
     editing = true;
     await tick();
@@ -48,7 +63,7 @@
       onNameChanged(result?.name ?? nextName, result?.lastUpdatedAt ?? new Date().toISOString());
     } catch (err) {
       draftName = name ?? "";
-      toasts.add({ title: "이름 수정 실패", description: "구성 이름을 변경하지 못했습니다.", type: "error" });
+      toasts.add({ title: "이름 수정 실패", description: getCustomGameErrorMessage(err, "구성 이름을 변경하지 못했습니다."), type: "error" });
     }
   };
 
@@ -81,12 +96,19 @@
           <div class="title">{name}</div>
         {/if}
         {#if !editing && configId}
-          <button class="edit-name" type="button" aria-label="구성 이름 수정" title="이름 수정" on:click={startEditing}>
+          <button
+            class="edit-name"
+            type="button"
+            disabled={!canEdit || locked}
+            aria-label="구성 이름 수정"
+            title={locked ? "최적의 조합 계산 중에는 수정할 수 없습니다." : canEdit ? "이름 수정" : "구성 소유자만 수정할 수 있습니다."}
+            on:click={startEditing}
+          >
             <FaPencilAlt />
           </button>
         {/if}
       </div>
-      <div class="last-update-time">최종 수정: {toRelativeTime(new Date(lastUpdatedAt ?? 0).getTime())}</div>
+      <div class="last-update-time">최종 수정: {lastUpdateTimeText}</div>
     </div>
   </MainContentLayout>
 </div>
