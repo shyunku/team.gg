@@ -57,11 +57,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: $main-bg-color;
-  color: white;
+  background: rgba(5, 8, 22, 0.9);
+  color: $color-text-primary;
   height: 60px;
   // padding: 0 12px;
   border-bottom: 1px solid $main-border-color;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
   // position: sticky;
   // top: 0;
   // left: 0;
@@ -97,31 +99,34 @@
       cursor: pointer;
       font-weight: bold;
       height: 100%;
-      color: $main-fg-color;
+      color: $color-text-secondary;
       font-size: 21px;
       padding: 0 18px;
-      background: linear-gradient(180deg, transparent 50%, transparent 100%);
+      background: transparent;
       transition: 0.2s linear;
       white-space: nowrap;
 
       &.ingame {
-        color: rgb(115, 193, 144);
+        color: $color-accent-hover;
 
         &:hover {
-          background: linear-gradient(180deg, transparent 60%, rgba(94, 193, 130, 0.393) 100%) !important;
+          background: linear-gradient(180deg, transparent 65%, $color-accent-soft 100%) !important;
         }
 
         &.selected {
-          background: linear-gradient(180deg, transparent 60%, rgba(135, 255, 179, 0.393) 100%) !important;
+          background: transparent !important;
         }
       }
 
       &:hover {
-        background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);
+        color: $color-text-primary;
+        background: linear-gradient(180deg, transparent 65%, $color-accent-soft 100%);
       }
 
       &.selected {
-        background: linear-gradient(180deg, transparent 60%, $highlight-color 100%);
+        color: $color-text-primary;
+        background: transparent;
+        box-shadow: inset 0 -2px 0 $color-accent;
       }
 
       &:not(.selected):not(:hover) {
@@ -147,7 +152,7 @@
       cursor: pointer;
       font-weight: bold;
       height: 100%;
-      color: $main-fg-color;
+      color: $color-text-secondary;
       font-size: 21px;
       padding: 0 18px;
       background: linear-gradient(180deg, transparent 50%, transparent 100%);
@@ -157,26 +162,46 @@
       font-family: inherit;
 
       &:hover {
-        background: linear-gradient(180deg, transparent 60%, rgba(222, 206, 160, 0.393) 100%);
+        color: $color-text-primary;
+        background: linear-gradient(180deg, transparent 65%, $color-accent-soft 100%);
       }
 
       &.selected {
-        background: linear-gradient(180deg, transparent 60%, $highlight-color 100%);
+        color: $color-text-primary;
+        background: transparent;
+        box-shadow: inset 0 -2px 0 $color-accent;
       }
     }
 
     .account-trigger {
       gap: 8px;
       background: transparent;
+      font-size: 14px;
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      &.selected:focus,
+      &.selected:focus-visible {
+        box-shadow: inset 0 -2px 0 $color-accent;
+      }
 
       .riot-account-name {
-        color: #54c39a;
+        color: $color-text-primary;
+      }
+
+      .account-name {
+        font-size: 14px;
       }
 
       .account-icon {
         display: flex;
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         flex: 0 0 auto;
         aspect-ratio: 1 / 1;
 
@@ -218,8 +243,9 @@
       padding: 4px 0;
       box-sizing: border-box;
       border: 1px solid $main-border-color;
-      background: $sub-bg-color;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+      border-radius: 8px;
+      background: $color-surface-raised;
+      box-shadow: $shadow-card;
 
       button {
         display: block;
@@ -231,7 +257,7 @@
         box-sizing: border-box;
         border: 0;
         background: transparent;
-        color: $main-fg-color;
+        color: $color-text-secondary;
         font-family: inherit;
         font-size: 12px;
         line-height: 30px;
@@ -239,7 +265,17 @@
         cursor: pointer;
 
         &:hover {
-          background: rgba(125, 106, 61, 0.22);
+          background: $color-accent-soft;
+          color: $color-text-primary;
+        }
+
+        &.logout {
+          color: $color-danger;
+
+          &:hover {
+            background: var(--color-danger-soft);
+            color: $color-danger;
+          }
         }
       }
     }

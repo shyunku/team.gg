@@ -193,13 +193,14 @@
     margin-bottom: 14px;
     padding: 22px;
     border: 1px solid $main-border-color;
-    border-radius: 4px;
-    background: $sub-bg-color;
+    border-radius: 9px;
+    background: linear-gradient(145deg, $color-surface-raised, $color-surface);
+    box-shadow: $shadow-card;
 
     &.loading,
     .empty,
     .hint {
-      color: rgba(205, 190, 145, 0.6);
+      color: rgba(173, 182, 209, 0.6);
       font-size: 13px;
     }
 
@@ -216,8 +217,8 @@
       border-top: 1px solid $sub-border-color;
       font-size: 13px;
 
-      span { color: rgba(205, 190, 145, 0.6); }
-      strong { color: #f0e6d2; }
+      span { color: rgba(173, 182, 209, 0.6); }
+      strong { color: var(--color-text-primary); }
     }
 
     .riot-account-list {
@@ -240,10 +241,10 @@
       flex: 0 0 32px;
       overflow: hidden;
       border-radius: 50%;
-      background: rgba(205, 190, 145, 0.12);
+      background: rgba(173, 182, 209, 0.12);
 
       :global(img) { width: 100%; height: 100%; object-fit: cover; }
-      :global(svg) { width: 100%; height: 100%; color: rgba(205, 190, 145, 0.7); }
+      :global(svg) { width: 100%; height: 100%; color: rgba(173, 182, 209, 0.7); }
     }
 
     .riot-account-name {
@@ -253,14 +254,14 @@
       align-items: center;
       gap: 8px;
 
-      strong { overflow: hidden; color: #f0e6d2; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+      strong { overflow: hidden; color: var(--color-text-primary); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
     }
 
     .primary-badge {
       padding: 2px 6px;
       border-radius: 10px;
       background: rgba(84, 195, 154, 0.18);
-      color: #54c39a;
+      color: var(--color-success);
       font-size: 11px;
     }
 
@@ -275,7 +276,7 @@
         padding: 0 9px;
         border: 1px solid $main-border-color;
         background: transparent;
-        color: rgba(205, 190, 145, 0.8);
+        color: rgba(173, 182, 209, 0.8);
         font-size: 11px;
       }
     }
@@ -303,7 +304,7 @@
     .disconnect {
       border: 1px solid $main-border-color;
       background: transparent;
-      color: rgba(205, 190, 145, 0.75);
+      color: rgba(173, 182, 209, 0.75);
     }
   }
 </style>

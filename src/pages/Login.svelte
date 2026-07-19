@@ -289,6 +289,10 @@
       width: 400px;
       padding: 30px;
       box-sizing: border-box;
+      border: 1px solid $color-border;
+      border-radius: 10px;
+      background: linear-gradient(145deg, $color-surface-raised, $color-surface);
+      box-shadow: $shadow-card;
 
       .title {
         font-size: 24px;
@@ -323,7 +327,7 @@
             height: 40px;
             border-radius: 5px;
             border: none;
-            background-color: rgb(154, 114, 35);
+            background: linear-gradient(90deg, $color-accent, $color-accent-hover);
             color: white;
             font-weight: bold;
             cursor: pointer;
@@ -343,7 +347,7 @@
 
         .link {
           cursor: pointer;
-          color: rgb(154, 114, 35);
+          color: $color-accent-hover;
         }
       }
 
@@ -352,7 +356,7 @@
         align-items: center;
         gap: 10px;
         margin: 20px 0;
-        color: rgba(205, 190, 145, 0.45);
+        color: rgba(173, 182, 209, 0.45);
         font-size: 11px;
 
         &::before,
@@ -360,7 +364,7 @@
           content: "";
           flex: 1;
           height: 1px;
-          background-color: rgba(205, 190, 145, 0.18);
+          background-color: rgba(173, 182, 209, 0.18);
         }
       }
 
@@ -386,7 +390,7 @@
 
       .riot-login-message {
         margin-top: 10px;
-        color: rgba(205, 190, 145, 0.7);
+        color: rgba(173, 182, 209, 0.7);
         font-size: 11px;
         text-align: center;
       }
@@ -399,12 +403,12 @@
         padding: 14px;
         border: 1px solid $sub-border-color;
         border-radius: 5px;
-        background: rgba(0, 0, 0, 0.16);
+        background: rgba(3, 7, 19, 0.58);
 
         .verified-riot-account {
           display: flex;
           justify-content: space-between;
-          color: rgba(205, 190, 145, 0.7);
+          color: rgba(173, 182, 209, 0.7);
           font-size: 12px;
 
           strong {
@@ -423,9 +427,9 @@
 
         button {
           height: 38px;
-          border: 1px solid rgb(154, 114, 35);
+          border: 1px solid var(--color-accent);
           border-radius: 5px;
-          background: rgb(154, 114, 35);
+          background: var(--color-accent);
           color: white;
           cursor: pointer;
 

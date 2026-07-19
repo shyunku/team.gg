@@ -10,13 +10,20 @@
   export let color = null;
   export let fixed = 0;
 
-  let fgColor = color ?? colorByRate(reversed ? 1 - rate : rate);
+  const resolveCssColor = (value) => {
+    const match = typeof value === "string" ? value.match(/^var\((--[^)]+)\)$/) : null;
+    if (!match) return value;
+    return getComputedStyle(document.documentElement).getPropertyValue(match[1]).trim() || value;
+  };
+
+  let fgColor = resolveCssColor(color ?? colorByRate(reversed ? 1 - rate : rate));
+  let trackColor = resolveCssColor("var(--color-chart-track)");
   let data = {
     labels: ["Red", "Blue"],
     datasets: [
       {
         data: [rate, 1 - rate],
-        backgroundColor: [fgColor, "#00000040"],
+        backgroundColor: [fgColor, trackColor],
       },
     ],
   };
@@ -37,9 +44,9 @@
   };
 
   $: {
-    fgColor = color ?? colorByRate(reversed ? 1 - rate : rate);
+    fgColor = resolveCssColor(color ?? colorByRate(reversed ? 1 - rate : rate));
     data.datasets[0].data = [rate, 1 - rate];
-    data.datasets[0].backgroundColor = [fgColor, "#00000040"];
+    data.datasets[0].backgroundColor = [fgColor, trackColor];
   }
 </script>
 

@@ -28,11 +28,18 @@
 
 html,
 body {
-  // display: flex;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
   flex-direction: column;
-  background: $main-bg-color;
-  color: white;
+  background:
+    radial-gradient(circle at 50% -15%, rgba(87, 54, 190, 0.18), transparent 38%),
+    linear-gradient(180deg, $color-bg-base 0%, $color-bg-deep 100%);
+  color: $color-text-primary;
   width: 100%;
+  min-height: 100vh;
   // overflow: hidden;
   // height: 100%;
 
@@ -62,13 +69,16 @@ select,
 button,
 textarea {
   background-color: transparent;
-  border: 1px solid white;
+  border: 1px solid $color-border;
+  color: $color-text-primary;
   margin: 0;
   padding: 0;
   font-family: inherit;
 
   &:focus {
     outline: none;
+    border-color: $color-accent;
+    box-shadow: 0 0 0 2px $color-accent-soft;
   }
 }
 
@@ -89,21 +99,23 @@ textarea {
   display: flex;
   flex-direction: column;
   background-color: $sub-bg-color;
-  border-radius: 3px;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  box-shadow: $shadow-card;
   overflow: hidden;
 
   & > .header {
     padding: 10px 15px;
     font-size: 13px;
     font-weight: bold;
-    border-bottom: 1px solid rgb(91, 81, 63);
-    color: rgb(215, 201, 165);
+    border-bottom: 1px solid $color-border;
+    color: $color-text-primary;
   }
 
   & > .body {
     padding: 10px 15px;
-    // color: rgb(215, 201, 165);
-    color: rgb(154, 144, 119);
+    // color: var(--color-text-primary);
+    color: $color-text-secondary;
   }
 }
 
@@ -114,7 +126,7 @@ textarea {
   background-color: rgba(0, 0, 0, 0);
 
   &-thumb {
-    background-color: rgb(61, 55, 42);
+    background-color: $color-border-strong;
     border-radius: 10px;
   }
 }

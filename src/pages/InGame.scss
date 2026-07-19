@@ -4,7 +4,7 @@
   width: 100%;
   background-color: $sub-bg-color;
   border-bottom: 1px solid $sub-border-color;
-  color: rgb(195, 190, 169);
+  color: var(--color-text-secondary);
   padding: 20px 0;
 
   .content {
@@ -19,7 +19,7 @@
     .description {
       margin-top: 10px;
       font-size: 13px;
-      color: rgb(129, 126, 113);
+      color: var(--color-text-muted);
       white-space: pre-line;
     }
   }
@@ -29,7 +29,7 @@
   width: 100%;
   background-color: $sub-bg-color;
   border-bottom: 1px solid $sub-border-color;
-  color: rgb(195, 190, 169);
+  color: var(--color-text-secondary);
   padding: 8px 0;
 
   .content {
@@ -54,7 +54,7 @@
 
       &.offline {
         .status {
-          background-color: rgb(52, 52, 52);
+          background-color: var(--color-surface-raised);
           color: rgb(168, 168, 168);
         }
         .status-text {
@@ -87,7 +87,7 @@
         padding: 3px 5px;
         color: rgb(202, 202, 202);
         border-radius: 2px;
-        background-color: rgb(52, 52, 52);
+        background-color: var(--color-surface-raised);
       }
 
       .status-text {
@@ -129,7 +129,7 @@
 
 .in-game-content {
   width: 100%;
-  color: rgb(193, 176, 129);
+  color: var(--color-text-secondary);
 
   .content {
     display: flex;
@@ -163,7 +163,7 @@
           color: white;
           // color: black;
           // font-weight: bold;
-          // border-bottom: 3px solid rgb(193, 176, 129);
+          // border-bottom: 3px solid var(--color-text-secondary);
           // background: radial-gradient(ellipse at 50% 100%, rgba(193, 176, 129, 0.5) 0%, transparent 80%);
         }
       }
@@ -176,7 +176,7 @@
       font-size: 20px;
       font-weight: bold;
       background-color: $selected-color;
-      color: rgb(213, 198, 169);
+      color: var(--color-text-secondary);
       padding: 12px 15px;
 
       .game-description {

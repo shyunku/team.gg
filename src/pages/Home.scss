@@ -22,7 +22,8 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    filter: blur(6px);
+    filter: blur(8px) saturate(0.65) hue-rotate(185deg);
+    opacity: 0.32;
   }
 
   & > * {
@@ -88,15 +89,22 @@
   width: 650px;
   height: 50px;
   align-items: center;
-  background-color: rgb(99, 83, 44);
+  border: 1px solid $color-border-strong;
+  background: linear-gradient(110deg, rgba(24, 36, 64, 0.96), rgba(13, 21, 43, 0.96));
   padding: 8px 12px;
   box-sizing: border-box;
-  border-radius: 3px;
-  box-shadow: 0 3px 20px 0 rgb(0, 0, 0, 0.7);
+  border-radius: 8px;
+  box-shadow: $shadow-card, 0 0 26px rgba(139, 92, 246, 0.1);
 
   .searcher-input {
     flex: 1;
     margin-left: 12px;
+
+    input:focus {
+      outline: none;
+      border-color: transparent;
+      box-shadow: none;
+    }
   }
 
   select,
@@ -121,7 +129,7 @@
   flex-direction: column;
   margin-top: 50px;
   width: 650px;
-  box-shadow: 0 3px 20px 0 rgb(0, 0, 0, 0.7);
+  box-shadow: $shadow-card;
 
   & > .body {
     display: flex;
@@ -157,21 +165,21 @@
       align-items: center;
       padding: 0 15px;
       font-size: 14px;
-      color: rgb(221, 211, 182);
+      color: $color-text-secondary;
       height: 50px;
       cursor: pointer;
 
       &:not(:last-child) {
-        border-bottom: 1px solid rgba(82, 74, 58, 0.441);
+        border-bottom: 1px solid rgba(32, 45, 73, 0.9);
       }
 
       &:hover {
-        background-color: rgb(41, 38, 30);
+        background-color: var(--color-surface-hover);
         // cursor: pointer;
 
         .summoner-name,
         .summoner-tag {
-          color: rgb(255, 220, 115);
+          color: $color-accent-hover;
         }
       }
 
@@ -198,13 +206,13 @@
         height: 16px;
         padding: 4px;
         border-radius: 3px;
-        background-color: rgb(74, 66, 52);
+        background-color: $color-accent-soft;
         color: rgb(255, 199, 31);
         cursor: pointer;
 
         &:hover {
-          background-color: rgb(99, 89, 70);
-          color: rgb(175, 160, 116);
+          background-color: $color-accent;
+          color: rgb(255, 199, 31);
         }
       }
     }
@@ -230,7 +238,7 @@
         cursor: pointer;
 
         &:hover {
-          color: rgb(255, 220, 115);
+          color: $color-accent-hover;
         }
       }
     }

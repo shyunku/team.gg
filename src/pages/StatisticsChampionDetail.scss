@@ -1,7 +1,7 @@
 @import "../styles/variables.scss";
 
 .champion-detail-summary {
-  color: rgb(195, 190, 169);
+  color: var(--color-text-secondary);
   padding: 20px 0;
 
   .content {

@@ -49,7 +49,7 @@
 
   .placeholder {
     position: absolute;
-    color: rgb(67, 67, 67);
+    color: var(--color-text-muted);
     pointer-events: none;
     white-space: nowrap;
     overflow: hidden;
@@ -68,13 +68,20 @@
 
   input {
     border: none;
-    color: white;
+    color: var(--color-text-primary);
     padding: 0 !important;
     min-width: 1px;
     background-color: transparent;
     border: none;
     width: 100%;
     height: 100%;
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      border-color: transparent;
+      box-shadow: none;
+    }
   }
 
   .quick-search-results {
@@ -84,13 +91,13 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(17, 27, 51, 0.96);
     z-index: 100;
-    color: rgb(160, 154, 135);
-    border: 1px solid rgb(102, 98, 93);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
     box-sizing: border-box;
-    box-shadow: 0 10px 15px 1px rgb(0, 0, 0);
-    border-radius: 3px;
+    box-shadow: var(--shadow-card);
+    border-radius: 8px;
     backdrop-filter: blur(10px);
     margin-top: 10px;
     overflow: hidden;
@@ -115,17 +122,17 @@
       }
 
       &:hover {
-        background-color: rgba(90, 81, 58, 0.6);
+        background-color: var(--color-surface-hover);
       }
       &.selected {
-        background-color: rgba(120, 95, 31, 0.8);
+        background-color: var(--color-accent-soft);
 
         .name {
           color: white !important;
         }
 
         .prev-name {
-          color: rgb(160, 154, 135) !important;
+          color: var(--color-text-secondary) !important;
         }
       }
 
@@ -147,7 +154,7 @@
         .name {
           display: flex;
           align-items: center;
-          color: rgb(194, 181, 152);
+          color: var(--color-text-primary);
           font-weight: bold;
           overflow: hidden;
           white-space: nowrap;
@@ -166,7 +173,7 @@
         .prev-name {
           font-size: 12px;
           margin-top: 3px;
-          color: rgb(151, 144, 128);
+          color: var(--color-text-muted);
         }
       }
 

@@ -1,7 +1,7 @@
 @import "../styles/variables.scss";
 
 .statistics-header {
-  color: rgb(195, 190, 169);
+  color: var(--color-text-secondary);
   padding: 20px 0;
 
   .content {
@@ -16,14 +16,14 @@
     .description {
       margin-top: 10px;
       font-size: 13px;
-      color: rgb(129, 126, 113);
+      color: var(--color-text-muted);
       white-space: pre-line;
     }
   }
 }
 
 .statistics-menu {
-  color: rgb(195, 190, 169);
+  color: var(--color-text-secondary);
   padding: 5px 0;
 
   .menu {
@@ -45,11 +45,11 @@
       }
 
       &:hover {
-        background-color: rgb(53, 49, 41);
+        background-color: var(--color-surface-hover);
       }
 
       &.selected {
-        background-color: rgb(84, 78, 65);
+        background-color: var(--color-accent-soft);
       }
     }
   }
@@ -71,12 +71,12 @@
     .title {
       font-weight: bold;
       font-size: 20px;
-      color: rgb(205, 190, 145);
+      color: var(--color-text-primary);
     }
 
     .description {
       font-size: 13px;
-      color: rgb(129, 126, 119);
+      color: var(--color-text-muted);
       margin-top: 10px;
       white-space: pre-line;
     }
@@ -84,7 +84,7 @@
     .updated-at {
       margin-top: 5px;
       font-size: 12px;
-      color: rgb(129, 126, 113);
+      color: var(--color-text-muted);
     }
   }
 }

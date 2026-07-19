@@ -21,7 +21,7 @@
         display: flex;
         align-items: center;
         padding: 5px 8px;
-        background-color: rgb(54, 51, 45);
+        background-color: var(--color-surface-hover);
         border-radius: 3px;
         cursor: pointer;
         font-size: 14px;
@@ -46,7 +46,7 @@
         }
 
         .dropdown {
-          background-color: rgb(54, 51, 45);
+          background-color: var(--color-surface-hover);
           border-radius: 3px;
           overflow: hidden;
 

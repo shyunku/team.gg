@@ -58,28 +58,35 @@
       $tier-rank-width: 100px;
       padding-right: calc(20px + #{$tier-rank-width});
       position: relative;
-      border-left: 5px solid rgb(53, 53, 53);
+      border-left: 5px solid $color-border-strong;
+      background: rgba(10, 18, 36, 0.62);
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
 
       &:not(:last-child) {
-        // border-bottom: 1px solid rgb(62, 59, 49);
+        // border-bottom: 1px solid var(--color-border);
       }
 
       &:hover {
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: $color-surface-hover;
       }
 
       &.context-menu-open {
-        background-color: rgba(84, 195, 154, 0.14);
-        box-shadow: inset 0 0 0 1px rgba(84, 195, 154, 0.8);
+        background-color: $color-accent-soft;
+        box-shadow: inset 0 0 0 1px $color-accent;
       }
 
       &.own-account {
         .name-bundle {
-          color: rgb(134 255 143);
+          color: $color-own-account;
           font-weight: bold;
 
-          .game-name { color: rgb(134 255 143) !important; }
-          .tag { color: rgb(134 255 143); opacity: 0.75 !important; }
+          .game-name {
+            color: $color-own-account !important;
+          }
+          .tag {
+            color: $color-own-account;
+            opacity: 0.75 !important;
+          }
         }
       }
 
@@ -106,6 +113,10 @@
       .summoner-menus {
         display: none;
         flex-direction: column;
+        border: 1px solid $color-border;
+        border-radius: 8px;
+        background-color: $color-surface-raised;
+        box-shadow: $shadow-card;
         // height: 500px;
         font-size: 13px;
 
@@ -117,15 +128,17 @@
           min-width: 160px;
 
           &:hover {
-            background-color: rgba(125, 115, 81, 0.713);
-            color: white;
+            background-color: $color-accent-soft;
+            color: $color-text-primary;
           }
 
           &.disabled {
-            color: rgb(99, 94, 82);
+            color: $color-text-muted;
             cursor: not-allowed;
 
-            &:hover { background-color: transparent; }
+            &:hover {
+              background-color: transparent;
+            }
           }
         }
 
@@ -246,7 +259,7 @@
 
           .game-name {
             // font-weight: bold;
-            color: rgb(255, 235, 196);
+            color: $color-text-primary;
           }
 
           .tag {
@@ -366,26 +379,18 @@
 
         $tier-border-rate: 75%;
         $tier-border-angle: 160deg;
-        background: linear-gradient(
-          $tier-blank-angle,
-          transparent $tier-blank-rate,
-          rgba(238, 238, 238, 0.2)
-        );
+        background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgba(238, 238, 238, 0.2));
         padding: 0 12px;
         color: white;
         z-index: 1;
 
         pointer-events: none;
 
-        $border-image-default: rgb(62, 59, 49);
+        $border-image-default: var(--color-border);
         border: 1px solid;
         border-top: 0px;
         border-left: 0px;
-        border-image: linear-gradient(
-          $tier-blank-angle,
-          $border-image-default $tier-border-rate,
-          #676767 100%
-        );
+        border-image: linear-gradient($tier-blank-angle, $border-image-default $tier-border-rate, #676767 100%);
         border-image-slice: 1;
 
         box-sizing: border-box;
@@ -406,28 +411,20 @@
         }
 
         &.iron {
-          background: linear-gradient(
-            $tier-blank-angle,
-            transparent $tier-blank-rate,
-            rgb(69, 69, 69)
-          ) !important;
-          color: rgb(189, 189, 189);
+          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(69, 69, 69)) !important;
+          color: var(--color-text-secondary);
 
           border-image: linear-gradient(
             $tier-border-angle,
             $border-image-default $tier-border-rate,
-            rgb(92, 92, 92) 100%
+            var(--color-text-muted) 100%
           ) !important;
           border-image-slice: 1 !important;
         }
 
         &.bronze {
-          background: linear-gradient(
-            $tier-blank-angle,
-            transparent $tier-blank-rate,
-            rgb(108, 78, 56)
-          ) !important;
-          color: rgb(189, 189, 189);
+          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(108, 78, 56)) !important;
+          color: var(--color-text-secondary);
 
           border-image: linear-gradient(
             $tier-border-angle,
@@ -438,12 +435,8 @@
         }
 
         &.silver {
-          background: linear-gradient(
-            $tier-blank-angle,
-            transparent $tier-blank-rate,
-            rgb(97, 97, 97)
-          ) !important;
-          color: rgb(221, 221, 221);
+          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(97, 97, 97)) !important;
+          color: var(--color-text-primary);
 
           border-image: linear-gradient(
             $tier-border-angle,
@@ -454,12 +447,8 @@
         }
 
         &.gold {
-          background: linear-gradient(
-            $tier-blank-angle,
-            transparent $tier-blank-rate,
-            rgb(165, 126, 54)
-          ) !important;
-          color: rgb(221, 221, 221);
+          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(165, 126, 54)) !important;
+          color: var(--color-text-primary);
 
           border-image: linear-gradient(
             $tier-border-angle,
@@ -470,12 +459,8 @@
         }
 
         &.platinum {
-          background: linear-gradient(
-            $tier-blank-angle,
-            transparent $tier-blank-rate,
-            rgb(38, 115, 114)
-          ) !important;
-          color: rgb(221, 221, 221);
+          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(38, 115, 114)) !important;
+          color: var(--color-text-primary);
 
           border-image: linear-gradient(
             $tier-border-angle,
@@ -486,12 +471,8 @@
         }
 
         &.emerald {
-          background: linear-gradient(
-            $tier-blank-angle,
-            transparent $tier-blank-rate,
-            rgb(42, 136, 95)
-          ) !important;
-          color: rgb(221, 221, 221);
+          background: linear-gradient($tier-blank-angle, transparent $tier-blank-rate, rgb(42, 136, 95)) !important;
+          color: var(--color-text-primary);
 
           border-image: linear-gradient(
             $tier-border-angle,
@@ -561,7 +542,7 @@
             rgb(53, 66, 79),
             rgb(83, 122, 166),
             rgb(199, 180, 98) $tier-blank-offset-2,
-            rgb(255, 235, 196)
+            var(--color-text-primary)
           ) !important;
           color: rgb(255, 255, 255);
 

@@ -24,7 +24,7 @@
 
     .description {
       font-size: 16px;
-      color: #666;
+      color: var(--color-text-muted);
     }
   }
 </style>

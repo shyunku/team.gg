@@ -34,7 +34,8 @@
 
   .player-searcher {
     display: flex;
-    background-color: $highlight-color;
+    background-color: $color-surface;
+    border-bottom: 1px solid $color-border;
     width: 100%;
     padding: 8px 0;
     box-sizing: border-box;
@@ -43,8 +44,9 @@
       display: flex;
       height: 30px;
       width: 100%;
-      background-color: rgb(29, 26, 22);
-      border-radius: 3px;
+      background-color: $color-bg-elevated;
+      border: 1px solid $color-border;
+      border-radius: 6px;
       font-size: 14px;
 
       & > * {
@@ -62,12 +64,12 @@
       #region_selector {
         border: none;
         // background-color: $highlight-color;
-        color: rgb(215, 201, 165);
+        color: var(--color-text-primary);
       }
 
       .searcher-input {
         flex: 1;
-        color: rgb(242, 228, 194);
+        color: $color-text-primary;
         font-weight: normal;
         padding: 0px 4px;
 
@@ -79,8 +81,14 @@
 
       #search_btn {
         padding: 0px 12px;
-        background-color: rgb(63, 50, 36);
-        color: rgb(213, 186, 123);
+        background-color: $color-accent-soft;
+        color: $color-accent-light;
+        border-left: 1px solid $color-border;
+
+        &:hover {
+          background-color: $color-surface-hover;
+          color: $color-text-primary;
+        }
       }
     }
   }

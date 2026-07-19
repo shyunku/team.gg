@@ -128,7 +128,7 @@
     padding: 7px 18px;
     padding-left: 20px;
     align-items: center;
-    color: rgb(215, 201, 165);
+    color: var(--color-text-primary);
     position: relative;
     background-color: rgb(23, 23, 23);
     border: 1px solid transparent;
@@ -142,7 +142,7 @@
       top: 0;
       width: 6px;
       height: 100%;
-      background-color: rgb(54, 54, 54);
+      background-color: var(--color-surface-raised);
     }
 
     .mastery-header {
@@ -164,8 +164,8 @@
     }
 
     &:hover {
-      border: 1px solid rgb(125, 106, 61);
-      box-shadow: 0 0 10px 1px rgb(125, 106, 61);
+      border: 1px solid var(--color-accent);
+      box-shadow: 0 0 10px 1px var(--color-accent);
     }
 
     &.m-7 {

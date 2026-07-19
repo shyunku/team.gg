@@ -192,16 +192,17 @@
       margin-top: 50px;
       text-align: center;
       font-size: 16px;
-      background-color: rgb(63, 57, 46);
+      background-color: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
       padding: 30px 50px;
       width: 500px;
       border-radius: 3px;
-      color: rgb(237, 221, 190);
+      color: var(--color-text-primary);
 
       .description {
         margin-top: 10px;
         font-size: 13px;
-        color: rgb(169, 155, 128);
+        color: var(--color-text-muted);
       }
     }
   </style>

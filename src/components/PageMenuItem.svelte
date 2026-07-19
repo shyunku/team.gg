@@ -21,20 +21,21 @@
     display: flex;
     min-width: 80px;
     justify-content: center;
-    border-radius: 3px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 13px;
-    color: rgb(163, 152, 133);
+    color: $color-text-secondary;
     padding: 6px 12px;
     box-sizing: border-box;
 
     &:hover {
-      background-color: rgb(53, 49, 41);
+      background-color: var(--color-surface-hover);
     }
 
     &.selected {
-      background-color: rgb(105, 92, 64);
-      color: white;
+      background-color: $color-accent-soft;
+      color: $color-text-primary;
+      box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.35);
     }
 
     &:not(:first-child) {

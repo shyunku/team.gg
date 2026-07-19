@@ -142,7 +142,7 @@
       .ranking {
         font-size: 9px;
         color: rgb(179, 179, 179);
-        background-color: rgb(53, 53, 53);
+        background-color: var(--color-border-strong);
         padding: 2px 3px;
         position: absolute;
         bottom: calc(100% - 10px);

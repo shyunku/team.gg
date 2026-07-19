@@ -33,7 +33,7 @@
           position: relative;
           border-left: 5px solid rgba(0, 0, 0, 0.2);
           box-sizing: border-box;
-          color: rgb(154, 147, 135);
+          color: var(--color-text-secondary);
 
           &:not(:last-child) {
             border-bottom: 1px solid #ffffff21;
@@ -43,7 +43,7 @@
             padding: 8px 12px;
             font-size: 13px;
             // font-weight: bold;
-            color: rgb(211, 189, 156);
+            color: var(--color-text-secondary);
             border-left: none;
             position: sticky;
             top: 0;
@@ -54,11 +54,11 @@
           &:not(.header) {
             cursor: pointer;
             &:hover {
-              border-left: 5px solid rgb(160, 138, 88);
+              border-left: 5px solid var(--color-text-secondary);
             }
 
             &.selected {
-              border-left: 5px solid rgb(231, 199, 129);
+              border-left: 5px solid var(--color-accent-hover);
               color: white;
             }
           }
@@ -103,7 +103,7 @@
         padding: 8px 12px;
         box-sizing: border-box;
         font-size: 13px;
-        color: rgb(165, 156, 140);
+        color: var(--color-text-secondary);
 
         &:not(:last-child) {
           border-bottom: 1px solid #ffffff21;
@@ -113,7 +113,7 @@
           width: 35px;
           text-align: center;
           font-weight: bold;
-          color: rgb(122, 116, 107);
+          color: var(--color-text-muted);
         }
 
         .profile-img {
@@ -127,13 +127,13 @@
           display: flex;
           align-items: center;
           margin-left: 15px;
-          color: rgb(188, 181, 168);
+          color: var(--color-text-secondary);
           cursor: pointer;
 
           &:hover {
             .game-name,
             .tag-line {
-              color: rgb(234, 210, 144);
+              color: var(--color-accent-hover);
             }
           }
 

@@ -115,6 +115,10 @@
       width: 400px;
       padding: 30px;
       box-sizing: border-box;
+      border: 1px solid $color-border;
+      border-radius: 10px;
+      background: linear-gradient(145deg, $color-surface-raised, $color-surface);
+      box-shadow: $shadow-card;
 
       .title {
         font-size: 24px;
@@ -149,7 +153,7 @@
             height: 40px;
             border-radius: 5px;
             border: none;
-            background-color: rgb(154, 114, 35);
+            background-color: var(--color-accent);
             color: white;
             font-weight: bold;
             cursor: pointer;
@@ -169,7 +173,7 @@
 
         .link {
           cursor: pointer;
-          color: rgb(154, 114, 35);
+          color: var(--color-accent);
         }
       }
     }

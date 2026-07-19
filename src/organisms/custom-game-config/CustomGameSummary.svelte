@@ -154,24 +154,32 @@
                   : "초기화 중..."}
               </div>
               <div class="progress-bar">
-                <DoughnutRateChart rate={processRate} cutout={28} color={"rgb(209, 160, 68)"} />
+                <DoughnutRateChart rate={processRate} cutout={32} color={"var(--color-accent)"} />
               </div>
             {:else}
               <div class="label">최적의 조합</div>
               <div class="progress-bar">
-                <DoughnutRateChart rate={0} cutout={28} color={"rgb(209, 160, 68)"} />
+                <DoughnutRateChart rate={0} cutout={32} color={"var(--color-accent)"} />
               </div>
             {/if}
           </div>
-          <div class="current-process">
+          <!-- <div class="current-process">
             {#if calculatingOptimization && processType != null}
               {`${formatStdEn(processCurrent)}/${formatStdEn(processTotal)}`}
             {:else}
               조합 대기 중
             {/if}
-          </div>
-          <button class="find-optimized" disabled={!canManage || calculatingOptimization} on:click={findMostBalancedCombination}>
-            {calculatingOptimization ? "계산 중" : "최적의 조합 찾기"}
+          </div> -->
+          <button
+            class="find-optimized"
+            disabled={!canManage || calculatingOptimization}
+            on:click={findMostBalancedCombination}
+          >
+            {calculatingOptimization
+              ? processType != null
+                ? `${formatStdEn(processCurrent)}/${formatStdEn(processTotal)}`
+                : "계산 중"
+              : "최적의 조합 찾기"}
           </button>
         </div>
         <div class="options">
@@ -230,24 +238,31 @@
       <div class="stats">
         <div class="stat highlight" style={`background-color: ${bgColorByRate(fairness)};`}>
           <div class="label">총 밸런스</div>
-          <div class="chart"><DoughnutRateChart rate={fairness} /></div>
+          <div class="chart"><DoughnutRateChart cutout={42} rate={fairness} color={"var(--color-accent)"} /></div>
         </div>
         <div class="stat">
           <div class="label">팀 전력 균형</div>
-          <div class="chart"><DoughnutRateChart rate={teamFairness} /></div>
+          <div class="chart"><DoughnutRateChart cutout={42} rate={teamFairness} color={"var(--color-success)"} /></div>
         </div>
         <div class="stat">
           <div class="label">라인별 전력 균형</div>
-          <div class="chart"><DoughnutRateChart rate={lineFairness} /></div>
+          <div class="chart"><DoughnutRateChart cutout={42} rate={lineFairness} color={"var(--color-warning)"} /></div>
         </div>
         <div class="stat">
           <div class="label">라인 만족도</div>
-          <div class="chart"><DoughnutRateChart rate={lineSatisfaction} /></div>
+          <div class="chart">
+            <DoughnutRateChart cutout={42} rate={lineSatisfaction} color={"var(--color-danger)"} />
+          </div>
         </div>
         <div class="stat">
           <div class="label">LP 차이</div>
           <div class="chart">
-            <DoughnutRateChart rate={rpDifferenceRate} text={formatStdEn(rpDifference)} reversed={true} />
+            <DoughnutRateChart
+              rate={rpDifferenceRate}
+              text={formatStdEn(rpDifference)}
+              reversed={true}
+              color={"var(--color-info)"}
+            />
           </div>
         </div>
       </div>

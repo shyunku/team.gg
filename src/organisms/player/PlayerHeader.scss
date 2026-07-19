@@ -109,11 +109,11 @@
             cursor: pointer;
 
             // &:hover {
-            //   background-color: rgb(91, 81, 63);
+            //   background-color: var(--color-border-strong);
             // }
 
             &.enabled {
-              background-color: rgb(91, 81, 63);
+              background-color: var(--color-border-strong);
               color: rgb(255, 199, 31);
             }
           }
@@ -121,7 +121,7 @@
 
         .last-renewed-time {
           font-size: 12px;
-          color: rgb(137, 129, 110);
+          color: var(--color-text-muted);
           margin-top: 8px;
           flex: 1;
         }
@@ -130,15 +130,23 @@
           font-size: 14px;
           margin-top: 10px;
           padding: 10px 0;
-          background-color: rgb(162, 128, 49);
-          color: rgb(255, 255, 255);
-          border: none;
+          background-color: $color-accent-soft;
+          color: $color-accent-light;
+          border: 1px solid rgba(139, 92, 246, 0.4);
+          border-radius: 5px;
           width: 140px;
           cursor: pointer;
 
+          &:hover:not(:disabled) {
+            background-color: $color-surface-hover;
+            border-color: $color-accent;
+            color: $color-text-primary;
+          }
+
           &:disabled {
-            background-color: rgb(59, 51, 32);
-            color: rgba(255, 255, 255, 0.5);
+            background-color: $color-surface-raised;
+            border-color: $color-border;
+            color: $color-text-muted;
             cursor: not-allowed;
           }
         }
@@ -159,7 +167,8 @@
           .prev-tier {
             display: flex;
             align-items: center;
-            background-color: rgb(75, 65, 54);
+            background-color: $color-surface-raised;
+            border: 1px solid $color-border;
             font-size: 12px;
             padding: 4px 6px;
             border-radius: 3px;
@@ -169,13 +178,13 @@
             }
 
             .label {
-              color: rgb(233, 208, 159);
+              color: var(--color-accent-hover);
               font-weight: bold;
             }
 
             .tier {
               margin-left: 5px;
-              color: rgb(158, 138, 107);
+              color: var(--color-text-muted);
             }
           }
         }
@@ -194,7 +203,7 @@
             width: 200px;
 
             .label {
-              color: rgb(126, 121, 112);
+              color: var(--color-text-muted);
             }
 
             .value {
@@ -216,7 +225,7 @@
           .bar {
             display: flex;
             height: 100%;
-            background-color: rgb(49, 49, 49);
+            background-color: var(--color-surface-raised);
             margin-left: 12px;
             border-radius: 2px;
             overflow: hidden;
@@ -224,7 +233,7 @@
 
             .filler {
               height: 100%;
-              background-color: rgb(158, 121, 57);
+              background-color: var(--color-accent);
               // background: linear-gradient(to right, rgb(129, 96, 40), rgb(200, 160, 92));
               border-radius: 2px;
               padding: 0 !important;

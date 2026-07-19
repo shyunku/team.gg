@@ -16,7 +16,7 @@
 
   .page-header {
     width: 100%;
-    background-color: $sub-bg-color;
+    background: linear-gradient(110deg, $color-surface, rgba(16, 24, 54, 0.94));
     border-bottom: 1px solid $sub-border-color;
   }
 </style>

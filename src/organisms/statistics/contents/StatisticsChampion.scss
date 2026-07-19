@@ -16,10 +16,12 @@
       font-size: 13px;
 
       box-sizing: border-box;
-      color: rgb(214, 198, 171);
+      color: var(--color-text-secondary);
 
       &.header {
-        background-color: rgb(81, 73, 49);
+        background-color: var(--color-surface-raised);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
 
         & > * {
           display: flex;
@@ -39,7 +41,7 @@
       }
 
       &:not(.header):not(:last-child) {
-        border-bottom: 1px solid #ffffff23;
+        border-bottom: 1px solid var(--color-divider-subtle);
       }
 
       .champion-position {
@@ -119,7 +121,7 @@
 
         .bar-wrapper {
           width: $bar-width;
-          background-color: rgb(16, 15, 13);
+          background-color: var(--color-bg-elevated);
           height: 8px;
           // border-radius: 1px;
           overflow: hidden;
@@ -132,7 +134,7 @@
       }
 
       .champion-pickrate .bar {
-        background-color: rgb(181, 150, 66) !important;
+        background-color: var(--color-accent) !important;
       }
 
       .champion-banrate .bar {
