@@ -15,10 +15,11 @@
     z-index: 1000;
     display: none;
     flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.75);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    // border-radius: 5px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: rgba(17, 27, 51, 0.96);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
     // height: 500px;
     // overflow-y: overlay;
     cursor: initial;
@@ -29,9 +30,10 @@
     z-index: 1001;
     display: none;
     flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.75);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    // border-radius: 5px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: rgba(17, 27, 51, 0.96);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
   }
 </style>

@@ -17,15 +17,15 @@
         width: 80px;
         border-radius: 3px;
         font-size: 13px;
-        background-color: rgb(40, 38, 33);
-        color: rgb(195, 190, 169);
+        background-color: var(--color-surface);
+        color: var(--color-text-secondary);
 
         &:hover {
-          background-color: rgb(59, 55, 47);
+          background-color: var(--color-surface-hover);
         }
 
         &.selected {
-          background-color: rgb(84, 78, 65);
+          background-color: var(--color-accent-soft);
           color: white;
         }
 
@@ -58,7 +58,7 @@
           display: flex;
           flex-direction: column;
           width: 100%;
-          color: rgb(159, 151, 139);
+          color: var(--color-text-muted);
 
           &:not(:last-child) {
             border-bottom: 1px solid #ffffff21;
@@ -80,11 +80,11 @@
             }
 
             &:hover {
-              border-left: 5px solid rgb(160, 138, 88);
+              border-left: 5px solid var(--color-text-secondary);
             }
 
             &.selected {
-              border-left: 5px solid rgb(231, 199, 129);
+              border-left: 5px solid var(--color-accent-hover);
               color: white;
             }
 
@@ -131,7 +131,7 @@
             }
 
             &.silver {
-              background-color: rgb(54, 54, 54);
+              background-color: var(--color-surface-raised);
             }
 
             &.gold {
@@ -179,7 +179,7 @@
         padding: 8px 12px;
         box-sizing: border-box;
         font-size: 13px;
-        color: rgb(165, 156, 140);
+        color: var(--color-text-secondary);
 
         &:not(:last-child) {
           border-bottom: 1px solid #ffffff21;
@@ -189,7 +189,7 @@
           width: 35px;
           text-align: center;
           font-weight: bold;
-          color: rgb(122, 116, 107);
+          color: var(--color-text-muted);
         }
 
         .profile-img {
@@ -209,7 +209,7 @@
           &:hover {
             .game-name,
             .tag-line {
-              color: rgb(234, 210, 144);
+              color: var(--color-accent-hover);
             }
           }
 

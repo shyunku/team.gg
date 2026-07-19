@@ -12,21 +12,21 @@ export const moveToPlayerPageByPuuid = (puuid) => {
 
 export const colorByRate = (rate) => {
   if (rate < 0.5) {
-    return "rgb(255, 100, 100)";
+    return "var(--color-danger)";
   } else if (rate < 0.85) {
-    return "rgb(213, 193, 104)";
+    return "var(--color-warning)";
   } else {
-    return "rgb(80, 219, 108)";
+    return "var(--color-success)";
   }
 };
 
 export const bgColorByRate = (rate) => {
   if (rate < 0.5) {
-    return "rgb(97, 53, 53)";
+    return "var(--color-danger-soft)";
   } else if (rate < 0.85) {
-    return "rgb(109, 91,13)";
+    return "var(--color-warning-soft)";
   } else {
-    return "rgb(19, 83, 30)";
+    return "var(--color-success-soft)";
   }
 };
 

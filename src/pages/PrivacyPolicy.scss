@@ -7,7 +7,7 @@
   & > .title {
     font-size: 24px;
     font-weight: bold;
-    color: rgb(215, 201, 165);
+    color: var(--color-text-primary);
     margin-bottom: 50px;
   }
 
@@ -19,13 +19,13 @@
     & > .title {
       font-size: 18px;
       font-weight: bold;
-      color: rgb(215, 201, 165);
+      color: var(--color-text-primary);
       margin-bottom: 20px;
     }
 
     & > .raw {
       font-size: 14px;
-      color: rgb(165, 164, 162);
+      color: var(--color-text-secondary);
       margin-bottom: 5px;
 
       & > div {

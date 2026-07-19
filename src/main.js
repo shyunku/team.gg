@@ -1,5 +1,6 @@
 import App from "./App.svelte";
 import "./styles/reset.scss";
+import "./styles/theme.scss";
 import "./styles/global.scss";
 import "./styles/variables.scss";
 

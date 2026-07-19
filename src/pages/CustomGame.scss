@@ -45,12 +45,14 @@
     justify-content: center;
     width: 240px;
     height: 45px;
-    background-color: rgb(133, 103, 56);
+    border: 1px solid $color-border-strong;
+    background: linear-gradient(90deg, $color-accent, $color-accent-hover);
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 7px;
+    box-shadow: $shadow-accent;
 
     &:hover {
-      background-color: rgb(166, 122, 52);
+      filter: brightness(1.1);
     }
   }
 }
@@ -73,20 +75,20 @@
       cursor: pointer;
 
       &:not(:last-child) {
-        border-bottom: 1px solid rgba(82, 74, 58, 0.441);
+        border-bottom: 1px solid rgba(32, 45, 73, 0.9);
       }
 
       &:hover {
-        background-color: rgb(41, 38, 30);
+        background-color: var(--color-surface-hover);
         // cursor: pointer;
 
-        color: rgb(255, 220, 115);
+        color: $color-accent-hover;
       }
 
       .created-at {
         flex: 1;
         margin-left: 15px;
-        color: rgb(105, 92, 68);
+        color: $color-text-muted;
       }
     }
   }

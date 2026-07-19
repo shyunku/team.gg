@@ -260,7 +260,7 @@
               interactive={false}
               strength={1}
               size={20}
-              highlightColor={isOwnedRiotAccount(puuid) ? "rgb(134 255 143)" : null}
+              highlightColor={isOwnedRiotAccount(puuid) ? "var(--color-own-account)" : null}
             />
           </div>
           {#if p != null}

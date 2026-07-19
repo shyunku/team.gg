@@ -61,7 +61,8 @@
 .custom-game-content {
   display: flex;
   box-sizing: border-box;
-  padding: 30px 0;
+  padding: 18px 0 30px;
+  background: linear-gradient(180deg, rgba(5, 8, 22, 0.15), rgba(5, 8, 22, 0.7));
   width: 100%;
 
   .content {
@@ -126,20 +127,20 @@
             height: 30px;
             align-items: center;
             padding: 0 10px;
-            color: rgb(154, 144, 119);
+            color: $color-text-secondary;
             cursor: pointer;
 
             &:not(:last-child) {
-              border-bottom: 1px solid rgb(62, 59, 49);
+              border-bottom: 1px solid $color-border;
             }
 
             &:hover {
-              background-color: rgb(62, 59, 49);
-              color: rgb(255, 228, 161);
+              background-color: $color-surface-hover;
+              color: $color-text-primary;
             }
 
             &.disabled {
-              color: rgb(91, 87, 76);
+              color: $color-text-muted;
               cursor: not-allowed;
 
               &:hover { background-color: transparent; }
@@ -186,7 +187,7 @@
             font-weight: normal;
 
             .detected {
-              color: rgb(154, 144, 120);
+              color: var(--color-text-secondary);
             }
 
             .applier {
@@ -198,12 +199,12 @@
               padding: 3px 5px;
               border-radius: 3px;
 
-              background-color: rgb(105, 79, 22);
+              background-color: $color-accent;
               box-sizing: border-box;
               cursor: pointer;
 
               &:hover {
-                background-color: rgb(134, 101, 28);
+                background-color: $color-accent-hover;
               }
 
               &.disabled {
@@ -223,14 +224,14 @@
           box-sizing: border-box;
 
           textarea {
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(3, 7, 19, 0.78);
             border: none;
             font-size: 11px;
             padding: 5px 8px;
             box-sizing: border-box;
             resize: none;
             min-height: 160px;
-            color: rgb(154, 147, 126);
+            color: $color-text-secondary;
 
             &:disabled { cursor: not-allowed; opacity: 0.5; }
           }
@@ -256,7 +257,8 @@
           .searcher-wrapper {
             display: flex;
             align-items: center;
-            background-color: rgba(0, 0, 0, 0.393);
+            border: 1px solid $color-border;
+            background-color: rgba(3, 7, 19, 0.72);
             width: 100%;
             padding: 5px 8px;
             font-size: 13px;
@@ -307,7 +309,7 @@
             width: 70%;
             text-align: center;
             transform: translate(-50%, -50%);
-            color: rgb(134, 122, 88);
+            color: $color-text-muted;
             font-size: 13px;
             line-height: 20px;
             white-space: initial;
@@ -323,17 +325,17 @@
             box-sizing: border-box;
 
             &:not(:last-child) {
-              border-bottom: 1px solid rgb(62, 59, 49);
+              border-bottom: 1px solid $color-border;
             }
 
             &:hover {
-              background-color: rgb(62, 59, 49);
+              background-color: $color-surface-hover;
             }
 
             &.not-permitted { cursor: not-allowed; }
 
             &.own-account .name {
-              color: rgb(134 255 143);
+              color: $color-own-account;
               font-weight: bold;
 
               .game-name { color: inherit; }
@@ -351,14 +353,14 @@
                 min-width: 160px;
                 cursor: pointer;
                 border-radius: 5px;
-                color: rgb(241, 222, 181);
+                color: $color-text-secondary;
 
                 &:hover {
-                  background-color: rgba(255, 255, 255, 0.1);
+                  background-color: $color-accent-soft;
                 }
 
                 &.disabled {
-                  color: rgb(99, 94, 82);
+                  color: $color-text-muted;
                   cursor: not-allowed;
 
                   &:hover { background-color: transparent; }

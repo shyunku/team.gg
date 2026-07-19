@@ -40,12 +40,12 @@
           cursor: pointer;
 
           &:hover {
-            border-left: 5px solid rgb(160, 138, 88);
+            border-left: 5px solid var(--color-text-secondary);
             background-color: rgba(0, 0, 0, 0.2);
           }
 
           &.selected {
-            border-left: 5px solid rgb(231, 199, 129);
+            border-left: 5px solid var(--color-accent-hover);
             color: rgb(245, 231, 202);
           }
 

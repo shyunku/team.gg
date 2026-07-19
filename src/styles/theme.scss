@@ -1,0 +1,34 @@
+:root,
+[data-theme="design-v2"] {
+  color-scheme: dark;
+  --color-bg-base: #050816;
+  --color-bg-deep: #030713;
+  --color-bg-elevated: #080d20;
+  --color-surface: #0c1428;
+  --color-surface-raised: #111b33;
+  --color-surface-hover: #182440;
+  --color-border: #202d49;
+  --color-border-strong: #334260;
+  --color-text-primary: #f0f3ff;
+  --color-text-secondary: #adb6d1;
+  --color-text-muted: #707b99;
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #a879ff;
+  --color-accent-light: #c4b5fd;
+  --color-accent-soft: rgba(139, 92, 246, 0.18);
+  --color-success: #43d17a;
+  --color-success-soft: rgba(67, 209, 122, 0.16);
+  --color-warning: #ffbe33;
+  --color-warning-soft: rgba(255, 190, 51, 0.16);
+  --color-danger: #ff5d6c;
+  --color-danger-soft: rgba(255, 93, 108, 0.16);
+  --color-info: #3cc8e8;
+  --color-info-soft: rgba(60, 200, 232, 0.16);
+  --color-own-account: #86ff8f;
+  --color-chart-track: rgba(2, 6, 20, 0.58);
+  --color-control-track: rgba(255, 255, 255, 0.08);
+  --color-divider-subtle: rgba(255, 255, 255, 0.08);
+  --color-overlay: rgba(2, 6, 20, 0.72);
+  --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.22);
+  --shadow-accent: 0 0 22px rgba(139, 92, 246, 0.28);
+}

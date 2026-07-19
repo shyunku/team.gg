@@ -174,13 +174,13 @@
               <FaUserCircle />
             {/if}
           </span>
-          <span class:riot-account-name={isLolAccount}>{userId}</span>
+          <span class="account-name" class:riot-account-name={isLolAccount}>{userId}</span>
           <span class="account-chevron"><FaChevronDown /></span>
         </button>
         {#if accountMenuOpen}
           <div class="account-dropdown" on:click|stopPropagation>
             <button on:click={goToAccount}>내 정보</button>
-            <button on:click={tryLogout}>로그아웃</button>
+            <button class="logout" on:click={tryLogout}>로그아웃</button>
           </div>
         {/if}
       {:else if !isAuthorized}

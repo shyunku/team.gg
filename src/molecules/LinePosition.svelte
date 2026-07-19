@@ -1,5 +1,4 @@
 <script>
-  import SafeImg from "../atoms/SafeImg.svelte";
   import JsxUtil from "../utils/JsxUtil";
 
   /**
@@ -105,9 +104,9 @@
     ></span>
   {:else if source != null}
     <span class="icon-stack">
-      <span class="state-icon state-default"><SafeImg src={source.default} /></span>
-      <span class="state-icon state-disabled"><SafeImg src={source.disabled} /></span>
-      <span class="state-icon state-hovered"><SafeImg src={source.hovered} /></span>
+      <span class="state-icon state-default" style={`--icon-url:url(${source.default})`}></span>
+      <span class="state-icon state-disabled" style={`--icon-url:url(${source.disabled})`}></span>
+      <span class="state-icon state-hovered" style={`--icon-url:url(${source.hovered})`}></span>
     </span>
   {/if}
   {#if showStrength}
@@ -191,15 +190,27 @@
         height: 100%;
         opacity: 0;
         pointer-events: none;
-
-        :global(img) {
-          width: 100%;
-          height: 100%;
-        }
+        background-color: $color-text-secondary;
+        -webkit-mask-image: var(--icon-url);
+        mask-image: var(--icon-url);
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
       }
 
       .state-default {
         opacity: 1;
+      }
+
+      .state-disabled {
+        background-color: $color-text-muted;
+      }
+
+      .state-hovered {
+        background-color: $color-accent-hover;
       }
     }
 

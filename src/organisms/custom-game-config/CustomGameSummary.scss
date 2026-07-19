@@ -6,8 +6,8 @@
   height: 220px;
   padding: 20px 0;
   box-sizing: border-box;
-  background-color: $sub-bg-color;
-  color: rgb(195, 190, 169);
+  background: rgba(7, 12, 29, 0.92);
+  color: $color-text-secondary;
 
   .content {
     display: flex;
@@ -33,8 +33,10 @@
       flex: 0 0 140px;
       padding: 10px;
       box-sizing: border-box;
-      border-radius: 3px;
-      background-color: rgb(52, 49, 43);
+      border: 1px solid $color-border;
+      border-radius: 8px;
+      background: linear-gradient(145deg, $color-surface-raised, $color-surface);
+      box-shadow: $shadow-card;
 
       .process-info {
         display: flex;
@@ -48,9 +50,9 @@
         }
 
         .progress-bar {
-          width: 74px;
-          height: 74px;
-          margin-top: 5px;
+          width: 84px;
+          height: 84px;
+          margin-top: 12px;
         }
       }
 
@@ -61,7 +63,7 @@
         min-height: 12px;
         font-size: 10px;
         white-space: nowrap;
-        color: rgb(157, 147, 117);
+        color: $color-text-muted;
       }
 
       button.find-optimized {
@@ -71,18 +73,19 @@
         width: 116px;
         height: 26px;
         border: none;
-        border-radius: 3px;
-        background-color: rgb(133, 97, 38);
+        border-radius: 5px;
+        background: linear-gradient(90deg, $color-accent, $color-accent-hover);
         color: white;
         font-size: 11px;
         cursor: pointer;
 
         &:hover {
-          background-color: rgb(162, 119, 49);
+          filter: brightness(1.1);
+          box-shadow: $shadow-accent;
         }
 
         &:disabled {
-          background-color: rgba(133, 97, 38, 0.45);
+          background: rgba(139, 92, 246, 0.3);
           color: rgba(255, 255, 255, 0.55);
           cursor: not-allowed;
         }
@@ -97,8 +100,10 @@
       margin-left: 10px;
       padding: 16px;
       box-sizing: border-box;
-      border-radius: 3px;
-      background-color: rgb(52, 49, 43);
+      border: 1px solid $color-border;
+      border-radius: 8px;
+      background: linear-gradient(145deg, $color-surface-raised, $color-surface);
+      box-shadow: $shadow-card;
       flex-direction: column;
       justify-content: center;
       font-size: 13px;
@@ -112,8 +117,9 @@
           margin-left: 10px;
           padding: 2px 7px;
           border: none;
-          background-color: rgb(111, 107, 98);
-          color: rgb(205, 201, 190);
+          border-radius: 4px;
+          background-color: $color-surface-hover;
+          color: $color-text-secondary;
           font-size: 11px;
           cursor: pointer;
 
@@ -131,7 +137,7 @@
 
         > .label {
           flex: 0 0 82px;
-          color: rgb(139, 132, 113);
+          color: $color-text-muted;
         }
 
         .slider {
@@ -141,11 +147,11 @@
 
           .rangeSlider {
             height: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: $color-control-track;
 
             .rangeBar {
               height: 5px;
-              background-color: rgb(133, 97, 38);
+              background: linear-gradient(90deg, $color-accent, $color-accent-hover);
             }
 
             .rangeHandle {
@@ -154,7 +160,8 @@
               height: 11px;
 
               .rangeNub {
-                background-color: rgb(220, 168, 106);
+                background-color: $color-accent-light;
+                box-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
                 transition: transform 0.15s ease;
 
                 &:hover {
@@ -168,7 +175,7 @@
         .value {
           flex: 0 0 34px;
           text-align: right;
-          color: rgb(195, 190, 169);
+          color: $color-text-secondary;
         }
       }
     }
@@ -188,8 +195,10 @@
       height: 168px;
       padding: 12px;
       box-sizing: border-box;
-      border-radius: 3px;
-      background-color: rgb(52, 49, 43);
+      border: 1px solid $color-border;
+      border-radius: 8px;
+      background: linear-gradient(145deg, $color-surface-raised, $color-surface);
+      box-shadow: $shadow-card;
 
       &:not(:last-child) {
         margin-right: 10px;
@@ -198,6 +207,9 @@
       &.highlight {
         color: white;
         font-weight: bold;
+        border-color: rgba(139, 92, 246, 0.55);
+        background: linear-gradient(145deg, rgba(69, 45, 135, 0.9), rgba(26, 22, 67, 0.95)) !important;
+        box-shadow: $shadow-accent;
       }
 
       .label {
