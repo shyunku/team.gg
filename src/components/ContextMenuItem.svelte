@@ -63,6 +63,7 @@
   class={"context-menu-item" + JsxUtil.class(_class)}
   on:mouseenter={onMouseEnter}
   on:mouseleave={onMouseLeave}
+  on:click
 >
   <slot />
 </div>

@@ -22,7 +22,8 @@ const scssAliasPath = path.resolve(__dirname, "src/");
 
 const isProduction = process.env.NODE_ENV === "production";
 dotenv.config({
-  path: isProduction ? ".production.env" : ".dev.env",
+  path: isProduction ? ".env.production" : ".env.dev",
+  override: true,
 });
 
 function serve() {

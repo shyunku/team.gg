@@ -4,7 +4,7 @@
   import { location, push } from "svelte-spa-router";
   import { authStore } from "../stores/AuthStore";
   import { toasts } from "svelte-toasts";
-  import { getMyAccount, logout } from "../thunks/GeneralThunk";
+  import { getMyAccount, logout, profileIconUrl } from "../thunks/GeneralThunk";
   import { AxiosError } from "axios";
   import { onDestroy, onMount } from "svelte";
   import "./Header.scss";
@@ -25,6 +25,8 @@
   let currentPage = HeaderMenus.main;
   let isAuthorized = false;
   let userId = "";
+  let riotProfileIconId = null;
+  let isLolAccount = false;
   let accountMenuOpen = false;
   let unsubscribeAuth;
 
@@ -74,6 +76,8 @@
     try {
       const account = await getMyAccount();
       userId = account?.displayName ?? account?.riot?.displayName ?? account?.userId ?? userId;
+      riotProfileIconId = account?.riot?.profileIconId ?? null;
+      isLolAccount = account?.riot?.isLolAccount === true;
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err?.response != null) {
@@ -101,6 +105,9 @@
       userId = value?.userId ?? "";
       if (isAuthorized) {
         checkIsAuthorized();
+      } else {
+        riotProfileIconId = null;
+        isLolAccount = false;
       }
     });
   });
@@ -152,8 +159,14 @@
           class:selected={currentPage.key === HeaderMenus.account.key}
           on:click|stopPropagation={() => (accountMenuOpen = !accountMenuOpen)}
         >
-          <span class="account-icon"><FaUserCircle /></span>
-          <span>{userId}</span>
+          <span class="account-icon">
+            {#if riotProfileIconId != null}
+              <SafeImg class="riot-profile-icon" src={profileIconUrl(riotProfileIconId)} />
+            {:else}
+              <FaUserCircle />
+            {/if}
+          </span>
+          <span class:riot-account-name={isLolAccount}>{userId}</span>
           <span class="account-chevron"><FaChevronDown /></span>
         </button>
         {#if accountMenuOpen}

@@ -180,41 +180,43 @@
           onDragStart={(e) => onParticipantDragStart(e, puuid, pos, teamIndex)}
           onDragEnd={onParticipantDragEnd}
         >
-          <ContextMenu className="summoner-menus">
-            <ContextMenuItem class="menu">
-              <div class="label">
-                {gameName} 랭크 지정
-              </div>
-              <ContextMenuInner class="tier-rank-group">
-                <TierRankGroup
-                  onSelect={(tier, rank) => {
-                    setCustomCandidateCustomTierRank(puuid, tier, rank);
-                  }}
-                />
-              </ContextMenuInner>
-            </ContextMenuItem>
-            <ContextMenuItem class="menu">
-              <div class="label">
-                {gameName} 컬러 지정
-              </div>
-              <ContextMenuInner class="color-label-group">
-                <div class="color-label" on:click={(e) => setParticipantColorLabel(puuid, 0)}>
-                  <div class="color-ball"></div>
-                  <div class="label">컬러 제거</div>
+          {#if p != null}
+            <ContextMenu className="summoner-menus">
+              <ContextMenuItem class="menu">
+                <div class="label">
+                  {gameName} 랭크 지정
                 </div>
-                {#each Object.keys(CustomGameTeammateColorLabels) as color}
-                  <div
-                    class="color-label"
-                    on:click={(e) => setParticipantColorLabel(puuid, CustomGameTeammateColorLabels[color])}
-                  >
-                    <div class="color-ball {color.toLowerCase()}"></div>
-                    <div class="label">{color}</div>
+                <ContextMenuInner class="tier-rank-group">
+                  <TierRankGroup
+                    onSelect={(tier, rank) => {
+                      setCustomCandidateCustomTierRank(puuid, tier, rank);
+                    }}
+                  />
+                </ContextMenuInner>
+              </ContextMenuItem>
+              <ContextMenuItem class="menu">
+                <div class="label">
+                  {gameName} 컬러 지정
+                </div>
+                <ContextMenuInner class="color-label-group">
+                  <div class="color-label" on:click={(e) => setParticipantColorLabel(puuid, 0)}>
+                    <div class="color-ball"></div>
+                    <div class="label">컬러 제거</div>
                   </div>
-                {/each}
-              </ContextMenuInner>
-            </ContextMenuItem>
-            <ContextMenuItem class="menu" on:click={(e) => onCandidateDelete(puuid)}>{gameName} 제거</ContextMenuItem>
-          </ContextMenu>
+                  {#each Object.keys(CustomGameTeammateColorLabels) as color}
+                    <div
+                      class="color-label"
+                      on:click={(e) => setParticipantColorLabel(puuid, CustomGameTeammateColorLabels[color])}
+                    >
+                      <div class="color-ball {color.toLowerCase()}"></div>
+                      <div class="label">{color}</div>
+                    </div>
+                  {/each}
+                </ContextMenuInner>
+              </ContextMenuItem>
+              <ContextMenuItem class="menu" on:click={() => onCandidateDelete(puuid)}>{gameName} 제거</ContextMenuItem>
+            </ContextMenu>
+          {/if}
           {#if draggingCandidate || draggingParticipant}
             <div
               class="droppable-zone"

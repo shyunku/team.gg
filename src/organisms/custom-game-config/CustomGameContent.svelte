@@ -300,12 +300,17 @@
   const onMultiSearchTextChange = (e) => {
     const payload = e.target.value;
     const lines = payload.split("\n");
-    const filtered = lines.filter((l) => l.includes("님이 로비에 참가하셨습니다."));
     detectedMultiSearchSummoners = {};
-    for (let raw of filtered) {
+    for (let raw of lines) {
+      const joinedLobby = raw.includes("님이 로비에 참가하셨습니다.");
+      const leftLobby = raw.includes("님이 로비를 떠났습니다.");
+      if (!joinedLobby && !leftLobby) continue;
+
       // remove unicode
       let line = removeUnicode(raw);
-      const match = line.match(/([a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9#\s]+)님이 로비에 참가하셨습니다./i);
+      const match = line.match(
+        /([a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9#\s]+)님이 로비(?:에 참가하셨습니다|를 떠났습니다)\./i,
+      );
       const matched = match?.[1] ?? null;
       if (matched == null) continue;
       const trimmed = matched.trim();
@@ -318,21 +323,29 @@
       const key = `${gameName}#${tag}`;
       const encryptedKey = sha256(key);
 
-      detectedMultiSearchSummoners[encryptedKey] = { gameName, tag };
+      if (joinedLobby) {
+        detectedMultiSearchSummoners[encryptedKey] = { gameName, tag };
+      } else {
+        delete detectedMultiSearchSummoners[encryptedKey];
+      }
     }
     console.log(detectedMultiSearchSummoners);
   };
 
   const applyMultiSearch = async () => {
     try {
-      const promises = [];
+      const candidatesByRiotId = candidates.reduce((map, candidate) => {
+        const gameName = candidate?.summary?.gameName ?? "";
+        const tagLine = candidate?.summary?.tagLine ?? "";
+        map[`${gameName}#${tagLine}`.toLocaleLowerCase()] = candidate;
+        return map;
+      }, {});
+
+      let addedSummoners = [];
       for (let key in detectedMultiSearchSummoners) {
         const { gameName, tag } = detectedMultiSearchSummoners[key];
-        promises.push(onCandidateSearch(gameName, tag, false));
-      }
-      let addedSummoners = [];
-      const responses = await Promise.all(promises);
-      for (let resp of responses) {
+        const existingCandidate = candidatesByRiotId[`${gameName}#${tag}`.toLocaleLowerCase()];
+        const resp = existingCandidate ?? (await onCandidateSearch(gameName, tag, false));
         if (resp != null) {
           addedSummoners.push(resp);
         }
@@ -545,6 +558,7 @@
     try {
       console.log(configId, puuid);
       await deleteCustomGameCandidateReq(configId, puuid);
+      await fetchAllData();
     } catch (err) {
       console.error(err);
       toasts.add({

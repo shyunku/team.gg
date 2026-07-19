@@ -60,23 +60,13 @@
     horizontalReverse = e.clientX > window.innerWidth / 2;
     verticalReverse = e.clientY > window.innerHeight / 2;
     menuOpened = true;
+    window.dispatchEvent(new CustomEvent("teamgg-context-menu-open", { detail: id }));
 
     for (let menu of getRootMenus(target)) {
       menu.style.display = "flex";
     }
     positionMenu();
 
-    // hide other context menus
-    const contextDivs = document.getElementsByClassName("context-div");
-    for (let div of contextDivs) {
-      if (div.id !== id) {
-        // find context menu
-        const menus = div.querySelectorAll(".context-menu:not(.context-menu-inner)");
-        for (let menu of menus) {
-          menu.style.display = "none";
-        }
-      }
-    }
   };
 
   const hideMenu = (e) => {
@@ -95,11 +85,16 @@
     hideMenu(e);
   };
 
+  const hideOtherMenu = (e) => {
+    if (e.detail !== id) hideMenu(e);
+  };
+
   onMount(() => {
     window.addEventListener("click", hideMenu);
     window.addEventListener("contextmenu", hideMenuOnContextMenu);
     window.addEventListener("scroll", positionMenu, true);
     window.addEventListener("resize", positionMenu);
+    window.addEventListener("teamgg-context-menu-open", hideOtherMenu);
   });
 
   onDestroy(() => {
@@ -107,6 +102,7 @@
     window.removeEventListener("contextmenu", hideMenuOnContextMenu);
     window.removeEventListener("scroll", positionMenu, true);
     window.removeEventListener("resize", positionMenu);
+    window.removeEventListener("teamgg-context-menu-open", hideOtherMenu);
   });
 
   $: {
@@ -123,6 +119,7 @@
   on:dragend={onDragEnd}
   {...$$restProps}
   class={"context-div" + JsxUtil.class(class_)}
+  class:context-menu-open={menuOpened}
 >
   <slot />
 </div>

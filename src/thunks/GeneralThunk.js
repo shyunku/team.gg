@@ -2,7 +2,18 @@ import axios from "axios";
 import { authStore, getAuth } from "../stores/AuthStore";
 import { toasts } from "svelte-toasts";
 
-export const ServerHostBase = APP_SERVER_HOST;
+const normalizeServerHost = (host) => {
+  const value = String(host ?? "")
+    .trim()
+    .replace(/\/+$/, "");
+  if (!value) throw new Error("Server host is not configured");
+  if (/^https?:\/\//i.test(value)) return value;
+
+  const isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(value);
+  return `${isLocalHost ? "http" : "https"}://${value}`;
+};
+
+export const ServerHostBase = normalizeServerHost(APP_SERVER_HOST);
 const ServerHost = `${ServerHostBase}/v1`;
 
 console.log("ServerHost", ServerHost);
@@ -199,6 +210,11 @@ export const createCustomGameConfiguration = async (config) => {
 
 export const getCustomGameConfigurationInfo = async (id) => {
   const response = await instance.get(`/platform/custom-game/info?id=${id}`);
+  return response.data;
+};
+
+export const updateCustomGameConfigurationName = async (id, name) => {
+  const response = await instance.patch(`/platform/custom-game/name`, { id, name });
   return response.data;
 };
 

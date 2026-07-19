@@ -83,7 +83,14 @@
   <title>내전 팀 구성</title>
 </svelte:head>
 
-<CustomGameHeader name={data?.name} lastUpdatedAt={data?.lastUpdatedAt} />
+<CustomGameHeader
+  configId={data?.id}
+  name={data?.name}
+  lastUpdatedAt={data?.lastUpdatedAt}
+  onNameChanged={(name, lastUpdatedAt) => {
+    data = { ...data, name, lastUpdatedAt };
+  }}
+/>
 <CustomGameSummary
   balance={data?.balance}
   configId={data?.id}
