@@ -21,6 +21,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const scssAliasPath = path.resolve(__dirname, "src/");
 
 const isProduction = process.env.NODE_ENV === "production";
+const buildTarget = isProduction ? "production" : "dev";
 dotenv.config({
   path: isProduction ? ".env.production" : ".env.dev",
   override: true,
@@ -53,7 +54,7 @@ export default {
     sourcemap: true,
     format: "iife",
     name: "app",
-    file: "public/build/bundle.js",
+    file: `public/build/${buildTarget}/bundle.js`,
   },
   plugins: [
     svelte({

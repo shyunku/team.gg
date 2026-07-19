@@ -25,9 +25,13 @@
 
     <link rel="icon" type="image/png" href="/favicon.ico" />
     <link rel="stylesheet" href="/global.css" />
-    <link rel="stylesheet" href="/build/bundle.css" />
-
-    <script defer src="/build/bundle.js"></script>
+    <script>
+      const isDevelopmentHost = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+      const buildTarget = isDevelopmentHost ? "dev" : "production";
+      window.TEAMGG_BUILD_TARGET = buildTarget;
+      document.write(`<link rel="stylesheet" href="/build/${buildTarget}/bundle.css" />`);
+      document.write(`<script defer src="/build/${buildTarget}/bundle.js"><\/script>`);
+    </script>
   </head>
 
   <body></body>

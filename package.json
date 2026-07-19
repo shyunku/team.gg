@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "set NODE_ENV=production&& rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "set NODE_ENV=development&& rollup -c -w",
     "start": "sirv public --no-clear",
     "win-electron": "set ELECTRON_START_URL=http://localhost:8080 && set NODE_ENV=development && wait-on http://localhost:8080 && electron .",
     "mac-electron": "export ELECTRON_START_URL=http://localhost:8080 && export NODE_ENV=development && wait-on http://localhost:8080 && electron .",
