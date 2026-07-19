@@ -46,7 +46,7 @@
 <div class="home-cover">
   <MainContentWrapper>
     <div class="home-content-wrapper">
-      <div class="app-logo img">
+      <div class="app-logo">
         <SafeImg src="/img/common/app_logo.png" />
         <div class="version">v{APP_VERSION}</div>
       </div>

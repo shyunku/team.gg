@@ -2,6 +2,7 @@
   import { toasts } from "svelte-toasts";
   import SafeImg from "../../../atoms/SafeImg.svelte";
   import LinePosition from "../../../molecules/LinePosition.svelte";
+  import LineMasteryLevel from "../../../molecules/LineMasteryLevel.svelte";
   import TierRank from "../../../molecules/TierRank.svelte";
   import {
     championIconUrl,
@@ -39,6 +40,7 @@
   export let onCandidateDelete;
 
   export let onCandidateChangeFavorPosition;
+  export let onCandidateChangeLineMastery;
   export let setCustomCandidateCustomTierRank;
 
   export let draggingCandidate;
@@ -47,6 +49,7 @@
   export let canManage = false;
   export let ownedPuuids = [];
   export let isOptimizing = false;
+  export let viewingPuuids = [];
   export let saveDefaultFavorPosition = () => {};
   export let resetFavorPositionToDefault = () => {};
 
@@ -170,12 +173,13 @@
         {@const gameName = p?.summary?.gameName ?? null}
         {@const dropKey = `team${teamIndex}-${pos}`}
         {@const posFavor = p?.positionFavor}
+        {@const posMastery = p?.positionMastery}
         {@const participantRanks = [
           { key: "지정", tierRank: p?.customRank },
           { key: "솔랭", tierRank: p?.soloRank },
           { key: "자랭", tierRank: p?.flexRank },
         ]}
-        {@const masteries = (p?.mastery ?? []).sort((a, b) => b?.championPoints - a?.championPoints).slice(0, 8)}
+        {@const masteries = (p?.mastery ?? []).sort((a, b) => b?.championPoints - a?.championPoints).slice(0, 7)}
         {@const pRank = participantRanks.reduce((acc, cur) => {
           if (cur?.tierRank == null) return acc;
           if (acc != null) return acc;
@@ -231,14 +235,23 @@
                 {/if}
               </ContextMenuItem>
               {#if isOwnedRiotAccount(puuid)}
-                <ContextMenuItem class={"menu" + JsxUtil.classByCondition(isOptimizing, "disabled")} on:click={() => saveDefaultFavorPosition(puuid)}>
-                  현재 선호도를 기본값으로 저장
+                <ContextMenuItem
+                  class={"menu" + JsxUtil.classByCondition(isOptimizing, "disabled")}
+                  on:click={() => saveDefaultFavorPosition(puuid)}
+                >
+                  현재 선호도·숙련도를 기본값으로 저장
                 </ContextMenuItem>
-                <ContextMenuItem class={"menu" + JsxUtil.classByCondition(isOptimizing, "disabled")} on:click={() => resetFavorPositionToDefault(puuid)}>
-                  기본값으로 초기화
+                <ContextMenuItem
+                  class={"menu" + JsxUtil.classByCondition(isOptimizing, "disabled")}
+                  on:click={() => resetFavorPositionToDefault(puuid)}
+                >
+                  선호도·숙련도를 기본값으로 초기화
                 </ContextMenuItem>
               {/if}
-              <ContextMenuItem class={"menu" + JsxUtil.classByCondition(!canManage || isOptimizing, "disabled")} on:click={() => onCandidateDelete(puuid)}>{gameName} 제거</ContextMenuItem>
+              <ContextMenuItem
+                class={"menu" + JsxUtil.classByCondition(!canManage || isOptimizing, "disabled")}
+                on:click={() => onCandidateDelete(puuid)}>{gameName} 제거</ContextMenuItem
+              >
             </ContextMenu>
           {/if}
           {#if draggingCandidate || draggingParticipant}
@@ -264,8 +277,11 @@
             />
           </div>
           {#if p != null}
-            <div class="profile-icon img">
+            <div class="profile-icon img" class:viewing={viewingPuuids.includes(puuid)}>
               <SafeImg src={profileIconUrl(p?.summary?.profileIconId)} />
+              {#if viewingPuuids.includes(puuid)}
+                <span class="viewing-indicator" title="현재 이 구성을 보고 있습니다."></span>
+              {/if}
             </div>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class="name-most-champions">
@@ -302,16 +318,26 @@
                 {@const lowerKey = key?.toLowerCase() ?? "-"}
                 {@const strength = posFavor?.[lowerKey] ?? 0}
                 <div class="line">
-                  <LinePosition
-                    position={lowerKey}
-                    interactive={true}
+                  <div class="line-position-control">
+                    <LinePosition
+                      position={lowerKey}
+                      interactive={true}
+                      disabled={!canEditPreference(puuid)}
+                      strength={strength ?? 0}
+                      showStrength={true}
+                      size={20}
+                      onClick={(en) => {
+                        onCandidateChangeFavorPosition(p?.summary?.puuid, key, en);
+                      }}
+                    />
+                    {#if pos === key}
+                      <span class="current-position" title="현재 적용된 라인"></span>
+                    {/if}
+                  </div>
+                  <LineMasteryLevel
+                    level={posMastery?.[lowerKey] ?? 0}
                     disabled={!canEditPreference(puuid)}
-                    strength={strength ?? 0}
-                    showStrength={true}
-                    size={20}
-                    onClick={(en) => {
-                      onCandidateChangeFavorPosition(p?.summary?.puuid, key, en);
-                    }}
+                    onChange={(level) => onCandidateChangeLineMastery(puuid, lowerKey, level)}
                   />
                 </div>
               {/each}

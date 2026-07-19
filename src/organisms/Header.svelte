@@ -85,8 +85,7 @@
 
           switch (code) {
             case 401:
-              toasts.add({ title: "인증 정보", description: "인증 정보가 만료되었습니다.", type: "warning" });
-              authStore.initialize();
+              // The shared API interceptor refreshes the token or reports expiry once.
               return;
           }
         } else {
@@ -137,7 +136,7 @@
 <div class="app-header">
   <MainContentWrapper>
     <div class="app-icon-wrapper">
-      <div class="app-icon img" on:click={goToHome}>
+      <div class="app-icon" on:click={goToHome}>
         <SafeImg src="/img/common/app_logo.png" />
       </div>
     </div>

@@ -17,7 +17,7 @@
     font-size: 15px;
   }
 
-  .recent-customs {
+  .custom-list {
     width: 100% !important;
     margin-top: 20px !important;
   }
@@ -57,11 +57,23 @@
   }
 }
 
-.recent-customs {
+.custom-list {
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
   width: 650px;
+
+  &.recent-customs {
+    margin-top: 50px;
+  }
+
+  &.joined-customs {
+    margin-top: 32px;
+    margin-bottom: 50px;
+  }
+
+  & > .header {
+    background-color: $color-surface-raised;
+  }
 
   .custom-configures {
     display: flex;
@@ -73,6 +85,7 @@
       font-size: 13px;
       color: $main-fg-color;
       cursor: pointer;
+      background-color: $color-surface;
 
       &:not(:last-child) {
         border-bottom: 1px solid rgba(32, 45, 73, 0.9);
@@ -90,6 +103,14 @@
         margin-left: 15px;
         color: $color-text-muted;
       }
+    }
+
+    .empty-list {
+      padding: 24px 15px;
+      color: $color-text-muted;
+      background-color: $color-surface;
+      font-size: 13px;
+      text-align: center;
     }
   }
 }

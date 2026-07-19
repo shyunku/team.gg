@@ -38,15 +38,21 @@
     team: 40,
     line: 20,
     satisfaction: 40,
+    mastery: 50,
   };
 
   const resetScoreWeights = () => {
-    scoreWeights = { team: 40, line: 20, satisfaction: 40 };
+    scoreWeights = { team: 40, line: 20, satisfaction: 40, mastery: 50 };
   };
 
   const updateScoreWeight = (key, value) => {
     const nextValue = Math.max(5, Math.min(90, value));
-    const otherKeys = Object.keys(scoreWeights).filter((otherKey) => otherKey !== key);
+    const balanceKeys = ["team", "line", "satisfaction"];
+    if (key === "mastery") {
+      scoreWeights = { ...scoreWeights, mastery: Math.max(0, Math.min(100, value)) };
+      return;
+    }
+    const otherKeys = balanceKeys.filter((otherKey) => otherKey !== key);
     const previousOtherTotal = otherKeys.reduce((total, otherKey) => total + scoreWeights[otherKey], 0);
     const nextOtherTotal = 100 - nextValue;
     const nextWeights = { ...scoreWeights, [key]: nextValue };
@@ -69,6 +75,7 @@
         tierFairnessWeight: scoreWeights.team / 100,
         lineFairnessWeight: scoreWeights.line / 100,
         lineSatisfactionWeight: scoreWeights.satisfaction / 100,
+        masteryInfluenceWeight: scoreWeights.mastery / 100,
       });
       await fetchAllData();
       onOptimizingChanged(false);
@@ -101,6 +108,7 @@
       team: (weights.tierFairness ?? 0.4) * 100,
       line: (weights.lineFairness ?? 0.2) * 100,
       satisfaction: (weights.lineSatisfaction ?? 0.4) * 100,
+      mastery: (weights.masteryInfluence ?? 0.5) * 100,
     };
     initializedWeightConfigId = configId;
   }
@@ -140,7 +148,7 @@
 </script>
 
 <div class="custom-game-summary">
-  <MainContentLayout>
+  <MainContentLayout class="summary-layout">
     <div class="content">
       <div class="controller">
         <div class="process">
@@ -154,12 +162,12 @@
                   : "초기화 중..."}
               </div>
               <div class="progress-bar">
-                <DoughnutRateChart rate={processRate} cutout={32} color={"var(--color-accent)"} />
+                <DoughnutRateChart rate={processRate} cutout={34} color={"var(--color-accent)"} />
               </div>
             {:else}
-              <div class="label">최적의 조합</div>
+              <div class="label">최적의 조합 찾기</div>
               <div class="progress-bar">
-                <DoughnutRateChart rate={0} cutout={32} color={"var(--color-accent)"} />
+                <DoughnutRateChart rate={0} cutout={34} color={"var(--color-accent)"} />
               </div>
             {/if}
           </div>
@@ -179,7 +187,7 @@
               ? processType != null
                 ? `${formatStdEn(processCurrent)}/${formatStdEn(processTotal)}`
                 : "계산 중"
-              : "최적의 조합 찾기"}
+              : "시작하기"}
           </button>
         </div>
         <div class="options">
@@ -232,6 +240,21 @@
             </div>
             <div class="value">{scoreWeights.satisfaction.toFixed(0)}%</div>
           </div>
+          <div class="option mastery-option">
+            <div class="label">숙련도 반영률</div>
+            <div class="slider">
+              <RangeSlider
+                min={0}
+                max={100}
+                range={"min"}
+                values={[scoreWeights.mastery]}
+                step={1}
+                disabled={!canManage || calculatingOptimization}
+                on:change={(event) => updateScoreWeight("mastery", event.detail.value)}
+              />
+            </div>
+            <div class="value">{scoreWeights.mastery.toFixed(0)}%</div>
+          </div>
         </div>
       </div>
 
@@ -266,6 +289,10 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="interaction-help">
+      선호도는 좌클릭으로 0→1→2, 우클릭으로 기피(-1)를 설정합니다. 숙련도는 막대를 눌러 0~5단계로 설정하며, 현재 배정
+      라인의 숙련도가 티어 RP를 보정합니다. 노란 점은 현재 적용 중인 라인입니다.
     </div>
   </MainContentLayout>
 </div>

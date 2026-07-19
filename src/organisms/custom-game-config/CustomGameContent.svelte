@@ -26,6 +26,7 @@
     resetCustomGameFavorPositionReq,
     setCustomGameCandidateCustomTierRankReq,
     setCustomGameCandidateFavorPositionReq,
+    setCustomGameCandidateLineMasteryReq,
     shuffleCustomGameTeamReq,
     swapCustomGameTeamReq,
     unArrangeAllCandidatesReq,
@@ -57,6 +58,7 @@
   export let canManage = false;
   export let ownedPuuids = [];
   export let isOptimizing = false;
+  export let viewingPuuids = [];
 
   const positions = ["TOP", "JUNGLE", "MID", "ADC", "SUPPORT"];
 
@@ -95,9 +97,9 @@
     if (isOptimizing || !isOwnedRiotAccount(puuid)) return;
     try {
       await saveCustomGameDefaultFavorPositionReq(configId, puuid);
-      toasts.add({ title: "기본 선호도", description: "현재 라인 선호도를 기본값으로 저장했습니다.", type: "success" });
+      toasts.add({ title: "기본 설정", description: "현재 라인 선호도와 숙련도를 기본값으로 저장했습니다.", type: "success" });
     } catch (err) {
-      toasts.add({ title: "기본 선호도 저장 실패", description: mutationErrorMessage(err, "기본 선호도를 저장하지 못했습니다."), type: "error" });
+      toasts.add({ title: "기본 설정 저장 실패", description: mutationErrorMessage(err, "기본 선호도와 숙련도를 저장하지 못했습니다."), type: "error" });
     }
   };
 
@@ -107,14 +109,14 @@
       const result = await resetCustomGameFavorPositionReq(configId, puuid);
       await fetchAllData();
       toasts.add({
-        title: "기본 선호도",
+        title: "기본 설정",
         description: result?.usedSavedDefault
-          ? "저장된 기본 라인 선호도로 초기화했습니다."
-          : "저장된 기본값이 없어 0/0/0/0/0으로 초기화했습니다.",
+          ? "저장된 기본 라인 선호도와 숙련도로 초기화했습니다."
+          : "저장된 기본값이 없어 선호도와 숙련도를 모두 0으로 초기화했습니다.",
         type: "success",
       });
     } catch (err) {
-      toasts.add({ title: "선호도 초기화 실패", description: mutationErrorMessage(err, "기본 선호도로 초기화하지 못했습니다."), type: "error" });
+      toasts.add({ title: "기본 설정 초기화 실패", description: mutationErrorMessage(err, "기본 선호도와 숙련도로 초기화하지 못했습니다."), type: "error" });
     }
   };
 
@@ -637,6 +639,35 @@
     }
   };
 
+  const onCandidateChangeLineMastery = async (puuid, position, level) => {
+    if (!canEditPreference(puuid)) {
+      toasts.add({
+        title: isOptimizing ? "내전 구성 잠김" : "권한 없음",
+        description: isOptimizing
+          ? "최적의 조합을 계산 중이라 라인 숙련도를 변경할 수 없습니다."
+          : "본인 Riot 계정의 라인 숙련도만 변경할 수 있습니다.",
+        type: "warning",
+      });
+      return;
+    }
+    try {
+      await setCustomGameCandidateLineMasteryReq(configId, puuid, position, level);
+      candidateMap[puuid].positionMastery = {
+        ...(candidateMap[puuid].positionMastery ?? {}),
+        [position.toLowerCase()]: level,
+      };
+      candidates = [...candidates];
+      await updateBalance();
+    } catch (err) {
+      console.error(err);
+      toasts.add({
+        title: "라인 숙련도 변경 오류",
+        description: mutationErrorMessage(err, "라인 숙련도를 변경하던 중 오류가 발생했습니다."),
+        type: "error",
+      });
+    }
+  };
+
   const onCandidateDelete = async (puuid) => {
     if (!requireManagePermission()) return;
     try {
@@ -697,6 +728,7 @@
           {onCandidateDragOver}
           {onCandidateDragLeave}
           {onCandidateChangeFavorPosition}
+          {onCandidateChangeLineMastery}
           {setCustomCandidateCustomTierRank}
           {onCandidateDelete}
           {draggingCandidate}
@@ -706,6 +738,7 @@
           {canManage}
           {ownedPuuids}
           {isOptimizing}
+          {viewingPuuids}
           {saveDefaultFavorPosition}
           {resetFavorPositionToDefault}
         />
@@ -721,6 +754,7 @@
           {onCandidateDragOver}
           {onCandidateDragLeave}
           {onCandidateChangeFavorPosition}
+          {onCandidateChangeLineMastery}
           {setCustomCandidateCustomTierRank}
           {onCandidateDelete}
           {draggingCandidate}
@@ -730,6 +764,7 @@
           {canManage}
           {ownedPuuids}
           {isOptimizing}
+          {viewingPuuids}
           {saveDefaultFavorPosition}
           {resetFavorPositionToDefault}
         />
@@ -851,17 +886,20 @@
                           class:disabled={isOptimizing}
                           class="menu"
                           on:click={() => saveDefaultFavorPosition(puuid)}
-                        >현재 선호도를 기본값으로 저장</div>
+                        >현재 선호도·숙련도를 기본값으로 저장</div>
                         <div
                           class:disabled={isOptimizing}
                           class="menu"
                           on:click={() => resetFavorPositionToDefault(puuid)}
-                        >기본값으로 초기화</div>
+                        >선호도·숙련도를 기본값으로 초기화</div>
                       {/if}
                       <div class:disabled={!canManage || isOptimizing} class="menu" on:click={(e) => onCandidateDelete(puuid)}>후보에서 제거</div>
                     </ContextMenu>
-                    <div class="profile-icon img">
+                    <div class="profile-icon img" class:viewing={viewingPuuids.includes(puuid)}>
                       <SafeImg src={profileIconUrl(c?.summary?.profileIconId)} />
+                      {#if viewingPuuids.includes(puuid)}
+                        <span class="viewing-indicator" title="현재 이 구성을 보고 있습니다."></span>
+                      {/if}
                     </div>
                     <div class="name">
                       <div class="game-name">{c?.summary?.gameName}</div>

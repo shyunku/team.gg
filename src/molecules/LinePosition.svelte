@@ -141,7 +141,7 @@
     &.strength--1 {
       // red image
       opacity: 0.7;
-      filter: sepia(1) hue-rotate(-50deg) brightness(0.8) saturate(6) contrast(1);
+      filter: sepia(1) hue-rotate(-50deg) brightness(0.64) saturate(6) contrast(1);
 
       .strength {
         // background-color: rgba(255, 0, 0, 0.7);
@@ -150,12 +150,12 @@
     }
 
     &.strength-0 {
-      opacity: 0.3;
+      opacity: 0.15;
       filter: grayscale(1) brightness(1);
     }
 
     &.strength-1 {
-      opacity: 0.7;
+      opacity: 0.5;
       filter: brightness(1);
     }
 
@@ -210,19 +210,81 @@
       }
 
       .state-hovered {
-        background-color: $color-accent-hover;
+        background-color: $color-highlight-hover;
       }
     }
 
     &.interactive.strength-0:not(.hovered) .icon-stack {
-      .state-default { opacity: 0; }
-      .state-disabled { opacity: 1; }
+      .state-default {
+        opacity: 0;
+      }
+      .state-disabled {
+        opacity: 1;
+      }
+    }
+
+    &.interactive.strength-1:not(.hovered) {
+      opacity: 1;
+      filter: saturate(1.25) brightness(0.68);
+
+      .state-default {
+        background-color: $color-highlight;
+      }
+    }
+
+
+    &.interactive.strength-2:not(.hovered) {
+      filter: saturate(1.25) brightness(1.08) drop-shadow(0 0 2px $color-highlight-glow);
+
+      .state-default {
+        background-color: $color-highlight-hover;
+      }
     }
 
     &.interactive.hovered .icon-stack {
       .state-default,
-      .state-disabled { opacity: 0; }
-      .state-hovered { opacity: 1; }
+      .state-disabled {
+        opacity: 0;
+      }
+      .state-hovered {
+        opacity: 1;
+      }
+    }
+
+    &.interactive.strength--1.hovered {
+      opacity: 1;
+      filter: brightness(0.9) drop-shadow(0 0 2px $color-text-muted);
+
+      .state-hovered {
+        background-color: $color-text-muted;
+      }
+    }
+
+    &.interactive.strength-0.hovered {
+      opacity: 1;
+      filter: saturate(1.2) brightness(0.6) drop-shadow(0 0 3px $color-highlight-glow);
+
+      .state-hovered {
+        background-color: $color-highlight;
+      }
+    }
+
+    &.interactive.strength-1.hovered {
+      opacity: 1;
+      filter: saturate(1.25) brightness(1.08) drop-shadow(0 0 3px $color-highlight-glow);
+
+      .state-hovered {
+        background-color: $color-highlight-hover;
+      }
+    }
+
+    &.interactive.strength-2.hovered {
+      opacity: 1;
+      filter: saturate(1.25) brightness(1.15) drop-shadow(0 0 4px $color-highlight-glow);
+
+      .state-hovered {
+        background-color: $color-highlight-light;
+      }
     }
 
     .highlighted-icon {

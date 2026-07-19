@@ -71,7 +71,16 @@
   position: relative;
   margin-top: 200px;
   margin-bottom: 50px;
-  width: 300px;
+  width: 340px;
+  aspect-ratio: 2387 / 456;
+  background-color: transparent;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
   .version {
     position: absolute;

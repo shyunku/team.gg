@@ -23,6 +23,39 @@ const instance = axios.create({
   withCredentials: false,
 });
 
+let refreshPromise = null;
+let sessionExpiryHandled = false;
+
+const refreshAuthToken = async () => {
+  if (refreshPromise == null) {
+    refreshPromise = (async () => {
+      const refreshToken = getAuth()?.refreshToken;
+      if (!refreshToken) throw new Error("Refresh token is missing");
+      const response = await axios.post(`${ServerHost}/auth/refresh`, { refreshToken });
+      const nextAuth = {
+        ...getAuth(),
+        authorized: true,
+        accessToken: response.data.accessToken,
+        refreshToken: response.data.refreshToken,
+      };
+      authStore.set(nextAuth);
+      sessionExpiryHandled = false;
+      return nextAuth.accessToken;
+    })().finally(() => {
+      refreshPromise = null;
+    });
+  }
+  return refreshPromise;
+};
+
+const handleSessionExpiry = () => {
+  if (sessionExpiryHandled) return;
+  sessionExpiryHandled = true;
+  authStore.initialize();
+  toasts.warning("세션이 만료되었습니다. 다시 로그인해주세요.");
+  window.location.href = "#/login";
+};
+
 instance.interceptors.request.use(
   (config) => {
     const { accessToken } = getAuth() ?? {};
@@ -46,30 +79,20 @@ instance.interceptors.response.use(
   async (error) => {
     const status = error?.response?.status;
     if (status === 401 && error?.config?.skipAuthRefresh !== true) {
-      try {
-        const refreshToken = getAuth()?.refreshToken;
-        if (refreshToken) {
-          const r = await axios.post(`${ServerHost}/auth/refresh`, {
-            refreshToken,
-          });
-          authStore.set({
-            ...getAuth(),
-            authorized: true,
-            accessToken: r.data.accessToken,
-            refreshToken: r.data.refreshToken,
-          });
-          // 실패했던 요청 재시도
-          const cfg = error.config;
-          cfg.headers = cfg.headers ?? {};
-          cfg.headers["Authorization"] = `Bearer ${r.data.accessToken}`;
-          return instance.request(cfg);
-        }
-      } catch (_) {
-        // 리프레시 실패 → 세션 종료
+      if (error.config._teamggAuthRetried === true) {
+        handleSessionExpiry();
+        return Promise.reject(error);
       }
-      authStore.initialize();
-      toasts.warning("세션이 만료되었습니다. 다시 로그인해주세요.");
-      window.location.href = "#/login";
+      error.config._teamggAuthRetried = true;
+      try {
+        const accessToken = await refreshAuthToken();
+        const cfg = error.config;
+        cfg.headers = cfg.headers ?? {};
+        cfg.headers["Authorization"] = `Bearer ${accessToken}`;
+        return instance.request(cfg);
+      } catch (_) {
+        handleSessionExpiry();
+      }
     }
     return Promise.reject(error);
   },
@@ -84,6 +107,7 @@ export const login = async (id, encryptedPassword) => {
     },
     { skipAuthRefresh: true },
   );
+  sessionExpiryHandled = false;
   return response.data;
 };
 
@@ -126,11 +150,13 @@ export const completeRsoWithExistingAccount = async (setupToken, userId, encrypt
     },
     { skipAuthRefresh: true },
   );
+  sessionExpiryHandled = false;
   return response.data;
 };
 
 export const completeRsoWithNewAccount = async (setupToken) => {
   const response = await instance.post(`/auth/rso/complete/new`, { setupToken });
+  sessionExpiryHandled = false;
   return response.data;
 };
 
@@ -210,6 +236,11 @@ export const getCustomGameConfigurations = async () => {
   return response.data;
 };
 
+export const getJoinedCustomGameConfigurations = async () => {
+  const response = await instance.get(`/platform/custom-game/joined-list`);
+  return response.data;
+};
+
 export const createCustomGameConfiguration = async (config) => {
   const response = await instance.post(`/platform/custom-game/create`);
   return response.data;
@@ -271,6 +302,16 @@ export const setCustomGameCandidateFavorPositionReq = async (customGameConfigId,
     strength,
   });
 
+  return response.data;
+};
+
+export const setCustomGameCandidateLineMasteryReq = async (customGameConfigId, puuid, position, level) => {
+  const response = await instance.post(`/platform/custom-game/line-mastery`, {
+    customGameConfigId,
+    puuid,
+    position,
+    level,
+  });
   return response.data;
 };
 

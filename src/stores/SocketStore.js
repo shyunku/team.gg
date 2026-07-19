@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import io from "socket.io-client";
 import { ServerHostBase } from "../thunks/GeneralThunk";
+import { getAuth } from "./AuthStore";
 
 function createSocketStore() {
   const { subscribe, set, update } = writable(null);
@@ -16,6 +17,9 @@ function createSocketStore() {
         // autoConnect: false,
         transports: ["websocket"],
         upgrade: false,
+        query: {
+          accessToken: getAuth()?.accessToken ?? "",
+        },
         // withCredentials: true,
       });
       socket.on("connect", () => {

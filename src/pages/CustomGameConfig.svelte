@@ -24,6 +24,12 @@
   let canManage = false;
   let ownedPuuids = [];
   let isOptimizing = false;
+  let viewingPuuids = [];
+  let unsubscribeSocket = () => {};
+
+  const onViewersChanged = (payload) => {
+    viewingPuuids = payload?.puuids ?? [];
+  };
 
   const updateBalance = async () => {
     try {
@@ -71,9 +77,12 @@
   onMount(() => {
     fetchAllData();
     socketStore.initialize();
-    socketStore.emit("join_custom_config_room", params.id);
-    socketStore.subscribe((value) => {
+    socketStore.on("custom_config/viewers", onViewersChanged);
+    unsubscribeSocket = socketStore.subscribe((value) => {
       socketConnected = value?.connected;
+      if (value?.connected) {
+        socketStore.emit("join_custom_config_room", params.id);
+      }
     });
     socketStore.on("custom_config/updated", () => {
       fetchAllData();
@@ -81,6 +90,8 @@
   });
 
   onDestroy(() => {
+    socketStore.off("custom_config/viewers", onViewersChanged);
+    unsubscribeSocket();
     socketStore.disconnect();
   });
 </script>
@@ -127,4 +138,5 @@
   {canManage}
   {ownedPuuids}
   {isOptimizing}
+  {viewingPuuids}
 />
